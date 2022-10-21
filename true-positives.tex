@@ -55,7 +55,7 @@
 
 % -------------------------- TITLE -------------------------------
 
-\title{A Model to Formally Define True-Positive Object Tracks for Uncertain World Models}
+\title{A Model to Define True-Positive Object Tracks for Uncertain World Models}
 
 % -------------------------- AUTHORS -------------------------------
 
@@ -94,7 +94,54 @@
 
 % -------------------------- CONTENT -------------------------------
 
-\input{sections/1_introduction}
+
+\section{Introduction}
+\label{sec:introduction}
+
+Will refer to \cite{Hoss2022review}.
+
+\subsection{Term Definitions}
+Unless stated otherwise, the following term definitions and acronyms hold throughout this paper.
+
+\subsubsection{Object under Test (OuT)} Perception subsystem of an ego vehicle / subject vehicle that contains a driving automation system.
+
+\subsubsection{True Positive (TP)} True positive object track that the OuT perceives.
+
+\subsection{Motivation}
+
+\subsubsection{Compliance with standards}
+Some standards, e.g. UL4600 (I guess) \cite{UL4600_voting_2019} suggest providing statistics of FPs and FNs. 
+Since a safety argumentation to comply with a standard should contain the least possible ambiguity, this paper aims at providing guidance to define FPs and FNs as clearly as possible. 
+
+\subsubsection{Awareness of Symbol Grounding Problem}
+Just like it is hard to define what e.g. a pedestrian is, it is also hard to define what a true positive is. 
+Humans that use these terms in their natural language have learned their meanings over time, but are often not fully aware of the exact features the criteria on these features that define a pedestrian or a true positive, for example.  
+
+Humans tend to say ``the ADS did not see the pedestrian". While for some world model instances, such a statement is obvious, for other world model instances, it is highly complex to unambiguously define what it means that one road user sees another one. 
+
+\subsubsection{Illustration of difficulties in perception metrics}
+
+Metrics that rely on a distinction between, TPs, FPs, FNs have these difficulties. 
+
+
+\section{Related Work}
+\label{sec:related_work}
+
+Only related work here that is about the definition of TPs, FPs, and FNs. 
+All further relevant literature sources that do not explicitly focus on defining TPs will be referenced as they become relevant in subsequent sections. 
+
+
+\section{Method}
+\label{key}
+
+Experience. No special method. 
+
+\section{The Model}
+
+Take stuff from \cite{Brahmi2020diss}, he did quite some stuff on timing for example.
+
+
+%\input{sections/1_introduction}
 % \input{sections/2_related work}
 % \input{sections/3_method}
 % \input{sections/4_evaluation}
