@@ -55,7 +55,7 @@
 
 % -------------------------- TITLE -------------------------------
 
-\title{A Model to Define True-Positive Object Tracks for Uncertain World Models}
+\title{What Is a True Positive? Relevant Criteria for Matching Perceived Objects to Reference Objects}
 
 % -------------------------- AUTHORS -------------------------------
 
@@ -82,7 +82,16 @@
 
 
 \begin{abstract}
-\input{sections/0_abstract}
+%\input{sections/0_abstract}
+
+%Single paragraph up to 250 words. Mini-version of the paper that includes context, state of the art, why it is not good enough, the research question, the methods, the evaluation and conclusions.
+Contemporary test methods for the perception subsystem of driving automation systems require a characterization of true-positive, false-positive, and false-negative object tracks. % general term for TP, FP, FN
+The literature defines these concepts in various different ways, which impedes comparability across different works. 
+To overcome this issue, this paper provides an exhaustive model to define these concepts as formally as feasible.
+The model generally describes the criteria for association of tracks under test to reference tracks. 
+Emphasized details are object distance functions in state space including penalties and thresholds, multi-object association algorithms, reference data and labeling characteristics, geometric issues like fields of view and semantic areas, temporal issues like incomplete tracks, and generalizations to probabilistic world models and asynchronous time stamps. 
+While a majority of aspects can be formalized, a case study illustrates the remaining challenges towards an entirely formal description. 
+
 \end{abstract}
 
 % -------------------------- KEYWORDS -------------------------------
@@ -100,12 +109,22 @@
 
 Will refer to \cite{Hoss2022review}.
 
-\subsection{Term Definitions}
+\subsection{Definition of Terms \& Abbreviations}
 Unless stated otherwise, the following term definitions and acronyms hold throughout this paper.
+
+\subsubsection{Object} Unless defined otherwise, digital representation of an entity on Layer 4 of the 6-layer-model \cite{Scholtes20216lmAccess}. Can span over one or multiple time steps. 
 
 \subsubsection{Object under Test (OuT)} Perception subsystem of an ego vehicle / subject vehicle that contains a driving automation system.
 
-\subsubsection{True Positive (TP)} True positive object track that the OuT perceives.
+\subsubsection{Matching concept} All circumstances of the testing methodology that influence the determination of TPs, FPs, and FNs. 
+
+\subsubsection{Matching result} General term for the mutually exclusive concepts TP, FP, FN.  
+
+\subsubsection{True Positive (TP)} Continue here!
+
+\subsubsection{Matching} As part of a test method, finding TPs, FPs, and FNs based on the object lists of OuT and reference system. 
+
+\subsubsection{Association} As part of a perception algorithm, deciding which existing object track a novel object detection belongs to. 
 
 \subsection{Motivation}
 
@@ -115,7 +134,7 @@ Since a safety argumentation to comply with a standard should contain the least 
 
 \subsubsection{Awareness of Symbol Grounding Problem}
 Just like it is hard to define what e.g. a pedestrian is, it is also hard to define what a true positive is. 
-Humans that use these terms in their natural language have learned their meanings over time, but are often not fully aware of the exact features the criteria on these features that define a pedestrian or a true positive, for example.  
+Humans that use these terms in their natural language have learned their meanings over time, but are often not fully aware of the exact criteria that define a pedestrian or a true positive, for example.  
 
 Humans tend to say ``the ADS did not see the pedestrian". While for some world model instances, such a statement is obvious, for other world model instances, it is highly complex to unambiguously define what it means that one road user sees another one. 
 
@@ -138,7 +157,37 @@ Experience. No special method.
 
 \section{The Model}
 
-Take stuff from \cite{Brahmi2020diss}, he did quite some stuff on timing for example.
+In general: association of tracks under test to reference tracks. This boils down to:
+
+Association of objects within a single time frame:
+\begin{itemize}
+\item object distance functions in state space, including penalties and thresholds
+\item multi-object association algorithms. Not only 1:1, but also n:n, as e.g. Brahmi \cite[Sec. 10.3]{Brahmi2020diss} describes it.
+\item reference data and labeling characteristics
+\item fields of view of reference data and OuT
+\item semantic areas in the road infrastructure that tell where to test
+\end{itemize}
+
+Generalization to object tracks over time:
+\begin{itemize}
+\item Brahmi \cite{Brahmi2020diss} did quite some stuff on timing
+\item temporally incomplete tracks 
+\item latency of the OuT
+\item synchronization between OuT and reference system (same measurement frequency)
+\item aligning time stamps for arbitrary asynchronous measurement frequencies. Brahmi \cite[Sec. 10.2.7]{Brahmi2020diss} interpolates the reference data time stamps onto the OuT time stamps.
+\end{itemize}
+
+
+Generalization to probabilistic world models: 
+\begin{itemize}
+\item if we choose hard threshold values to avoid association of certain 
+\end{itemize}
+
+
+
+
+
+
 
 
 %\input{sections/1_introduction}
