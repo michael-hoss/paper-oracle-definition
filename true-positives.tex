@@ -55,7 +55,9 @@
 
 % -------------------------- TITLE -------------------------------
 
-\title{What Is a True Positive? Relevant Criteria for Matching Perceived Objects to Reference Objects}
+\title{A Model to Define TP, FP, and FN for Dependable Object Perception}
+
+% \title{A Model to Define True Positives, False Positives, and False Negatives for Dependable Object Perception}
 
 % -------------------------- AUTHORS -------------------------------
 
@@ -85,11 +87,11 @@
 %\input{sections/0_abstract}
 
 %Single paragraph up to 250 words. Mini-version of the paper that includes context, state of the art, why it is not good enough, the research question, the methods, the evaluation and conclusions.
-Contemporary test methods for the perception subsystem of driving automation systems require a characterization of true-positive, false-positive, and false-negative object tracks. % general term for TP, FP, FN
+Test methods for the perception subsystem of driving automation systems often require a characterization of true-positive, false-positive, and false-negative objects. % general term for TP, FP, FN
 The literature defines these concepts in various different ways, which impedes comparability across different works. 
 To overcome this issue, this paper provides an exhaustive model to define these concepts as formally as feasible.
-The model generally describes the criteria for association of tracks under test to reference tracks. 
-Emphasized details are object distance functions in state space including penalties and thresholds, multi-object association algorithms, reference data and labeling characteristics, geometric issues like fields of view and semantic areas, temporal issues like incomplete tracks, and generalizations to probabilistic world models and asynchronous time stamps. 
+The model generally describes criteria for the generation of reference tracks, as well as their synchronization and association to tracks under test. 
+Emphasized details are labeling policies, object distance functions in state space including penalties and thresholds, multi-object association algorithms, geometric issues like fields of view and semantic areas, temporal issues like incomplete tracks, and generalizations to probabilistic world models and asynchronous time stamps. 
 While a majority of aspects can be formalized, a case study illustrates the remaining challenges towards an entirely formal description. 
 
 \end{abstract}
@@ -107,7 +109,34 @@ While a majority of aspects can be formalized, a case study illustrates the rema
 \section{Introduction}
 \label{sec:introduction}
 
-Will refer to \cite{Hoss2022review}.
+% Will refer to \cite{Hoss2022review}.
+
+
+
+\subsection{Context \& Research Questions}
+
+\subsubsection{Compliance with standards}
+Some standards, e.g. UL4600 (I guess) \cite{UL4600_voting_2019} suggest providing statistics of FPs and FNs. 
+Since a safety argumentation to comply with a standard should contain the least possible ambiguity, this paper aims at providing guidance to define FPs and FNs as clearly as possible. 
+
+\textbf{RQ1}: \textit{How can statistics about TP, FP, and FN meaningfully contribute to a safety argumentation?}
+
+\subsubsection{Awareness of Symbol Grounding Problem}
+Just like it is hard to define what e.g. a pedestrian is, it is also hard to define what a true positive is. 
+Humans that use these terms in their natural language have learned their meanings over time, but are often not fully aware of the exact criteria that define a pedestrian or a true positive, for example.  
+
+Humans tend to say ``the ADS did not see the pedestrian". While for some world model instances, such a statement is obvious, for other world model instances, it is highly complex to unambiguously define what it means that one road user sees another one. 
+
+\textbf{RQ2}: \textit{How can TP, FP, and FN be objectively defined?}
+
+\subsubsection{Design of Future Safety-Oriented Perception Metrics}
+
+Metrics that rely on a distinction between, TPs, FPs, FNs have these difficulties. 
+
+In contrast, Task-Oriented Metrics that employ a downstream driving function or assumptions thereof don't manually feature-engineer the criteria for must-see objects, but have that additional complexity. 
+
+\textbf{RQ3}: \textit{Which roles can TP, FP, and FN play in task-oriented perception metrics?}
+
 
 \subsection{Definition of Terms \& Abbreviations}
 Unless stated otherwise, the following term definitions and acronyms hold throughout this paper.
@@ -125,22 +154,6 @@ Unless stated otherwise, the following term definitions and acronyms hold throug
 \subsubsection{Matching} As part of a test method, finding TPs, FPs, and FNs based on the object lists of OuT and reference system. 
 
 \subsubsection{Association} As part of a perception algorithm, deciding which existing object track a novel object detection belongs to. 
-
-\subsection{Motivation}
-
-\subsubsection{Compliance with standards}
-Some standards, e.g. UL4600 (I guess) \cite{UL4600_voting_2019} suggest providing statistics of FPs and FNs. 
-Since a safety argumentation to comply with a standard should contain the least possible ambiguity, this paper aims at providing guidance to define FPs and FNs as clearly as possible. 
-
-\subsubsection{Awareness of Symbol Grounding Problem}
-Just like it is hard to define what e.g. a pedestrian is, it is also hard to define what a true positive is. 
-Humans that use these terms in their natural language have learned their meanings over time, but are often not fully aware of the exact criteria that define a pedestrian or a true positive, for example.  
-
-Humans tend to say ``the ADS did not see the pedestrian". While for some world model instances, such a statement is obvious, for other world model instances, it is highly complex to unambiguously define what it means that one road user sees another one. 
-
-\subsubsection{Illustration of difficulties in perception metrics}
-
-Metrics that rely on a distinction between, TPs, FPs, FNs have these difficulties. 
 
 
 \section{Related Work}
