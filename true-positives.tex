@@ -77,7 +77,7 @@
 
 % -------------------------- TITLE -------------------------------
 
-\title{Relevant Criteria for Defining TP, FP, and FN in Dependability Assessment of Object Perception}
+\title{Relevant Criteria for Identifying TP, FP, and FN in Dependability Assessment of Object Perception}
 
 %\title{A Model to Define TP, FP, and FN for Dependable Object Perception}
 
@@ -117,18 +117,18 @@
 %\input{sections/0_abstract}
 
 %Single paragraph up to 250 words. Mini-version of the paper that includes context, state of the art, why it is not good enough, the research question, the methods, the evaluation and conclusions.
-Test methods for the perception subsystem of driving automation systems commonly determine true-positive (TP), false-positive (FP), and false-negative (FN) objects. % general term for TP, FP, FN
+Test methods for the perception subsystem of driving automation systems commonly identify true-positive (TP), false-positive (FP), and false-negative (FN) objects. % general term for TP, FP, FN
 To date, these terms may be understood differently in different testing activities.
 However, clear definitions are needed for their comparability and for a potential usage within a safety case. 
-Therefore, this paper provides a set of relevant criteria for defining TP, FP, and FN objects. % in an ideally unambiguous way.
+Therefore, this paper provides a set of relevant criteria for identifying TP, FP, and FN objects. % in an ideally unambiguous way.
 % The criteria generally cover 
 %that cover the generation of reference objects and their association to objects under test. 
-Emphasized details are the level of the objects (e.g. detections or tracks), reference sensors, labeling policies, object distance functions, % in state space including penalties and thresholds, 
+Emphasized details are the level of the tested objects (e.g. detections or tracks), reference sensors, labeling policies, object distance functions, % in state space including penalties and thresholds, 
 multi-object association, fields of view, areas of importance, incomplete tracks, asynchronous time stamps, and probabilistic object representations. 
 % While a majority of aspects can be formalized, a case study illustrates the remaining challenges towards an entirely formal description. 
 We find it challenging to characterize all relevant aspects through adequate formal criteria due to both the open context problem and the symbol grounding problem.
-Nevertheless, we encourage practitioners to define TP, FP, and FN objects as formally as feasible. 
-Remaining uncertainties in their definition should be explicitly named and considered in the safety context.
+Nevertheless, we encourage practitioners to define the identification of TP, FP, and FN objects as formally as feasible. 
+Uncertainties in these definitions likely remain and should therefore be accounted for in the induction of safety claims from statistics of TP, FP, and FN. 
 
 \end{abstract}
 
@@ -152,9 +152,11 @@ Tell a certain story:
 Much research in object perception. 
 Perception challenges receive many submissions. 
 The metrics of their leaderboards require obtaining the TP, FP, and FN objects. 
+Direct metrics from the perception domain are easy to understand, easy to compute, and extremely popular, but not adapted to the driving task. 
+Therefore, it is unclear when FP or FN objects also lead to vehicle-level failures. 
 
-Also much research in safety assurance. 
-What is needed for a decomposition approach: claim that perception subsystem is reliable and allows safe vehicle behavior. Or at least claim that a sensor model has representative failure rates.
+Much research in safety assurance to reduce and forecast vehicle-level failures.
+Decomposition approach is popular, where different parts are . It needs a claim that perception subsystem is reliable and allows safe vehicle behavior. Or at least estimate how the perception outputs differ from the ground truth to construct sensor models for simulation tests.
 
 Safety-relevant perception metrics are an active topic of research. 
 Task-oriented metrics have been proposed. 
@@ -162,8 +164,7 @@ They are complex and need some assumptions about the downstream driving function
 Popularity of direct metrics that are based on TP, FP, FN still orders of magnitude higher than the popularity of task-oriented metrics. 
 
 Differentiation between metric types:
-Direct metrics from the perception domain are easy to understand, easy to compute, and extremely popular, but not adapted to the driving task. 
-Therefore, it is highly unclear when a FP or a FN also denote a failure that is relevant to the driving task. 
+
 In contrast, downstream metrics from the safety domain are adapted to the driving task, but more difficult to understand, more difficult to compute, and still not as well researched. 
 These metrics, however, directly detect and penalize failures relevant to the driving task. 
 %Consequently, we consider it worth while investigating whether metrics can be both easy to compute \textit{and} sufficient for safety claims.
@@ -174,7 +175,7 @@ Specifically, we aim at defining popular aspects of direct metrics clearly enoug
 
 Our contributions are therefore:
 \begin{itemize}
-\item A set of criteria to be used for the definition of TP, FP, and FN
+\item A set of criteria to be used for the definition of TP, FP, and FN (Sec. \ref{sec:criteria}).
 \item A discussion regarding their relevance for the driving task and safety
 \end{itemize}
 
@@ -192,7 +193,7 @@ Our contributions are therefore:
 \subsection{Context \& Research Questions}
 
 \subsubsection{Compliance with standards}
-Some standards, e.g. UL4600 (I guess) \cite{UL4600_voting_2019} suggest providing statistics of FPs and FNs. 
+Some standards, e.g. UL4600 \cite[Sec. 8.4.1.2]{UL4600_voting_2019} suggest providing statistics of FPs and FNs. 
 Since a safety argumentation to comply with a standard should contain the least possible ambiguity, this paper aims at providing guidance to define FPs and FNs as clearly as possible. 
 
 \textbf{RQ1}: \textit{How can statistics about TP, FP, and FN meaningfully contribute to a safety argumentation?}
@@ -232,19 +233,57 @@ Unless stated otherwise, the following term definitions and acronyms hold throug
 \subsubsection{Association} As part of a perception algorithm, deciding which existing object track a novel object detection belongs to. 
 
 
-\section{Related Work}
-\label{sec:related_work}
+\section{Methods}
+\label{sec:method}
 
-Only related work here that is about the definition of TPs, FPs, and FNs. 
-All further relevant literature sources that do not explicitly focus on defining TPs will be referenced as they become relevant in subsequent sections. 
+% We define the criteria for identifying TP, FP, and FN in the following way.
+
+When human experts observe a top-down representation of a traffic scene with an overlaid object list under test, they can typically derive the following statements:
+\begin{itemize}
+	\item the ADS \textit{did} see the other road user
+	\item the ADS \textit{did not} see the other road user 
+	\item the ADS saw a road user \textit{that did not exist}.
+\end{itemize}
+
+We currently assume that an ideal test oracle exactly reproduces such human expert statements when it identifies TPs, FNs, and FPs correspondingly.
+A human reference for the definition of a test oracle is beneficial for the human comprehensibility of the overall safety argumentation. 
+However, for the sake of comparability of test results, the actual oracle should be subject to as little human intuition as possible. 
+
+We therefore aim at encoding our human intuition for a test oracle into unambiguous criteria. 
+Our method to do this primarily consists of noting down and structuring all aspects that we consider relevant based on our previous experience. 
+This experience consists of ...
 
 
-\section{Method}
-\label{key}
 
-Experience. No special method. 
 
-\section{The Model}
+%oracle is also at least partially based on intuition that is naturally impossible to specify explicitly. 
+%Therefore, we intend to define criteria that allow to specify this human intuition as close as possible. 
+
+
+%Eliminating the uncertainty of human intuition from the test oracle might make it more rigorous and formal, but for the time being, we justify our human reference for the test oracle as follows. 
+%Since the safety argumentation is performed and evaluated by humans, its claims and evidences should be 
+
+
+%\footnote{Eliminating informal human intuition from the oracle for TPs, FPs, and FNs could be beneficial, but this topic is outside the scope of this paper.}. 
+%This assumption can be justified by the fact that human judges 
+
+
+% Our goal is to list all relevant aspects of the test method 
+
+%While other works use machine learning in the test method to reproduce these human observations \cite{Florbaeck2016.matching.offline, Sondell2018}, our goal is to make the features, criteria, and thresholds of the oracle as explicit as possible.
+
+
+
+  
+
+
+
+% Experience. No special method. 
+
+
+
+\section{The Criteria}
+\label{sec:criteria}
 
 In general: association of tracks under test to reference tracks. This boils down to:
 
@@ -273,9 +312,22 @@ Generalization to probabilistic world models:
 \end{itemize}
 
 
+\section{Discussion}
+\label{sec:discussion}
 
 
 
+\section{Related Work}
+\label{sec:related_work}
+
+Only related work here that is about the definition of TPs, FPs, and FNs. 
+All further relevant literature sources that do not explicitly focus on defining TPs will be referenced as they become relevant in other sections. 
+
+Florbäck et al. \cite{Florbaeck2016.matching.offline} and Sondell and Svensson \cite{Sondell2018} investigate how machine learning can reproduce human associations of objects under test to reference objects.
+
+
+\section{Conclusion}
+\label{sec:conclusion}
 
 
 
