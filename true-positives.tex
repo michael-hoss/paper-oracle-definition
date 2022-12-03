@@ -77,6 +77,8 @@
 
 % -------------------------- TITLE -------------------------------
 
+\title{A Language to Specify a Test Oracle that Identifies TP, FP, and FN}
+
 \title{Relevant Criteria for Identifying TP, FP, and FN in Dependability Assessment of Object Perception}
 
 %\title{A Model to Define TP, FP, and FN for Dependable Object Perception}
@@ -232,6 +234,7 @@ Unless stated otherwise, the following term definitions and acronyms hold throug
 
 \subsubsection{Association} As part of a perception algorithm, deciding which existing object track a novel object detection belongs to. 
 
+\subsubsection{Oracle} The mechanism that determines whether a test passes or fails, see also the survey by Barr et al. \cite{Barr2015oracle}.
 
 \section{Methods}
 \label{sec:method}
@@ -247,9 +250,9 @@ When human experts observe a top-down representation of a traffic scene with an 
 
 We currently assume that an ideal test oracle exactly reproduces such human expert statements when it identifies TPs, FNs, and FPs correspondingly.
 A human reference for the definition of a test oracle is beneficial for the human comprehensibility of the overall safety argumentation. 
-However, for the sake of comparability of test results, the actual oracle should be subject to as little human intuition as possible. 
+However, for the sake of comparability of test results, the actual oracle should ideally be reproducible and therefore contain as little human intuition as possible. 
 
-We therefore aim at encoding our human intuition for a test oracle into unambiguous criteria. 
+Consequently, we aim at encoding our human intuition for a test oracle into unambiguous criteria. 
 Our method to do this primarily consists of noting down and structuring all aspects that we consider relevant based on our previous experience. 
 This experience consists of ...
 
@@ -285,6 +288,10 @@ This experience consists of ...
 \section{The Criteria}
 \label{sec:criteria}
 
+TODO: big schematic of testing taxonomy, with subsection numbers for individual aspects mapped into it.
+
+% USE NATURAL LANGUAGE HERE!
+
 In general: association of tracks under test to reference tracks. This boils down to:
 
 Association of objects within a single time frame:
@@ -312,8 +319,32 @@ Generalization to probabilistic world models:
 \end{itemize}
 
 
+\section{Example Case Studies}
+
+Or outsource them to the next paper?
+
+Use as much mathematical notation as possible here!
+
+\subsection{Submission at Perception Challenge}
+
+Describe an example submission at the leaderboard of Waymo Open Dataset. 
+
+Labeling specifications\footnote{\url{https://github.com/waymo-research/waymo-open-dataset/blob/master/docs/labeling_specifications.md}}.
+
+Description of perception challenge\footnote{\url{https://waymo.com/open/data/perception/}}
+
+
+\subsection{External Reference System}
+
+Use inD data with a simulated ego vehicle and simulated data under test.
+Use the Lanelet2 map (converted to the omega format) to include and exclude certain areas.
+
+
 \section{Discussion}
 \label{sec:discussion}
+
+We have presented a generic set of relevant conditions for specifying a test oracle that identifies TP, FP, and FN. 
+However, even this set of conditions might not be generic enough to specify all possible concepts of such a test oracle. 
 
 
 
