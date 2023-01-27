@@ -150,7 +150,8 @@ Uncertainties in these definitions likely remain and should therefore be account
 
 % Will refer to \cite{Hoss2022review}.
 
-Tell a certain story:
+This story is a good introduction to the topic and to what I want to say! 
+TODO: make a smooth text out of it.
 
 Much research in object perception. 
 Perception challenges receive many submissions. 
@@ -178,12 +179,10 @@ Specifically, we aim at defining popular aspects of direct metrics clearly enoug
 
 Our contributions are therefore:
 \begin{itemize}
-\item A set of criteria to be used for the definition of TP, FP, and FN (Sec. \ref{sec:criteria}).
-\item A discussion of the relevance of TP, FP, and FN for the driving task and safety
+\item A set of criteria to define how a test method identifies TP, FP, and FN (Sec. \ref{sec:criteria}).
+\item A discussion of the relevance of TP, FP, and FN in the safety assurance context
 \end{itemize}
 
-
-THIS IS IT I GUESS. THE REST OF THE INTRODUCTION CAN BE REALLY SHORT. 
 
 %This paper aims at contributing basic understanding of relevant at the intersection of perception and safety assurance. 
 
@@ -195,30 +194,13 @@ THIS IS IT I GUESS. THE REST OF THE INTRODUCTION CAN BE REALLY SHORT.
 
 
 
-\subsection{Research Questions}
+The discussion will treat the following research questions:
 
-\subsubsection{Compliance with standards}
-Some standards, e.g. UL4600 \cite[Sec. 8.4.1.2]{UL4600_voting_2019} suggest providing statistics of FPs and FNs. 
-Since a safety argumentation to comply with a standard should contain the least possible ambiguity, this paper aims at providing guidance to define FPs and FNs as clearly as possible. 
+\noindent \textbf{RQ1}: \textit{Can TP, FP, and FN be objectively defined?}
 
-\textbf{RQ1}: \textit{How can statistics about TP, FP, and FN meaningfully contribute to a safety argumentation?}
+\noindent \textbf{RQ2}: \textit{How relevant are TP, FP, and FN for task-oriented perception metrics?}
 
-\subsubsection{Awareness of Symbol Grounding Problem}
-Just like it is hard to define what e.g. a pedestrian is, it is also hard to define what a true positive is. 
-Humans that use these terms in their natural language have learned their meanings over time, but are often not fully aware of the exact criteria that define a pedestrian or a true positive, for example.  
-
-Humans tend to say ``the ADS did not see the pedestrian". While for some world model instances, such a statement is obvious, for other world model instances, it is highly complex to unambiguously define what it means that one road user sees another one. 
-
-\textbf{RQ2}: \textit{How can TP, FP, and FN be objectively defined?}
-
-\subsubsection{Design of Future Safety-Oriented Perception Metrics}
-
-Metrics that rely on a distinction between, TPs, FPs, FNs have these difficulties. 
-
-In contrast, Task-Oriented Metrics that employ a downstream driving function or assumptions thereof don't manually feature-engineer the criteria for must-see objects, but have that additional complexity. 
-
-\textbf{RQ3}: \textit{Which roles can TP, FP, and FN play in task-oriented perception metrics?}
-
+\noindent \textbf{RQ3}: \textit{Can statistics of TP, FP, and FN contribute to a safety argumentation?}
 
 \subsection{Definition of Terms \& Abbreviations}
 Unless stated otherwise, the following term definitions and acronyms hold throughout this paper.
@@ -228,26 +210,26 @@ From ISO 23150:2021 \cite{ISO_23150_2021_data_communication}:
 ``representation of a real-world entity with defined boundaries and characteristics in the vehicle coordinate system".
 This paper narrows down this definition to Layer 4 of the 6-layer-model \cite{Scholtes20216lmAccess}. An object can span over one or multiple time steps. 
 
-\subsubsection{Object under Test (OuT)} Perception subsystem of an ego vehicle / subject vehicle that contains a driving automation system. Note: The ``object" in OuT must not be confused with the more general \textit{object} defined above (Sec. \ref{def:object}).
+\subsubsection{Object under Test (OuT)} \label{def:out} Perception subsystem of an ego vehicle / subject vehicle that contains a driving automation system. Note: The ``object" in OuT must not be confused with the more general \textit{object} defined above (Sec. \ref{def:object}).
 
-\subsubsection{True Positive (TP)} The circumstance that an object in the data under test matches with an object in the reference data.
+\subsubsection{True Positive (TP)} \label{def:tp} The circumstance that an object in the data under test matches with an object in the reference data.
 
-\subsubsection{False Positive (FP)} The circumstance that an object in the data under test does not match with any object in the reference data. 
+\subsubsection{False Positive (FP)} \label{def:fp} The circumstance that an object in the data under test does not match with any object in the reference data. 
 
-\subsubsection{False Negative (FN)} The circumstance that no object in the data under test matches with a given object in the reference data.
+\subsubsection{False Negative (FN)} \label{def:fn} The circumstance that no object in the data under test matches with a given object in the reference data.
 
-\subsubsection{Matching method} Those parts of the test method that influence the identification of TPs, FPs, and FNs. % based on an object list under test and a reference object list. 
+\subsubsection{Matching method} \label{def:matching_method} Those parts of the test method that influence the identification of TPs, FPs, and FNs. % based on an object list under test and a reference object list. 
 
 % OMG I finally got the difference between method and methodology!! I should use method much more often now. But sometimes, methodology is the term to use (when I analyze different methods).
 
-\subsubsection{Matching result} General term for the mutually exclusive circumstances TP, FP, FN.  
+\subsubsection{Matching result} \label{def:matching_result} General term for the mutually exclusive circumstances TP, FP, FN.  
 
 
 %\subsubsection{Matching} As part of a test method, identifying TPs, FPs, and FNs based on the object lists of OuT and reference system. 
 
-\subsubsection{Object association} As part of a perception algorithm, deciding which existing object track a novel object detection belongs to. Not to be confused with \textit{matching}, which is a concept of the test method (adopted from \cite{Luiten2020hota}).
+\subsubsection{Object association} \label{def:association} As part of a perception algorithm, deciding which existing object track a novel object detection belongs to. Not to be confused with \textit{matching}, which is a concept of the test method (adopted from \cite{Luiten2020hota}).
 
-\subsubsection{Oracle} The mechanism that determines whether a test passes or fails. See also the oracle survey by Barr et al. \cite{Barr2015oracle}.
+\subsubsection{Oracle} \label{def:oracle} The mechanism that determines whether a test passes or fails. See also the oracle survey by Barr et al. \cite{Barr2015oracle}.
 
 \section{Methods}
 \label{sec:method}
@@ -298,7 +280,7 @@ This experience consists of object-level online data fusion, object-level percep
 
 
 
-\section{The Criteria}
+\section{Defining a matching method}
 \label{sec:criteria}
 
 TODO: big schematic of testing taxonomy, with subsection numbers for individual aspects mapped into it.
@@ -353,11 +335,40 @@ Use inD data with a simulated ego vehicle and simulated data under test.
 Use the Lanelet2 map (converted to the omega format) to include and exclude certain areas.
 
 
-\section{Discussion}
+\section{Discussion of Research Questions}
 \label{sec:discussion}
 
 We have presented a generic set of relevant conditions for specifying a test oracle that identifies TP, FP, and FN. 
 However, even this set of conditions might not be generic enough to specify all possible concepts of such a test oracle. 
+
+
+\subsubsection{Awareness of Symbol Grounding Problem}
+
+TODO
+
+Just like it is hard to define what e.g. a pedestrian is, it is also hard to define what a true positive is. 
+Humans that use these terms in their natural language have learned their meanings over time, but are often not fully aware of the exact criteria that define a pedestrian or a true positive, for example.  
+
+Humans tend to say ``the ADS did not see the pedestrian". While for some world model instances, such a statement is obvious, for other world model instances, it is highly complex to unambiguously define what it means that one road user sees another one. 
+
+
+\subsubsection{Design of Future Safety-Oriented Perception Metrics}
+
+Metrics that rely on a distinction between, TPs, FPs, FNs have these difficulties. 
+
+In contrast, Task-Oriented Metrics that employ a downstream driving function or assumptions thereof don't manually feature-engineer the criteria for must-see objects, but have that additional complexity. 
+
+
+\subsection{Compliance with standards}
+
+TODO
+
+Some standards, e.g. UL4600 \cite[Sec. 8.4.1.2]{UL4600_voting_2019} suggest providing statistics of FPs and FNs. 
+Since a safety argumentation to comply with a standard should contain the least possible ambiguity, this paper aims at providing guidance to define FPs and FNs as clearly as possible. 
+
+
+
+
 
 
 
