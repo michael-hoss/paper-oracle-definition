@@ -97,8 +97,9 @@
 
 \maketitle
 
-\nnfootnote{$^{1}$~The author is with RWTH Aachen University, Germany. {\tt\small \href{mailto:michael.hoss@rwth-aachen.de}{michael.hoss@rwth-aachen.de}}
-	%\newline
+\nnfootnote{$^{1}$~The author is with RWTH Aachen University, Germany. {\tt\small \href{mailto:michael.hoss@rwth-aachen.de}{michael.hoss@rwth-aachen.de}}. 
+\newline
+Despite being the only author, the first person plural (``we") is used in the paper to comply with a common style of scientific writing. 
 }
 
 %\nnfootnote{\textasteriskcentered~These authors contributed equally}
@@ -125,11 +126,11 @@ However, clear definitions are needed for their comparability and for a potentia
 Therefore, this paper provides a set of relevant criteria for identifying TP, FP, and FN objects. % in an ideally unambiguous way.
 % The criteria generally cover 
 %that cover the generation of reference objects and their association to objects under test. 
-Emphasized details are the level of the tested objects (e.g. detections or tracks), reference sensors, labeling policies, object distance functions, % in state space including penalties and thresholds, 
+Emphasized details are the level of the tested objects (e.g. detections or tracks), reference sensor characteristics, labeling policies, object distance functions, % in state space including penalties and thresholds, 
 multi-object association, fields of view, areas of importance, incomplete tracks, asynchronous time stamps, and probabilistic object representations. 
 % While a majority of aspects can be formalized, a case study illustrates the remaining challenges towards an entirely formal description. 
-We find it challenging to characterize all relevant aspects through adequate formal criteria due to both the open context problem and the symbol grounding problem.
-Nevertheless, we encourage practitioners to define the identification of TP, FP, and FN objects as formally as feasible. 
+We find it challenging to characterize all aspects relevant for identifying TP, FP, and FN through adequate formal criteria due to both the open context problem and the symbol grounding problem.
+Nevertheless, we encourage practitioners to define these aspects in their publications as formally as feasible. 
 Uncertainties in these definitions likely remain and should therefore be accounted for in the induction of safety claims from statistics of TP, FP, and FN. 
 
 \end{abstract}
@@ -158,7 +159,7 @@ Direct metrics from the perception domain are easy to understand, easy to comput
 Therefore, it is unclear when FP or FN objects also lead to vehicle-level failures. 
 
 Much research in safety assurance to reduce and forecast vehicle-level failures.
-Decomposition approach is popular, where different parts are . It needs a claim that perception subsystem is reliable and allows safe vehicle behavior. Or at least estimate how the perception outputs differ from the ground truth to construct sensor models for simulation tests.
+Decomposition approach is popular, where different parts are... It needs a claim that perception subsystem is reliable and allows safe vehicle behavior. Or at least estimate how the perception outputs differ from the ground truth to construct sensor models for simulation tests.
 
 Safety-relevant perception metrics are an active topic of research. 
 Task-oriented metrics have been proposed. 
@@ -178,9 +179,11 @@ Specifically, we aim at defining popular aspects of direct metrics clearly enoug
 Our contributions are therefore:
 \begin{itemize}
 \item A set of criteria to be used for the definition of TP, FP, and FN (Sec. \ref{sec:criteria}).
-\item A discussion regarding their relevance for the driving task and safety
+\item A discussion of the relevance of TP, FP, and FN for the driving task and safety
 \end{itemize}
 
+
+THIS IS IT I GUESS. THE REST OF THE INTRODUCTION CAN BE REALLY SHORT. 
 
 %This paper aims at contributing basic understanding of relevant at the intersection of perception and safety assurance. 
 
@@ -192,7 +195,7 @@ Our contributions are therefore:
 
 
 
-\subsection{Context \& Research Questions}
+\subsection{Research Questions}
 
 \subsubsection{Compliance with standards}
 Some standards, e.g. UL4600 \cite[Sec. 8.4.1.2]{UL4600_voting_2019} suggest providing statistics of FPs and FNs. 
@@ -220,21 +223,31 @@ In contrast, Task-Oriented Metrics that employ a downstream driving function or 
 \subsection{Definition of Terms \& Abbreviations}
 Unless stated otherwise, the following term definitions and acronyms hold throughout this paper.
 
-\subsubsection{Object} Unless defined otherwise, digital representation of an entity on Layer 4 of the 6-layer-model \cite{Scholtes20216lmAccess}. Can span over one or multiple time steps. 
+\subsubsection{Object} \label{def:object}
+From ISO 23150:2021 \cite{ISO_23150_2021_data_communication}: 
+``representation of a real-world entity with defined boundaries and characteristics in the vehicle coordinate system".
+This paper narrows down this definition to Layer 4 of the 6-layer-model \cite{Scholtes20216lmAccess}. An object can span over one or multiple time steps. 
 
-\subsubsection{Object under Test (OuT)} Perception subsystem of an ego vehicle / subject vehicle that contains a driving automation system.
+\subsubsection{Object under Test (OuT)} Perception subsystem of an ego vehicle / subject vehicle that contains a driving automation system. Note: The ``object" in OuT must not be confused with the more general \textit{object} defined above (Sec. \ref{def:object}).
 
-\subsubsection{Matching concept} All circumstances of the testing methodology that influence the determination of TPs, FPs, and FNs. 
+\subsubsection{True Positive (TP)} The circumstance that an object in the data under test matches with an object in the reference data.
 
-\subsubsection{Matching result} General term for the mutually exclusive concepts TP, FP, FN.  
+\subsubsection{False Positive (FP)} The circumstance that an object in the data under test does not match with any object in the reference data. 
 
-\subsubsection{True Positive (TP)} Continue here!
+\subsubsection{False Negative (FN)} The circumstance that no object in the data under test matches with a given object in the reference data.
 
-\subsubsection{Matching} As part of a test method, finding TPs, FPs, and FNs based on the object lists of OuT and reference system. 
+\subsubsection{Matching method} Those parts of the test method that influence the identification of TPs, FPs, and FNs. % based on an object list under test and a reference object list. 
 
-\subsubsection{Association} As part of a perception algorithm, deciding which existing object track a novel object detection belongs to. 
+% OMG I finally got the difference between method and methodology!! I should use method much more often now. But sometimes, methodology is the term to use (when I analyze different methods).
 
-\subsubsection{Oracle} The mechanism that determines whether a test passes or fails, see also the survey by Barr et al. \cite{Barr2015oracle}.
+\subsubsection{Matching result} General term for the mutually exclusive circumstances TP, FP, FN.  
+
+
+%\subsubsection{Matching} As part of a test method, identifying TPs, FPs, and FNs based on the object lists of OuT and reference system. 
+
+\subsubsection{Object association} As part of a perception algorithm, deciding which existing object track a novel object detection belongs to. Not to be confused with \textit{matching}, which is a concept of the test method (adopted from \cite{Luiten2020hota}).
+
+\subsubsection{Oracle} The mechanism that determines whether a test passes or fails. See also the oracle survey by Barr et al. \cite{Barr2015oracle}.
 
 \section{Methods}
 \label{sec:method}
@@ -250,11 +263,11 @@ When human experts observe a top-down representation of a traffic scene with an 
 
 We currently assume that an ideal test oracle exactly reproduces such human expert statements when it identifies TPs, FNs, and FPs correspondingly.
 A human reference for the definition of a test oracle is beneficial for the human comprehensibility of the overall safety argumentation. 
-However, for the sake of comparability of test results, the actual oracle should ideally be reproducible and therefore contain as little human intuition as possible. 
+However, for the sake of comparability of test results, the actual oracle should ideally be exactly reproducible and therefore contain as little human intuition as possible. 
 
 Consequently, we aim at encoding our human intuition for a test oracle into unambiguous criteria. 
 Our method to do this primarily consists of noting down and structuring all aspects that we consider relevant based on our previous experience. 
-This experience consists of ...
+This experience consists of object-level online data fusion, object-level perception error modeling, testing of object perception against aerial reference data, and scenario elicitation from traffic recordings for safety assurance. 
 
 
 
