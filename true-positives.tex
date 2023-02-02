@@ -230,6 +230,7 @@ This paper narrows down this definition to Layer 4 of the 6-layer-model \cite{Sc
 \subsubsection{Object association} \label{def:association} As part of a perception algorithm, deciding which existing object track a novel object detection belongs to. Not to be confused with \textit{matching}, which is a concept of the test method (adopted from \cite{Luiten2020hota}).
 
 \subsubsection{Oracle} \label{def:oracle} The mechanism that determines whether a test passes or fails. See also the oracle survey by Barr et al. \cite{Barr2015oracle}.
+In the present context, \textit{oracle} also refers to a \textit{matching method}.
 
 \section{Methods}
 \label{sec:method}
@@ -283,35 +284,41 @@ This experience consists of object-level online data fusion, object-level percep
 \section{Defining a matching method}
 \label{sec:criteria}
 
-TODO: big schematic of testing taxonomy, with subsection numbers for individual aspects mapped into it.
+TODO GRAPHIC: big schematic of testing taxonomy, with subsection numbers for individual aspects mapped into it.
 
+
+TODO GRAPHIC: big top-down view of a traffic scene with 
 % USE NATURAL LANGUAGE HERE!
 
 In general: association of tracks under test to reference tracks. This boils down to:
 
-Association of objects within a single time frame:
-\begin{itemize}
+\subsection{Matching deterministic objects in a single time frame}
+
+\subsubsection{Object distance functions in state space}
+asdf
+
+\begin{enumerate}
 \item object distance functions in state space, including penalties and thresholds
 \item multi-object association algorithms. Not only 1:1, but also n:n, as e.g. Brahmi \cite[Sec. 10.3]{Brahmi2020diss} describes it.
 \item reference data and labeling characteristics
 \item fields of view of reference data and OuT
 \item semantic areas in the road infrastructure that tell where to test
-\end{itemize}
+\end{enumerate}
 
-Generalization to object tracks over time:
-\begin{itemize}
+\subsection{Generalization to object tracks over time}
+\begin{enumerate}
 \item Brahmi \cite{Brahmi2020diss} did quite some stuff on timing
 \item temporally incomplete tracks 
 \item latency of the OuT
 \item synchronization between OuT and reference system (same measurement frequency)
 \item aligning time stamps for arbitrary asynchronous measurement frequencies. Brahmi \cite[Sec. 10.2.7]{Brahmi2020diss} interpolates the reference data time stamps onto the OuT time stamps.
-\end{itemize}
+\end{enumerate}
 
 
-Generalization to probabilistic world models: 
-\begin{itemize}
+\subsection{Generalization to probabilistic object descriptions}
+\begin{enumerate}
 \item if we choose hard threshold values to avoid association of certain 
-\end{itemize}
+\end{enumerate}
 
 
 \section{Example Case Studies}
