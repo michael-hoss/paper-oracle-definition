@@ -103,7 +103,7 @@
 
 \nnfootnote{$^{1}$~The author is with RWTH Aachen University, Germany. {\tt\small \href{mailto:michael.hoss@rwth-aachen.de}{michael.hoss@rwth-aachen.de}}. 
 \newline
-Despite being the only author, the first person plural (``we") is used in the paper to comply with a common style of scientific writing. 
+Despite being the only author, the first person plural (``we") is used to comply with a common style of scientific writing. 
 }
 
 %\nnfootnote{\textasteriskcentered~These authors contributed equally}
@@ -152,9 +152,9 @@ Uncertainties in these definitions likely remain and should therefore be account
 \section{Introduction}
 \label{sec:introduction}
 
-% Will refer to \cite{Hoss2022review}.
+\subsection{Motivation}
 
-The task of object-based environment perception for automated driving receives much focus through public perception challenges. % that benchmark different approaches.
+The task of object-based environment perception for automated driving systems (ADS) receives much focus through public perception challenges. % that benchmark different approaches.
 They publish datasets of raw sensor data along with reference labels for training purposes. 
 Their leaderboards then rank individual submissions according to their similarity to the non-public reference labels on the test part of the dataset.
 
@@ -167,20 +167,22 @@ For example, it is typically unclear which FPs or FNs also lead to vehicle-level
 To reduce and forecast vehicle-level failures, the field of safety assurance for automated driving has gained much popularity. 
 One method of achieving provable safety is to decompose the driving automation system into different subsystems and establish dependable interfaces between them. 
 The perception subsystem can be defined to consist of sensor hardware and computation for world modeling, excluding any prediction or planning into the future. 
-It is dependable in case of a sufficiently low mean time between events that induce vehicle-level failures. 
+Its dependability requires a sufficiently low mean time between events that induce vehicle-level failures. 
 %Demonstrating this dependability is an active research questions that this paper aims to contribute to. 
 
 % Or at least estimate how the perception outputs differ from the ground truth to construct sensor models for simulation tests.
 
 The demonstration of this dependability is an active topic of research, where one of the most crucial issues is the identification of perception outputs that are not safe for the driving task. 
 Task-oriented and safety-relevant perception metrics are therefore currently being proposed. 
-In contrast to the most popular perception leaderboard metrics, safety-oriented metrics tend to be more complex and incomprehensible due to their additional consideration of the downstream driving function and safety in road traffic. 
+In contrast to the most popular perception leaderboard metrics, safety-oriented metrics tend to be more complex and incomprehensible due to their additional consideration of the downstream driving function and of safety in road traffic. 
 %Popularity of direct metrics that are based on TP, FP, FN still orders of magnitude higher than the popularity of task-oriented metrics. 
 
 Ideally, novel perception metrics combine all desired properties such that they are helpful to both perception developers and verification and validation engineers. 
 This requires closing the gap between straightforward safety-agnostic metrics and highly complex safety-relevant metrics. 
 %comprehensible to humans, and straightforward to compute all at the same time. 
-While one could make safety-relevant metrics less complex, the present paper aims at making straightforward metrics more safety-relevant. 
+
+\subsection{Contributions}
+While one could make safety-relevant metrics less complex, the present paper aims at making straightforward metrics better usable for safety assurance. 
 Specifically, we aim at defining TPs, FPs, and FNs clearly enough such that statistics of them represent meaningful evidences for safety claims. 
 %Differentiation between metric types:
 %In contrast, downstream metrics from the safety domain are adapted to the driving task, but more difficult to understand, more difficult to compute, and still not as well researched. 
@@ -191,8 +193,8 @@ Specifically, we aim at defining TPs, FPs, and FNs clearly enough such that stat
 %Specifically, we aim at defining popular aspects of direct metrics clearly enough such that they can represent meaningful evidences for safety-relevant claims.  
 Our main contributions are:
 \begin{itemize}
-\item A set of criteria to define how a test oracle identifies TP, FP, and FN (Sec. \ref{sec:criteria})
-\item A discussion of the relevance of TP, FP, and FN in the safety assurance context (Sec. \ref{sec:discussion})
+\item A set of criteria to define how a test oracle identifies TPs, FPs, and FNs (Sec. \ref{sec:criteria})
+\item A discussion of the relevance of TPs, FPs, and FNs in the safety assurance context (Sec. \ref{sec:discussion})
 \end{itemize}
 
 
@@ -207,12 +209,15 @@ Our main contributions are:
 
 
 The discussion will treat the following research questions:
+\begin{itemize}
 
-\noindent \textbf{RQ1}: \textit{Can TP, FP, and FN be objectively defined?}
 
-\noindent \textbf{RQ2}: \textit{How relevant are TP, FP, and FN for task-oriented perception metrics?}
+\item {RQ1}: \textit{Can TP, FP, and FN be objectively defined?}
 
-\noindent \textbf{RQ3}: \textit{Can statistics of TP, FP, and FN contribute to a safety argumentation?}
+\item {RQ2}: \textit{How relevant are TP, FP, and FN for task-oriented perception metrics?}
+
+\item {RQ3}: \textit{Can statistics of TP, FP, and FN contribute to a safety argumentation?}
+\end{itemize}
 
 \begin{figure*}[t]
 	\centering
@@ -226,7 +231,7 @@ The discussion will treat the following research questions:
 \end{figure*}
 
 
-\subsection{Definition of Terms \& Abbreviations}
+\subsection{Definition of terms \& abbreviations}
 Unless stated otherwise, the following term definitions and acronyms hold throughout this paper.
 
 \subsubsection{Object} \label{def:object}
@@ -268,7 +273,7 @@ In the present paper, \textit{(test) oracle} refers to the mechanism that identi
 
 % We define the criteria for identifying TP, FP, and FN in the following way.
 
-When human experts observe a top-down representation of a traffic scene with an overlaid object list under test, they can typically derive the following statements:
+When human experts observe a top-down representation of a traffic scene with an overlaid object list under test (Fig. \ref{fig:top_down_all}), they can typically make the following statements:
 \begin{itemize}
 	\item the ADS \textit{did} see the other road user
 	\item the ADS \textit{did not} see the other road user 
@@ -323,18 +328,20 @@ As we apply this experience-based oracle definition to a popular perception chal
 	\vspace*{2mm}
 	\includegraphics[width=\textwidth]{img/top_down_fitting_slide.pdf}
 	
-	\caption{Aspects influencing the test oracle for TPs, FPs, and FNs. TODO: include 1) an object only in the fov of the OuT that the OuT did not perceive. 2) an object outside all fovs
+	\caption{Aspects of road traffic and geometry that the test oracle covers.
 	}
 	\label{fig:top_down_all}
 \end{figure*}
 
-The aspects that define the test oracle for TPs, FPs, and FNs, are illustrated in Fig. \ref{fig:top_down_all}.
 
-% USE NATURAL LANGUAGE HERE!
+A test oracle that identifies TPs, FPs, and FNs is a logical part of a testing activity (Fig. \ref{fig:oracle_in_taxonomy}), it deals with spatial relations in a traffic scene (Fig. \ref{fig:top_down_all}), and with temporal aspects of object matching (Fig. \ref{fig:timeline}).
 
-In this section, we intentionally use natural language and avoid a more specific or more technical description of these aspects in order to keep it generally applicable to as many test oracles as possible without prescribing an internal structure. 
+This section details the aspects illustrated in the mentioned figures in natural language. 
+% We intentionally avoid a more formal, more technical, or more specific description in order to keep it generally applicable to as many test oracles as possible without prescribing an internal structure and without . 
+% DO THIS WHY NATURAL LANGUAGE HERE IN THE DISCUSSION!
+It first treats the simple case of deterministic object representations in a single time frame (Sec. \ref{sec:oracle_simple}) and then covers temporal aspects (Sec. \ref{sec:oracle_time}) and probabilistic object descriptions (\ref{sec:oracle_probabilistic}).
 
-In general: association of tracks under test to reference tracks. This boils down to:
+%In general: matching of tracks under test to reference tracks. This boils down to:
 
 \subsection{Matching deterministic objects in a single time frame}
 \label{sec:oracle_simple}
@@ -381,6 +388,17 @@ Not only 1:1, but also n:n, as e.g. Brahmi \cite[Sec. 10.3]{Brahmi2020diss} desc
 
 \subsection{Generalization to object tracks over time}
 \label{sec:oracle_time}
+
+
+\begin{figure}[t]
+	\centering
+	\vspace*{2mm}
+	\includegraphics[width=0.49\textwidth]{img/timeline.pdf}
+	\caption{Temporal aspects of the test oracle. TODO: synchronization/interpolation?
+	}
+	\label{fig:timeline}
+\end{figure}
+
 
 Brahmi \cite{Brahmi2020diss} did quite some stuff on timing.
 
@@ -485,7 +503,11 @@ Since a safety argumentation to comply with a standard should contain the least 
 
 
 
+\subsection{More formal definition of test oracle}
 
+It is hard because some things are hard to formalize.
+A modular technical description of a test oracle would already partially predetermine the arrangement of its modules, or the internal structure of the test oracle. This, however, can be flexible. For example, certain objects or semantic areas could be ignored at the very beginning of the testing activity, or at the very end. 
+Future work how far a formal description can go without unnecessarily prescribing internals of the test oracle. 
 
 
 
