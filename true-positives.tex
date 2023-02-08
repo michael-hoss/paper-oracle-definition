@@ -158,7 +158,7 @@ The task of object-based environment perception for automated driving receives m
 They publish datasets of raw sensor data along with reference labels for training purposes. 
 Their leaderboards then rank individual submissions according to their similarity to the non-public reference labels on the test part of the dataset.
 
-Common metrics of such leaderboards consist of aggregations of true-positive (TP), false-positive (FP), and false-negative (FN) objects. 
+Common metrics of such leaderboards consist of aggregations of true-positive objects (TPs), false-positive objects (FPs), and false-negative objects (FNs). 
 These direct metrics from the perception domain are comprehensible, straightforward to compute, and highly popular, but not necessarily adapted to the driving task. 
 For example, it is typically unclear which FPs or FNs also lead to vehicle-level failures. 
 % Assuming that every FP and FN leads to a vehicle-level failure would render the achievement of 
@@ -178,24 +178,21 @@ In contrast to the most popular perception leaderboard metrics, safety-oriented 
 %Popularity of direct metrics that are based on TP, FP, FN still orders of magnitude higher than the popularity of task-oriented metrics. 
 
 Ideally, novel perception metrics combine all desired properties such that they are helpful to both perception developers and verification and validation engineers. 
-This requires solving the tradeoff between straightforward safety-agnostic metrics and highly complex safety-relevant metrics. 
+This requires closing the gap between straightforward safety-agnostic metrics and highly complex safety-relevant metrics. 
 %comprehensible to humans, and straightforward to compute all at the same time. 
-The present paper contributes to solving this tradeoff by providing guidance to define 
-CONTINUE HERE
-
+While one could make safety-relevant metrics less complex, the present paper aims at making straightforward metrics more safety-relevant. 
+Specifically, we aim at defining TPs, FPs, and FNs clearly enough such that statistics of them represent meaningful evidences for safety claims. 
 %Differentiation between metric types:
 %In contrast, downstream metrics from the safety domain are adapted to the driving task, but more difficult to understand, more difficult to compute, and still not as well researched. 
 %These metrics, however, directly detect and penalize failures relevant to the driving task. 
 %Consequently, we consider it worth while investigating whether metrics can be both easy to compute \textit{and} sufficient for safety claims.
-
-Context of this contribution:
-This paper provides potential tools for the definition of further perception metrics that are ideally task-oriented, safety-oriented, and easy to understand and compute. 
-Specifically, we aim at defining popular aspects of direct metrics clearly enough such that they can represent meaningful evidences for safety-relevant claims.  
-
-Our contributions are therefore:
+%Context of this contribution:
+%This paper provides potential tools for the definition of further perception metrics that are ideally task-oriented, safety-oriented, and easy to understand and compute. 
+%Specifically, we aim at defining popular aspects of direct metrics clearly enough such that they can represent meaningful evidences for safety-relevant claims.  
+Our main contributions are:
 \begin{itemize}
-\item A set of criteria to define how a test method (or a test oracle) identifies TP, FP, and FN (Sec. \ref{sec:criteria})
-\item A discussion of the relevance of TP, FP, and FN in the safety assurance context
+\item A set of criteria to define how a test oracle identifies TP, FP, and FN (Sec. \ref{sec:criteria})
+\item A discussion of the relevance of TP, FP, and FN in the safety assurance context (Sec. \ref{sec:discussion})
 \end{itemize}
 
 
