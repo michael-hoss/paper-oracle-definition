@@ -340,7 +340,9 @@ As we apply this experience-based oracle definition to a popular perception chal
 	\vspace*{2mm}
 	\includegraphics[width=\textwidth]{img/top_down_fitting_slide.pdf}
 	
-	\caption{Aspects of road traffic and geometry that the test oracle covers.
+	\caption{ While objects A-C appear obvious, the desired identification of TPs, FPs, and FNs from objects D-L requires a purposefully defined test oracle. 
+		%A clear definition of the test oracle is needed to understand how it identifies TPs, FPs, and FNs from the given objects A-L. 
+		%Aspects of road traffic and geometry that the test oracle covers.
 	}
 	\label{fig:top_down_all}
 \end{figure*}
@@ -363,37 +365,49 @@ In this whole section, we assume that any FP or FN is an undesired penalty to th
 
 In this subsection, we assume that the object lists of OuT and ReS are perfectly temporally synchronized. 
 
-\subsubsection{Field of view of reference data}
+\subsubsection{Perspective and field of view of reference data}
 \label{sec:fov_ref}
-In general, the fields of view (FoV) can differ between OuT and ReS. This can lead to undesired FNs and FPs in areas where only one of both FoVs is present (Fig. \ref{fig:top_down_all}). 
-The OuT has no chance to detect the pedestrian E, given its FoV. 
+In general, the fields of view (FoV) can differ between OuT and ReS. This can lead to undesired FNs and FPs in areas where only one of both FoVs is present. 
+In Fig. \ref{fig:top_down_all}, the OuT has no chance to detect the pedestrian E, given its FoV. 
 Likewise, the ReS has no chance to detect the pedestrians K and J, given its FoV. 
 
-Differing FoVs can have multiple reasons.
-A ReS based on a hovering UAV has a rectangular FoV, whereas the OuT's FoV typically consists of circles and circular sectors (Fig. \ref{fig:top_down_all}).
-However, also a ReS based on sensors of the OuT can have a different FoV.
-For example, reference data could be labeled only on cameras and lidars, whereas the OuT additionally uses a radar whose range exceeds the other sensors. 
-Even if all sensors of ReS and OuT are equal, different FoV ranges can still occur with respect to data processing. 
-For example, the OuT's detection algorithm might propose object hypotheses on distant raw data where the ReS refuses to label objects.
+Differing FoVs can originate from different perspectives, different sensor choices, and different data processing methods.
+First, the perspective of a camera-equipped drone results in a rectangular FoV, whereas the OuT's FoV on the ground typically consists of circles and circular sectors (Fig. \ref{fig:top_down_all}).
+Second, reference data could be labeled only on the OuT's cameras and lidars, whereas the OuT additionally uses a radar whose range exceeds the other sensors. 
+Third, the OuT's detection algorithm might propose object hypotheses on distant raw data where the ReS refuses to label objects.
 
 Whether or not the OuT should be penalized for missing pedestrian E in Fig. \ref{fig:top_down_all} depends on the test objective. 
-If only the perception algorithm is tested, all areas not present in the OuT's FoV could be trimmed from the ReS's FoV to enable a fair evaluation.
-However, if the OuT's FoV is under test, too, and it is supposed to cover the entire ReS's FoV, then the ReS's FoV should not be trimmed such that the FN can be identified. 
+If only the perception algorithm is tested, then overlapping areas of the ReS could be trimmed to enable a fair evaluation.
+However, if the FoV of the OuT is put under test, too, and it is supposed to cover the entire ReS's FoV, then the ReS's FoV should not be trimmed and the FN E should be identified. 
 
 In summary, a clear definition of the ReS's FoV relative to the OuT's FoV is crucial for a clearly defined test oracle. 
 
-\subsubsection{Reference data characteristics}
-\label{sec:ref_data}
+\subsubsection{Reference system hardware}
+\label{sec:ref_hw}
 
-HW, SW, ML, human aspects.
+The way in which the ReS hardware differs from the OuT hardware influences the test oracle. 
+In the simplest case, ReS and OuT share the very same sensor hardware and just differ in their data processing. 
+This case would exclude unexpected FPs and FNs based on hardware differences, which is desired if only the OuT's data processing is focused. 
 
-Characteristics of the reference sensors.
+If, however, also the OuT's hardware is focused, then the ReS should contain sensors with superior properties. 
+For example, if ReS and OuT consist of different sensor modalities, then in adverse weather conditions, the ReS could detect objects that the OuT cannot detect (FNs). 
+%Depending on what part or parts of the OuT is focused in the testing activity (hardware/data processing), these FNs can be desired or undesired.
 
-Characteristics of the labeling.
 
-Which objects get labeled where and how?
 
-Description of labeling quality. Only human, semi-automated (how), fully automated?
+\subsubsection{Reference system labeling and data processing}
+\label{sec:ref_processing}
+
+In general, the extraction of an object list from the raw reference data can consist of programmed software, machine-learned modules, and human interaction. 
+
+Specified labeling policies fall under this category. They include details such as how objects are classified, criteria for including and omitting objects, which parts of objects shall be inside or outside their bounding boxes, how to label in case of partial or full occlusions and much more.
+The labeling policy and their realization influence the reference data quality, which, in turn, influences the test oracle. 
+%For example, labeling can be fully automated, semi-automated, or manual, where each way impacts the labeling quality in a different way. 
+
+This aspect of the test oracle can be characterized by its internal workings and its outputted results. 
+The internal workings include the programmed modifications that the data undergo, the capabilities of the machine-learned modifications, and the relevant human aspects (when and how do humans interact with the data).
+The outputted results, namely, the reference object list, can be described by statements or statistics about accuracy and precision of the labels. 
+A higher-level reference system or procedure could be needed for this purpose.
 
 
 \subsubsection{Semantic areas and no-test areas}
