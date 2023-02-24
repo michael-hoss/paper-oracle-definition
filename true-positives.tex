@@ -35,6 +35,8 @@
 \newcommand{\secref}[1]{Sec.~\ref{#1}}
 
 \usepackage{cite}
+\usepackage{tabularx}
+\usepackage{booktabs}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
 \usepackage{graphicx}
@@ -230,7 +232,7 @@ The discussion will treat the following research questions:
 	\vspace*{2mm}
 	\includegraphics[width=\textwidth]{img/taxonomy_with_oracle.pdf}
 	
-	\caption{Test oracle for identifying TPs, FPs, and FNs, mapped into the taxonomy for ADS perception testing \cite{Hoss2022review, stellet2015testing}.
+	\caption{Test oracle for identifying TPs, FPs, and FNs, mapped into the taxonomy for ADS perception testing \cite{Hoss2022review, stellet2015testing}. Implemented test oracles can differ from this exemplary illustration. For example, certain aspects can be located either under ``Reference System" or ``Comparison, Metrics, Test Criteria".
 		TODO: insert subsection numbers.
 	}
 	\label{fig:oracle_in_taxonomy}
@@ -270,6 +272,10 @@ This paper narrows down this definition to Layer 4 of the 6-layer-model \cite{Sc
 \subsubsection{(Test) oracle} \label{def:oracle} 
 %The mechanism that determines whether a test passes or fails (see also survey by Barr et al. \cite{Barr2015oracle}).
 In the present paper, \textit{(test) oracle} refers to the mechanism that identifies TPs, FPs, and FNs, where the test scenario and the OuT are given (Fig. \ref{fig:oracle_in_taxonomy}).
+
+\subsubsection{Reference System (ReS)}
+\label{def:reference_system}
+Perception system that observes the scenario and whose outputted object list serves as a desired reference for the object list under test. 
 
 % oracle problem in \cite{Zhang2022ml_testing}
 
@@ -352,12 +358,16 @@ It first treats the simple case of deterministic object representations in a sin
 \subsection{Matching deterministic objects in a single time frame}
 \label{sec:oracle_simple}
 
+Here, we assume that the object lists of the OuT and the reference system share the exact same time stamps. 
+
 \subsubsection{Field of view of reference data}
 \label{sec:fov_ref}
 Relative to FOV of OuT.
 
 \subsubsection{Reference data characteristics}
 \label{sec:ref_data}
+
+HW, SW, ML, human aspects.
 
 Characteristics of the reference sensors.
 
@@ -382,6 +392,13 @@ Can be a mathematical metric or not.
 Not only 1:1, but also n:n, as e.g. Brahmi \cite[Sec. 10.3]{Brahmi2020diss} describes it. E.g. hungarian or auction. 
 
 
+\subsubsection{Geometrical alignment of OuT and ReS}
+How are both object lists put into the same coordinate system, which is necessary for a subsequent comparison?
+
+Ideally, the coordinate transformation's inaccuracy and imprecision are negligible. 
+However, errors in the geometrical alignment can affect the test oracle. 
+E.g. sensor mounting positions not correctly calibrated. 
+E.g. transformation from top-down view (e.g. moving UAV or infrastructure sensor) to vehicle coordinate system imprecise. 
 
 
 %\begin{enumerate}
@@ -395,6 +412,8 @@ Not only 1:1, but also n:n, as e.g. Brahmi \cite[Sec. 10.3]{Brahmi2020diss} desc
 \subsection{Generalization to object tracks over time}
 \label{sec:oracle_time}
 
+Brahmi \cite{Brahmi2020diss} did quite some stuff on timing.
+
 
 \begin{figure}[t]
 	\centering
@@ -405,8 +424,16 @@ Not only 1:1, but also n:n, as e.g. Brahmi \cite[Sec. 10.3]{Brahmi2020diss} desc
 	\label{fig:timeline}
 \end{figure}
 
+\subsubsection{Level of object lists}
 
-Brahmi \cite{Brahmi2020diss} did quite some stuff on timing.
+When time is also considered, the level of the evaluated object lists becomes important:
+\begin{itemize}
+\item detections
+\item tracks
+\item single frames from tracks
+\item tracklets
+\end{itemize}
+
 
 
 \subsubsection{Association of tracks}
@@ -421,7 +448,8 @@ Brahmi \cite{Brahmi2020diss} did quite some stuff on timing.
 \subsubsection{Synchronization of measurement time stamps}
 \label{sec:temp_sync}
 
-Synchronization between OuT and reference system (same measurement frequency).
+Synchronization between OuT and reference system (same measurement frequency). 
+Also interpolation and extrapolation.
 
 Aligning time stamps for arbitrary asynchronous measurement frequencies. Brahmi \cite[Sec. 10.2.7]{Brahmi2020diss} interpolates the reference data time stamps onto the OuT time stamps.
 
@@ -469,6 +497,33 @@ Description of perception challenge\footnote{\url{https://waymo.com/open/data/pe
 
 Use inD data with a simulated ego vehicle and simulated data under test.
 Use the Lanelet2 map (converted to the omega format) to include and exclude certain areas.
+
+\begin{table*}[t]
+	\centering
+	\caption{Test oracles expressed in the terminology of this paper}
+	\label{table:case_study}
+	\begin{tabularx}{\linewidth}{
+			>{\hsize=0.40\hsize}X 
+			>{\hsize=0.8\hsize}X 
+			>{\hsize=0.8\hsize}X 
+		} 
+		\toprule
+		\textbf{Criterion} & \textbf{Waymo Challenge} & \textbf{Drone Testing} \\
+		\midrule
+		Simple aspects %
+		& stuff
+		& stuff \\
+		\hline
+		Temporal aspects 
+		& stuff
+		& stuff  \\ 
+		\hline
+		Probabilistic aspects 
+		& stuff
+		& stuff  \\ 
+		\bottomrule
+	\end{tabularx}
+\end{table*}
 
 
 \subsection{How do TP statistics change when the oracle criteria vary?}
