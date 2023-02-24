@@ -233,7 +233,7 @@ The discussion will treat the following research questions:
 	\includegraphics[width=\textwidth]{img/taxonomy_with_oracle.pdf}
 	
 	\caption{Test oracle for identifying TPs, FPs, and FNs, mapped into the taxonomy for ADS perception testing \cite{Hoss2022review, stellet2015testing}. Implemented test oracles can differ from this exemplary illustration. For example, certain aspects can be located either under ``Reference System" or ``Comparison, Metrics, Test Criteria".
-		TODO: insert subsection numbers.
+		% TODO: insert subsection numbers.
 	}
 	\label{fig:oracle_in_taxonomy}
 \end{figure*}
@@ -249,11 +249,11 @@ This paper narrows down this definition to Layer 4 of the 6-layer-model \cite{Sc
 
 \subsubsection{Object under Test (OuT)} \label{def:out} Perception subsystem of a driving automation system. It comprises both hardware and software and it outputs an object list in each time step. Note: The ``object" in OuT must not be confused with the more general \textit{object} defined above (Sec. \ref{def:object}).
 
-\subsubsection{True Positive (TP)} \label{def:tp} The circumstance that an object in the data under test matches with an object in the reference data.
+\subsubsection{True Positive (TP)} \label{def:tp} The circumstance that an object in the data under test matches with an object in the reference data (Fig. \ref{fig:top_down_all}, 1).
 
-\subsubsection{False Positive (FP)} \label{def:fp} The circumstance that an object in the data under test does not match with any object in the reference data. 
+\subsubsection{False Positive (FP)} \label{def:fp} The circumstance that an object in the data under test does not match with any object in the reference data (Fig. \ref{fig:top_down_all}, 2). 
 
-\subsubsection{False Negative (FN)} \label{def:fn} The circumstance that no object in the data under test matches with a given object in the reference data.
+\subsubsection{False Negative (FN)} \label{def:fn} The circumstance that no object in the data under test matches with a given object in the reference data (Fig. \ref{fig:top_down_all}, 3).
 
 \subsubsection{True Negative (TN)} \label{def:tn} The circumstance that the non-existence of an object in the data under test matches with the non-existence of an object in the reference data. Since world modeling in form of object lists represents the non-existence of objects only implicitly, TNs are not quantifiable in the context of this paper.
 
@@ -285,7 +285,7 @@ Perception system that observes the scenario and whose outputted object list ser
 
 % We define the criteria for identifying TP, FP, and FN in the following way.
 
-When human experts observe a top-down representation of a traffic scene with an overlaid object list under test (Fig. \ref{fig:top_down_all}), they can typically make the following statements:
+When human experts observe a top-down view representation of a traffic scene with an overlaid object list under test (Fig. \ref{fig:top_down_all}), they can typically make the following statements:
 \begin{itemize}
 	\item the ADS \textit{did} see the other road user
 	\item the ADS \textit{did not} see the other road user 
@@ -352,17 +352,35 @@ This section details the aspects illustrated in the mentioned figures in natural
 % We intentionally avoid a more formal, more technical, or more specific description in order to keep it generally applicable to as many test oracles as possible without prescribing an internal structure and without . 
 % DO THIS WHY NATURAL LANGUAGE HERE IN THE DISCUSSION!
 It first treats the simple case of deterministic object representations in a single time frame (Sec. \ref{sec:oracle_simple}) and then covers temporal aspects (Sec. \ref{sec:oracle_time}) and probabilistic object descriptions (\ref{sec:oracle_probabilistic}).
+The actual aspects that collectively define the workings of the test oracle are given one level deeper (e.g. Sec. \ref{sec:fov_ref}). 
+
+In this whole section, we assume that any FP or FN is an undesired penalty to the OuT. 
 
 %In general: matching of tracks under test to reference tracks. This boils down to:
 
 \subsection{Matching deterministic objects in a single time frame}
 \label{sec:oracle_simple}
 
-Here, we assume that the object lists of the OuT and the reference system share the exact same time stamps. 
+In this subsection, we assume that the object lists of OuT and ReS are perfectly temporally synchronized. 
 
 \subsubsection{Field of view of reference data}
 \label{sec:fov_ref}
-Relative to FOV of OuT.
+In general, the fields of view (FoV) can differ between OuT and ReS. This can lead to undesired FNs and FPs in areas where only one of both FoVs is present (Fig. \ref{fig:top_down_all}). 
+The OuT has no chance to detect the pedestrian E, given its FoV. 
+Likewise, the ReS has no chance to detect the pedestrians K and J, given its FoV. 
+
+Differing FoVs can have multiple reasons.
+A ReS based on a hovering UAV has a rectangular FoV, whereas the OuT's FoV typically consists of circles and circular sectors (Fig. \ref{fig:top_down_all}).
+However, also a ReS based on sensors of the OuT can have a different FoV.
+For example, reference data could be labeled only on cameras and lidars, whereas the OuT additionally uses a radar whose range exceeds the other sensors. 
+Even if all sensors of ReS and OuT are equal, different FoV ranges can still occur with respect to data processing. 
+For example, the OuT's detection algorithm might propose object hypotheses on distant raw data where the ReS refuses to label objects.
+
+Whether or not the OuT should be penalized for missing pedestrian E in Fig. \ref{fig:top_down_all} depends on the test objective. 
+If only the perception algorithm is tested, all areas not present in the OuT's FoV could be trimmed from the ReS's FoV to enable a fair evaluation.
+However, if the OuT's FoV is under test, too, and it is supposed to cover the entire ReS's FoV, then the ReS's FoV should not be trimmed such that the FN can be identified. 
+
+In summary, a clear definition of the ReS's FoV relative to the OuT's FoV is crucial for a clearly defined test oracle. 
 
 \subsubsection{Reference data characteristics}
 \label{sec:ref_data}
@@ -466,6 +484,8 @@ Aligning time stamps for arbitrary asynchronous measurement frequencies. Brahmi 
 \subsection{Generalization to probabilistic object descriptions}
 \label{sec:oracle_probabilistic}
 
+\subsubsection{Probabilistic FoVs}
+What if no clear FoV border exists?
 
 \subsubsection{Probabilistic thresholding}
 \label{sec:prob_thresholding}
