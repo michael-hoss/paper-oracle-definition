@@ -375,7 +375,7 @@ Likewise, the ReS has no chance to detect pedestrians K and J, given its FoV.
 Differing FoVs can have multiple reasons, such as different perspectives, different sensor choices, and different data processing methods, all of which are briefly explained in the following.
 First, the perspective of a camera-equipped drone results in a rectangular FoV, whereas the OuT's FoV on the ground typically consists of circles and circular sectors (Fig. \ref{fig:top_down_all}).
 Second, reference data could be labeled only on the ego vehicle's cameras and lidars, whereas the OuT additionally uses a radar whose range exceeds the cameras and lidars used for the ReS. 
-Third, even if OuT and ReS share the same sensors, the OuT's detection algorithm might propose object hypotheses on distant raw data where the ReS refuses to label objects.
+Third, even if OuT and ReS share the same sensors, their sensor ranges might not have clear-cut limits, but instead degrade probabilistically with increasing distance. In this probabilistic zone of performance degradation, the OuT's detection algorithm might propose object hypotheses where the ReS already refuses to label objects.
 
 Whether or not the OuT should be penalized for missing pedestrian E in Fig. \ref{fig:top_down_all} depends on the test objective. 
 If only the perception software is tested, then one might want to remove all objects from overlapping areas of the ReS to enable a fair evaluation.
@@ -433,8 +433,8 @@ A higher-level reference system or evaluation procedure (``reference of the refe
 \subsubsection{Semantic areas and no-test areas}
 \label{sec:semantic_areas}
 
-Certain areas on or next to the road surface might be irrelevant to the traffic scenario and therefore not worth while perceiving. 
-To avoid needless test efforts, one could define no-test-areas, where no evaluation of TPs, FPs, and FNs takes place (Fig.~\ref{fig:top_down_all}, pedestrian D).
+Certain areas on or next to the road surface might be irrelevant to the traffic scenario and therefore be not worth while perceiving. 
+To avoid needless test efforts, one could define no-test-areas, where no evaluation of TPs, FPs, and FNs takes place (Fig.~\ref{fig:top_down_all}, pedestrian D). TODO cite kitti.
 
 The exclusion of objects from such areas can occur in different stages of the testing activity (Fig. \ref{fig:oracle_in_taxonomy}). 
 They might already be excluded from the reference data; they might be included in the reference data, but excluded from the identification of TPs, FPs, and FNs; or, they could still be part of the TPs, FPs, and FNs, but excluded from a potential further evaluation.
@@ -444,7 +444,7 @@ They could be defined by individual polygons or by generally applicable rules (e
 The definition of no-test areas can be delicate due to the risk of omitting objects that are in fact safety-relevant. 
 For example, pedestrian D in Fig.~\ref{fig:top_down_all} might be running towards the intersection or be throwing objects at it.
 
-\subsubsection{Geometrical alignment of OuT and ReS}
+\subsubsection{Coordinate transformation from ReS to OuT}
 \label{sec:geometrical_alignment}
 
 Comparing the OuT's object list to the ReS object list requires both to be in the same coordinate system. 
@@ -452,7 +452,7 @@ Typically, the OuT's vehicle coordinate system is used for the comparison.
 Therefore, if the ReS internally uses a distinct coordinate system, the ReS object list must be transformed to the OuT's coordinate system. 
 
 Ideally, uncertainties inherent in this geometric alignment are negligible. 
-However, these uncertainties can skew the reference objects' positions, which affects the distance function values for object matching (Sec. \ref{sec:distance_function}), which, in turn, affects the resulting TPs, FPs, and FNs.  
+However, these uncertainties can skew the reference objects' positions, which affects the pairwise object distances for object matching (Sec. \ref{sec:distance_function}), which, in turn, affects the resulting TPs, FPs, and FNs.  
  
 Especially, inaccuracies in the sensor orientation angles result in large cartesian offsets in a large radial distance from the sensor.
 For reference sensors on the ego vehicle, such uncertainties could stem from the calibration of sensor mounting positions. 
@@ -461,22 +461,47 @@ This includes a generally uncertain localization of the ego vehicle and of the e
 
 A comprehensively defined test oracle should therefore state the positional uncertainty resulting from the geometrical alignment to illustrate how this can affect the matching of object pairs.
 
-\subsubsection{Object distance function in state space}
+\subsubsection{Object distance function for matching}
 \label{sec:distance_function}
 
-Once 
+Once both object lists share the same coordinate system, the pairwise distances between ReS objects and OuT objects can be computed to find candidates for TPs. 
+Commonly used distance functions are the euclidean distance between bounding box centroids, with common threshold values around \SI{2}{\metre}; or $1 - IoU$, where the threshold value could be $0.5$.
+Some employed distance functions also qualify as mathematical metrics in a vector space of objects.
 
-Mention truck H in Fig.~\ref{fig:top_down_all}. 
+The chosen distance function and threshold values directly affect the identification of TPs. 
+While the bounding boxes of truck A (Fig.~\ref{fig:top_down_all}) should match for any reasonable choice, the situation is less obvious for truck H.
+Since only its rear end got detected by the OuT, both the centroid distance and $1 - IoU$ could prevent a match under the exemplary thresholds. 
+Without a match, though, truck H would lead to a FP and a FN, which might be undesired given the fact that its property that is relevant to the driving task of ego vehicle, namely its rear end, got properly detected. 
+Still, thresholds should also not be unnecessarily large to prevent unrelated misdetections such as G and B from merging into an undesired TP candidate.
 
-including penalties (object classifications?) and thresholds. 
-Can be a mathematical metric or not. 
+%including penalties (object classifications?) and thresholds. 
+
+Furthermore, an object pair that falls below the distance function's threshold does not automatically represent a TP. 
+For example, the OuT bounding box of cyclist F (Fig.~\ref{fig:top_down_all}) could have a below-threshold centroid distance to both ReS bounding boxes nearby. 
+If only a 1:1 matching is allowed (Sec. \ref{sec:multi_object_matching}), situation F would hold one TP and one additional FN.
+
+If not only statistics, but also individual occurrences of FPs and FNs are important to the testing approach, one might have a preference about which ReS bounding box the OuT cyclist F should be matched with. 
+For example, if the matched cyclists should go into the same direction, the distance function could include additional penalty terms for differing velocities or heading angles, which is already popular for distance functions in online object tracking. 
+
+Additionally, the matching of vulnerable road users (VRUs) of one system with cars or trucks of the other system could be completely prevented for the sake of separate statistics of both groups. 
+In this setting, the matching policy for ``unknown" object classifications could become important.
+
+
+
+
+
 
 \subsubsection{Multi-object matching algorithm}
 \label{sec:multi_object_matching}
-Not only 1:1, but also n:n, as e.g. Brahmi \cite[Sec. 10.3]{Brahmi2020diss} describes it. E.g. hungarian or auction. 
 
-Mention cyclists F in Fig.~\ref{fig:top_down_all}. 
+With all pairwise object distances given, a multi-object matching algorithm can finally identify the resulting TPs, FPs, and FNs. 
+Often, algorithms only match one OuT object with one ReS object (1:1), but 1:n or n:n matches could also be allowed \cite[Sec. 11.3]{Brahmi2020diss}. 
+For cyclists F in Fig.~\ref{fig:top_down_all}, the algorithm would match the OuT bounding box to the ReS bounding box with the closest distance function value as long as the distance is below the threshold (Sec. \ref{sec:distance_function}). 
+With n:n matching and both distances below the threshold, there would be no FN in F.
 
+While the object list matching in Fig.~\ref{fig:top_down_all} is straightforward, there may also be complex scenes like a political demonstration, where each pedestrian bounding box could have more than five potential matches. % and the matrix of matching object distances has non-sparse blocks. 
+In such cases, optimization algorithms such as the Hungarian/Munkres algorithm determine TPs by globally minimizing the overall distance between all matches.
+In summary, also the way of multi-object matching influences the resulting TPs, FPs, and FNs.
 
 %\begin{enumerate}
 %\item object distance functions in state space, including penalties and thresholds
@@ -486,34 +511,45 @@ Mention cyclists F in Fig.~\ref{fig:top_down_all}.
 %\item semantic areas in the road infrastructure that tell where to test
 %\end{enumerate}
 
-\subsection{Generalization to object tracks over time}
+\subsection{Generalization to object representations over time}
 \label{sec:oracle_time}
 
-Brahmi \cite{Brahmi2020diss} did quite some stuff on timing.
+While the previous section (Sec. \ref{sec:oracle_simple}) only treated object representations in one single time frame, this section highlights how the test oracle can deal with temporal aspects.  
+
+%Brahmi \cite{Brahmi2020diss} did quite some stuff on timing.
 
 
 \begin{figure}[t]
 	\centering
 	\vspace*{2mm}
 	\includegraphics[width=0.49\textwidth]{img/timeline.pdf}
-	\caption{Temporal aspects of the test oracle. TODO: synchronization/interpolation?
+	\caption{Temporal design aspects of a test oracle for TPs, FPs, and FNs.
 	}
 	\label{fig:timeline}
 \end{figure}
 
-\subsubsection{Level of object lists}
+%\subsubsection{Temporal validity of tested objects}
+%\label{sec:temp_level_of_objects}
 
-When time is also considered, the level of the evaluated object lists becomes important:
+\subsubsection{Matching of objects with an extended lifetime}
+\label{sec:temp_matching}
+
+
+
+Depending on the perception task whose output is being tested (e.g. detection, filtering, tracking), the tested OuT objects may or may not contain IDs to indicate their correspondence over consecutive time frames. 
+In this regard, we assume here that the ReS objects do contain track IDs. 
+Resulting OuT object representations that can be matched to the ReS objects are therefore:
 \begin{itemize}
-\item detections
-\item tracks
-\item single frames from tracks
-\item tracklets
+\item \textit{detections or ID-stripped single frames out of tracks} (boils down to testing individual decoupled time frames, as explained in Sec. \ref{sec:oracle_simple}, and applied in e.g. the original OSPA metric \cite{schuhmacher2008consistent}) % (if track labels do not matter, e.g. in the OSPA metric \cite{schuhmacher2008consistent})
+\item \textit{tracks} (entire OuT and ReS tracks are matched with each other without being split up)
+\item \textit{sub-sequences of tracks} (tracks are split up into better-matching sub-sequences, as done in e.g. the CLEAR MOT metrics \cite{bernardin2008evaluating})
 \end{itemize}
 
+The three examples of Fig.~\ref{fig:timeline} show pairs of tracks that fulfill the geometrical criteria for being matched to one another.
+Now, temporal aspects of the test oracle decide how exactly these tracks get matched.
 
+If tracks are split up for better-matching sub-sequences, then in the middle of Fig.~\ref{fig:timeline}, the late part of the first ReS track can be matched with the early part of the second OuT track. 
 
-\subsubsection{Association of tracks}
 
 
 \subsubsection{Temporally incomplete tracks}
@@ -543,8 +579,10 @@ Aligning time stamps for arbitrary asynchronous measurement frequencies. Brahmi 
 \subsection{Generalization to probabilistic object descriptions}
 \label{sec:oracle_probabilistic}
 
-\subsubsection{Probabilistic FoVs}
-What if no clear FoV border exists?
+%\subsubsection{Probabilistic FoVs}
+%What if no clear FoV border exists?
+% already covered in FoV above.
+% But I might want to bring that only here because that is clearer distinction between deterinistic and probabilistic.
 
 \subsubsection{Probabilistic thresholding}
 \label{sec:prob_thresholding}
@@ -623,6 +661,8 @@ For example, one might first opt for identifying as many FPs and FNs as possible
 The ``Potential further evaluation" could then apply further criteria for the relevance of the test results to the driving task. 
 
 
+TODO: show a graphic with FPs and FNs that do not matter, but also with missing FPs and missing FNs that would matter. 
+
 
 
 \subsection{Rest of the discussion}
@@ -682,8 +722,8 @@ Future work includes a more formal description of a test oracle, potentially by 
 \section*{Acknowledgment}
 \label{sec:acknowledgment}
 
-This work was conducted privately without funding. 
-The author would like to thank those social media users who interacted with his posts about the given topic for the feedback and inspiration.
+This work was conducted independently without \href{https://ko-fi.com/michaelhoss}{funding} or a related employment. 
+The author would like to thank the social media users who interacted with his posts about the given topic for the feedback and inspiration.
 
 %\input{sections/1_introduction}
 % \input{sections/2_related work}
