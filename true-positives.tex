@@ -134,12 +134,12 @@ Despite being the only author, the first person plural (``we") is used to comply
 
 %Single paragraph up to 250 words. Mini-version of the paper that includes context, state of the art, why it is not good enough, the research question, the methods, the evaluation and conclusions.
 Test methods for the perception subsystem of driving automation systems commonly identify true-positive (TP), false-positive (FP), and false-negative (FN) objects. % general term for TP, FP, FN
-To date, these terms may be understood differently in different testing activities.
+Despite a common understanding, the implementation of these concepts varies across testing activities.
 However, clear definitions are needed for their comparability and for a potential usage within a safety case. 
 Therefore, this paper provides a set of relevant criteria for identifying TP, FP, and FN objects. % in an ideally unambiguous way.
 % The criteria generally cover 
 %that cover the generation of reference objects and their association to objects under test. 
-Emphasized details are the level of the tested objects (e.g. detections or tracks), reference sensor characteristics, labeling policies, object distance functions, % in state space including penalties and thresholds, 
+Emphasized details are the tested object representations (e.g. detections or tracks), reference sensor characteristics, labeling policies, object distance functions, % in state space including penalties and thresholds, 
 multi-object association, fields of view, areas of importance, incomplete tracks, asynchronous time stamps, and probabilistic object representations. 
 % While a majority of aspects can be formalized, a case study illustrates the remaining challenges towards an entirely formal description. 
 We find it challenging to characterize all aspects relevant for identifying TP, FP, and FN through adequate formal criteria due to both the open context problem and the symbol grounding problem.
@@ -514,7 +514,13 @@ In summary, also the way of multi-object matching influences the resulting TPs, 
 \subsection{Generalization to object representations over time}
 \label{sec:oracle_time}
 
-While the previous section (Sec. \ref{sec:oracle_simple}) only treated object representations in one single time frame, this section highlights how the test oracle can deal with temporal aspects.  
+%The previous section (Sec. \ref{sec:oracle_simple}) only treated object representations in one single time frame. %, this section highlights how the test oracle can deal with temporal aspects. 
+%To illustrate also the test oracle's handling of temporal aspects, 
+%The following subsections refer 
+
+This section refers to Fig.~\ref{fig:timeline}, which contains pairs of tracks that would match geometrically according to the criteria from the previous section (Sec. \ref{sec:oracle_simple}). 
+The vertical ticks denote the systems' sampled time frames.
+Now, the test oracle's temporal aspects, which are explained in the following, determine how these objects match while the temporal dimension is also considered.
 
 %Brahmi \cite{Brahmi2020diss} did quite some stuff on timing.
 
@@ -531,10 +537,24 @@ While the previous section (Sec. \ref{sec:oracle_simple}) only treated object re
 %\subsubsection{Temporal validity of tested objects}
 %\label{sec:temp_level_of_objects}
 
+
+\subsubsection{Synchronization of measurement time stamps}
+\label{sec:temp_sync}
+
+If the recorded ReS sampling times do not coincide with the OuT sampling times, synchronization of both systems must happen offline during post-processing. % to allow a subsequent comparison.
+Continuously present reference tracks from, for example, RTK-GNSS recordings, can be linearly interpolated onto the OuT time stamps \cite[Sec. 10.2.7]{Brahmi2020diss}.
+
+However, in general, reference tracks do not span continuously over the entire recording, which means that the synchronization must also deal with track beginnings and ends. % (Fig. \ref{fig:timeline}, a)).  
+If the sampling times of track $a_\text{ReS}$ (Fig. \ref{fig:timeline}) are linearly interpolated to those of $a_\text{OuT}$, all sampling times of $a_\text{OuT}$ are covered. 
+Then, however, it is up to the test oracle to decide what happens to the overhanging frames of $a_\text{ReS}$ at the beginning and at the end. 
+Both could be neglected, but they could also both mark FNs. 
+Whether or not the test oracle identifies FNs there might also depend on whether the overhang falls below a temporal matching threshold given in milliseconds.
+
+For synchronous time stamps of the same frequency that only suffer from a slight offset (smaller than a temporal matching threshold), the test oracle might also synchronize by matching the temporally closest time frames with one another without interpolating any recorded data.
+
+
 \subsubsection{Matching of objects with an extended lifetime}
 \label{sec:temp_matching}
-
-
 
 Depending on the perception task whose output is being tested (e.g. detection, filtering, tracking), the tested OuT objects may or may not contain IDs to indicate their correspondence over consecutive time frames. 
 In this regard, we assume here that the ReS objects do contain track IDs. 
@@ -545,35 +565,38 @@ Resulting OuT object representations that can be matched to the ReS objects are 
 \item \textit{sub-sequences of tracks} (tracks are split up into better-matching sub-sequences, as done in e.g. the CLEAR MOT metrics \cite{bernardin2008evaluating})
 \end{itemize}
 
-The three examples of Fig.~\ref{fig:timeline} show pairs of tracks that fulfill the geometrical criteria for being matched to one another.
-Now, temporal aspects of the test oracle decide how exactly these tracks get matched.
+If only individual frames of tracks are matched irrespective of their belonging to a track, then example b) (Fig.~\ref{fig:timeline}) would contain exactly one FN and one FP. 
+If entire tracks are matched, then $b_{\text{OuT},1}$ would match with $b_{\text{ReS},1}$ and $b_{\text{OuT},2}$ would match with $b_{\text{ReS},2}$.
+These matches would, however, have large temporal overhangs.
+%This would, however, mean that the middle part would stay unmatched despite its geometrical fit. 
+To reduce the extent of these overhangs, one could match also sub-sequences of tracks, such as the latest three frames of $b_{\text{ReS},1}$ with the first three frames of $b_{\text{OuT},2}$.
+In these cases, some test methods identify an ID switch for $b_{\text{ReS},1}$ to penalize the OuT's fragmented tracking.
+% There would still remain two temporal overhangs
 
-If tracks are split up for better-matching sub-sequences, then in the middle of Fig.~\ref{fig:timeline}, the late part of the first ReS track can be matched with the early part of the second OuT track. 
-
-
-
-\subsubsection{Temporally incomplete tracks}
+\subsubsection{Missed frames and incomplete tracks}
 \label{sec:temp_incomplete}
+
+Track $b_{\text{ReS},1}$ (Fig.~\ref{fig:timeline}) is perceived by the OuT in all but one frame, namely the frame in between $b_{\text{OuT},1}$ and $b_{\text{OuT},2}$. 
+The test oracle could naturally identify a FN in this missing frame. 
+However, if the sampling frequency is sufficiently high such that a single missed frame in the middle is irrelevant to the driving task, the test oracle might also intentionally not want to identify this missed frame as a FN. 
+
+%Contrary to single missed frames in the middle of a ReS track, subsequently missed frames, or missed frames at the end of a track, might be more severe and therefore worth while being identified as FNs.
+
 
 \subsubsection{Treatment of latency and delays}
 \label{sec:temp_latency}
 
-\subsubsection{Synchronization of measurement time stamps}
-\label{sec:temp_sync}
+%Similar to missed frames in the middle of a reference track, 
+A test oracle should also have a policy for missed frames at the beginning and overhanging frames at the end of a ReS track. 
+In example c) (Fig.~\ref{fig:timeline}), the oracle could either
+\begin{itemize}
+	\item identify a FN in the first, missing frame, and TPs otherwise, or
+	\item identify just one single TP track, but mark it as detected with an initial delay.
+\end{itemize}
 
-Synchronization between OuT and reference system (same measurement frequency). 
-Also interpolation and extrapolation.
+Hence, the time that the OuT takes to output a newly appeared object can be considered by the test method implicitly through initial FNs, or explicitly as a property of TPs.
+The same concept holds for FPs in case of sustained OuT tracks after the lifetime of a ReS track.
 
-Aligning time stamps for arbitrary asynchronous measurement frequencies. Brahmi \cite[Sec. 10.2.7]{Brahmi2020diss} interpolates the reference data time stamps onto the OuT time stamps.
-
-
-%\begin{enumerate}
-%\item Brahmi \cite{Brahmi2020diss} did quite some stuff on timing
-%\item temporally incomplete tracks 
-%\item latency of the OuT
-%\item synchronization between OuT and reference system (same measurement frequency)
-%\item aligning time stamps for arbitrary asynchronous measurement frequencies. Brahmi \cite[Sec. 10.2.7]{Brahmi2020diss} interpolates the reference data time stamps onto the OuT time stamps.
-%\end{enumerate}
 
 
 \subsection{Generalization to probabilistic object descriptions}
@@ -582,7 +605,7 @@ Aligning time stamps for arbitrary asynchronous measurement frequencies. Brahmi 
 %\subsubsection{Probabilistic FoVs}
 %What if no clear FoV border exists?
 % already covered in FoV above.
-% But I might want to bring that only here because that is clearer distinction between deterinistic and probabilistic.
+% ---> But I might want to bring that only here because that is a clearer distinction between deterinistic and probabilistic.
 
 \subsubsection{Probabilistic thresholding}
 \label{sec:prob_thresholding}
