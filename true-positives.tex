@@ -602,19 +602,29 @@ The same concept holds for FPs in case of sustained OuT tracks after the lifetim
 \subsection{Generalization to probabilistic object descriptions}
 \label{sec:oracle_probabilistic}
 
-%\subsubsection{Probabilistic FoVs}
-%What if no clear FoV border exists?
-% already covered in FoV above.
-% ---> But I might want to bring that only here because that is a clearer distinction between deterinistic and probabilistic.
+\subsubsection{Probabilistic bounding boxes}
+\label{sec:prob_bbox}
+Object representations by the OuT often come with estimated covariances, especially for the bounding boxes' positions and dimensions.
 
-\subsubsection{Probabilistic thresholding}
+Object distance functions for object matching on probability distributions. 
+Wasserstein distance?
+
+\subsubsection{Probabilistic existence and classification}
 \label{sec:prob_thresholding}
-if we choose hard threshold values to avoid association of certain 
+For existence and classification!
+
+E.g. if a classification is not sure about car of bicycle, it can change the FN or FP!
+
+%If we choose hard threshold values, only one single.
 
 
-%\begin{enumerate}
-%\item if we choose hard threshold values to avoid association of certain 
-%\end{enumerate}
+\subsubsection{Probabilistic FoVs}
+\label{sec:prob_fov}
+What if no clear FoV border exists?
+(already covered in FoV above in the simple section).
+ ---> But I might want to bring that only here because that is a clearer distinction between deterinistic and probabilistic.
+
+
 
 
 \section{Example Case Studies}
