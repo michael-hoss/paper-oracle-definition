@@ -163,8 +163,8 @@ Uncertainties in these definitions likely remain and should therefore be account
 
 \subsection{Motivation}
 
-The task of object-based environment perception for automated driving systems (ADS) receives much focus through public perception challenges. % that benchmark different approaches.
-They publish datasets of raw sensor data along with reference labels for training purposes. 
+The task of object-based environment perception for automated driving systems (ADS) receives much focus through public perception challenges, % that benchmark different approaches.
+which publish datasets of raw sensor data along with reference labels for training purposes. 
 Their leaderboards then rank individual submissions according to their similarity to the non-public reference labels on the test part of the dataset.
 
 Common metrics of such leaderboards consist of aggregations of true-positive objects (TPs), false-positive objects (FPs), and false-negative objects (FNs). 
@@ -373,12 +373,13 @@ In Fig. \ref{fig:top_down_all}, the OuT has no chance to detect pedestrian E, gi
 Likewise, the ReS has no chance to detect pedestrians K and J, given its FoV. 
 
 Differing FoVs can have multiple reasons, such as different perspectives, different sensor choices, and different data processing methods, all of which are briefly explained in the following.
-First, the perspective of a camera-equipped drone results in a rectangular FoV, whereas the OuT's FoV on the ground typically consists of circles and circular sectors (Fig. \ref{fig:top_down_all}).
+First, the perspective of a camera-equipped drone results in a rectangular FoV, whereas the OuT's FoV on the ground typically consists of circles and circular sectors (Fig.~\ref{fig:top_down_all}).
 Second, reference data could be labeled only on the ego vehicle's cameras and lidars, whereas the OuT additionally uses a radar whose range exceeds the cameras and lidars used for the ReS. 
-Third, even if OuT and ReS share the same sensors, their sensor ranges might not have clear-cut limits, but instead degrade probabilistically with increasing distance. In this probabilistic zone of performance degradation, the OuT's detection algorithm might propose object hypotheses where the ReS already refuses to label objects.
+Third, even if OuT and ReS share the same sensors, in distant regions with sparse raw data, a manual labeling process of the ReS could reach either farther or shorter than the OuT's automated detection.
+%their sensor ranges might not have clear-cut limits, but instead degrade probabilistically with increasing distance. In this probabilistic zone of performance degradation, the OuT's detection algorithm might propose object hypotheses where the ReS already refuses to label objects.
 
 Whether or not the OuT should be penalized for missing pedestrian E in Fig. \ref{fig:top_down_all} depends on the test objective. 
-If only the perception software is tested, then one might want to remove all objects from overlapping areas of the ReS to enable a fair evaluation.
+If only the perception software is tested, then one might want to remove all objects from overhanging areas of the ReS to enable a fair evaluation.
 However, if the sensor hardware's FoV of the OuT is put under test, too, and it is supposed to cover the entire ReS's FoV, then the ReS's FoV should not be trimmed and pedestrian E should be identified as a FN. 
 
 In summary, a clear definition of the ReS's FoV relative to the OuT's FoV is crucial for a clearly defined test oracle. 
@@ -434,7 +435,8 @@ A higher-level reference system or evaluation procedure (``reference of the refe
 \label{sec:semantic_areas}
 
 Certain areas on or next to the road surface might be irrelevant to the traffic scenario and therefore be not worth while perceiving. 
-To avoid needless test efforts, one could define no-test-areas, where no evaluation of TPs, FPs, and FNs takes place (Fig.~\ref{fig:top_down_all}, pedestrian D). TODO cite kitti.
+To avoid needless test efforts, one could define no-test-areas, where no evaluation of TPs, FPs, and FNs takes place (Fig.~\ref{fig:top_down_all}, pedestrian D). 
+For example, the KITTI object development kit\footnote{\url{https://www.cvlibs.net/datasets/kitti}} contains \textit{DontCare} labels where no reference data was labeled. 
 
 The exclusion of objects from such areas can occur in different stages of the testing activity (Fig. \ref{fig:oracle_in_taxonomy}). 
 They might already be excluded from the reference data; they might be included in the reference data, but excluded from the identification of TPs, FPs, and FNs; or, they could still be part of the TPs, FPs, and FNs, but excluded from a potential further evaluation.
@@ -599,31 +601,52 @@ The same concept holds for FPs in case of sustained OuT tracks after the lifetim
 
 
 
-\subsection{Generalization to probabilistic object descriptions}
+\subsection{Generalization to probabilistic object representations}
 \label{sec:oracle_probabilistic}
 
-\subsubsection{Probabilistic bounding boxes}
-\label{sec:prob_bbox}
-Object representations by the OuT often come with estimated covariances, especially for the bounding boxes' positions and dimensions.
-
-Object distance functions for object matching on probability distributions. 
-Wasserstein distance?
-
-\subsubsection{Probabilistic existence and classification}
-\label{sec:prob_thresholding}
-For existence and classification!
-
-E.g. if a classification is not sure about car of bicycle, it can change the FN or FP!
-
-%If we choose hard threshold values, only one single.
-
+While the previous two sections assumed deterministic object representations, the following subsections highlight the test oracle's degrees of freedom for evaluating probabilistic data.
 
 \subsubsection{Probabilistic FoVs}
 \label{sec:prob_fov}
-What if no clear FoV border exists?
-(already covered in FoV above in the simple section).
- ---> But I might want to bring that only here because that is a clearer distinction between deterinistic and probabilistic.
 
+The FoVs of active sensors often have no clear-cut borders, but their performance can be regarded as degrading probabilistically with increasing distance. 
+If a sensor system software does not cut off object hypotheses after a fixed distance, but instead detects objects as far as possible, then a clear distinction of intersecting and overhanging FoV areas of OuT and ReS (Sec. \ref{sec:fov_ref}) is no longer possible.
+In such a case, it could be the test oracle that cuts off uncertain FoV regions to reduce the problem to the previously explained deterministic case.
+Otherwise, undesired FPs and FNs are possible in these distant regions where one system might randomly still detect an object that the other system might not detect (even though both systems might work perfectly closer to the sensor).
+
+
+\subsubsection{Probabilistic object distance functions}
+\label{sec:prob_bbox}
+OuTs often estimate error covariances of the detected objects' positions, orientations, dimensions, and velocities. 
+Also the ReS objects' properties are generally uncertain unless they stem from a simulated ground truth \cite{Wang2020inferring_iros}.
+It is worth while evaluating the accuracy of these covariances due to their relevance for the downstream driving policy, which could, for example, maintain a higher safety distance to uncertainly perceived objects.
+
+Therefore, finding TP matches requires a probabilistic distance function with a suitable threshold. 
+The dissimilarity of two probability distributions for the bounding box centroids can be expressed by the Wasserstein or earth mover's distance.
+A probabilistic version of the \textit{IoU} for rotated 3D bounding boxes is the \textit{JIoU} \cite{Wang2020inferring_iros}.
+
+\subsubsection{Probabilistic object existence and classification}
+\label{sec:prob_thresholding}
+
+OuTs often compute a probability for the existence of an object and probabilities for its belonging to the different road user classes.
+If the OuT does the thresholding itself and only outputs a binary existence and a unique classification, then the deterministic test oracle criteria from Sec. \ref{sec:oracle_simple} can be applied. 
+However, if the OuT forwards these probabilities to the downstream driving policy, which could make use of them, then the test oracle should also consider them. 
+
+In the simplest case, the test oracle can threshold the existence probability at a fixed value and take the maximum probability out of all classifications.
+Other oracles might also be reasonable.
+For example, if the test oracle refuses to match deterministic OuT bicycles with ReS cars, it might still allow such a match on probabilistic data by considering also the OuT's second most likely classification, e.g. $p_\text{car} = 0.96$, $p_\text{bicycle} = 0.95$.
+
+Furthermore, the oracle's policy for identifying FNs behind occlusions could include a variable threshold for the existence probability that depends on how much the target is occluded.
+
+\subsubsection{Probabilistic multi-object matching}
+\label{sec:prob_matching}
+% THIS IS A BIT EXPERIMENTAL AND I MIGHT DELETE IT LATER
+
+
+TODO CONTINUE HERE.
+
+No binary matches, but rather match probabilities. 
+Just as done with association in probabilistic filters for object tracking (e.g. LMB). 
 
 
 
