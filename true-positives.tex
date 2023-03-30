@@ -647,44 +647,50 @@ Furthermore, an oracle's policy for identifying or not identifying FNs behind oc
 
 
 
-\section{Example Case Studies}
+\section{Exemplary test oracles}
 \label{sec:case_studies}
 
 % Or outsource them to the next paper? No, then it would be too theoretical!
 % Use as much mathematical notation as possible here! Really? -> Actually, no, this paper will not contain mathematical notation!
 
-\subsection{Submission at Perception Challenge}
-\label{sec:perception_challenge}
-
-Describe an example submission at the leaderboard of Waymo Open Dataset. 
-
-Labeling specifications\footnote{\url{https://github.com/waymo-research/waymo-open-dataset/blob/master/docs/labeling_specifications.md}}.
-
-Description of perception challenge\footnote{\url{https://waymo.com/open/data/perception/}}
+The criteria from the previous section (Sec.~\ref{sec:criteria}) are illustrated by two exemplary test oracles in Table~\ref{table:case_study}.
 
 
-\subsection{External Reference System}
+Describe nuScenes 3D tracking challenge and give link. 
 
-Use inD data with a simulated ego vehicle and simulated data under test.
-Use the Lanelet2 map (converted to the omega format) to include and exclude certain areas.
+Describe own previous paper with drone perception error modeling \cite{Krajewski2020UsingDrones}. 
 
-\newcommand{\basicDroneFoV}{}
-\newcommand{\basicDroneOcclusion}{stuff}
-\newcommand{\basicDroneReSHW}{stuff}
-\newcommand{\basicDroneReSLabling}{stuff}
-\newcommand{\basicDroneAreas}{stuff}
-\newcommand{\basicDroneGeometrAlign}{stuff}
-\newcommand{\basicDroneObjDistance}{stuff}
-\newcommand{\basicDroneMultiObjMatching}{stuff}
+Mention that these descriptions are still super high-level, and more detail is given (and should be given) in the respective papers and documentation.
 
-\newcommand{\tempDroneSync}{stuff}
-\newcommand{\tempDroneMatching}{stuff}
-\newcommand{\tempDroneIncomplete}{stuff}
-\newcommand{\tempDroneDelays}{stuff}
+% WAYMO 3D TRACKING CHALLENGE
+% --> don't take it. Was not so popular and is already outdated and even officially retired.
+% Describe an example submission at the leaderboard of Waymo Open Dataset. 
+% Labeling specifications\footnote{\url{https://github.com/waymo-research/waymo-open-dataset/blob/master/docs/labeling_specifications.md}}.
+% Description of perception challenge\footnote{\url{https://waymo.com/open/data/perception/}}
 
-\newcommand{\probDroneFoV}{stuff}
-\newcommand{\probDroneObjDistance}{stuff}
-\newcommand{\probDroneExistClass}{stuff}
+% OLD IDEAS FOR OWN TESTING ACTIVITY
+%Use inD data with a simulated ego vehicle and simulated data under test.
+%Use the Lanelet2 map (converted to the omega format) to include and exclude certain areas.
+
+\newcommand{\basicDroneFoV}{ReS FoV is rectangular (about \SI{85}{\meter} $\times$ \SI{45}{\meter}), whereas OuT FoV is \SI{145}{\degree} wide and $\approx$\,\SI{80}{\meter} long. 
+The FoVs overlap in the analyzed area.}
+\newcommand{\basicDroneOcclusion}{Not published (how did Fabian do it?)}
+\newcommand{\basicDroneReSHW}{Camera-equipped drone with 4K resolution hovering in a steady state disturbed by wind.}
+\newcommand{\basicDroneReSLabling}{Same as in inD dataset; high-level description of entirely offline post-processing: correcting lens distortion, stabilizing wind disturbances, semantic segmentation by UNet, vehicle localization, then tracking and smoothing by Kalman Filter.}
+\newcommand{\basicDroneAreas}{Analyzed area: roads up to non-specified distances from the intersection center. Roads beyond, sidewalks, and anything else is excluded.}
+\newcommand{\basicDroneGeometrAlign}{Polynomial transformation of 3\textsuperscript{rd} order from ReS coordinates to OuT coordinates. Polynomial is fitted through corresponding pixels in an orthophoto and a stabilized drone image. 
+Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not further calculated.}
+\newcommand{\basicDroneObjDistance}{Centroid distance over the 2D ground}
+\newcommand{\basicDroneMultiObjMatching}{Only car-car matching}
+
+\newcommand{\tempDroneSync}{Synchronization during post-processing by means of a mutually captured visual signal. Accuracy loss $\approx$\,\SI{0.14}{\meter}.}
+\newcommand{\tempDroneMatching}{Entire tracks are matched if their mean centroid distance (see above) during their lifetimes $<$\,\SI{1.5}{\meter}}
+\newcommand{\tempDroneIncomplete}{not published (related to occlusion handling, how did Fabian treat missing OuT frames in the middle of a ReS object?)}
+\newcommand{\tempDroneDelays}{Any temporally overhanging track parts are discarded as FNs or FPs.}
+
+\newcommand{\probDroneFoV}{OuT FoV is acknowledged to have a fuzzy range, but its fuzziness is not explicitly modeled.}
+\newcommand{\probDroneObjDistance}{-}
+\newcommand{\probDroneExistClass}{OuT objects were considered if their classification with highest probability was ``car" at least once during their lifetime. All existence probabilities were considered without any threshold.}
 
 
 
@@ -719,8 +725,8 @@ Use the Lanelet2 map (converted to the omega format) to include and exclude cert
 			>{\hsize=0.8\hsize}X 
 		}
 		\toprule
-		\multicolumn{2}{>{\hsize=\dimexpr0.4\hsize+0.4\tabcolsep+\arrayrulewidth\relax}X}{\textbf{Criterion}}                      & \textbf{Waymo Challenge}        & \textbf{Drone Testing \cite{Krajewski2020UsingDrones}} \\ \midrule
-		\parbox[t]{2mm}{\multirow{8}{*}{\rotatebox[origin=c]{90}{Basic}}}    & \ref{sec:fov_ref} FoVs                              & \basicChallengeFoV              & \basicDroneFoV                                         \\ \cline{2-4}
+		\multicolumn{2}{>{\hsize=\dimexpr0.4\hsize+0.4\tabcolsep+\arrayrulewidth\relax}X}{\textbf{Criterion}}                      & \textbf{nuScenes tracking challenge}        & \textbf{Perception error modeling with a drone \cite{Krajewski2020UsingDrones}} \\ \midrule
+		\parbox[t]{2mm}{\multirow{8}{*}[-2cm]{\rotatebox[origin=c]{90}{Basic}}}    & \ref{sec:fov_ref} FoVs                              & \basicChallengeFoV              & \basicDroneFoV                                         \\ \cline{2-4}
 		                                                                     & \ref{sec:occlusions} Occlusion handling             & \basicChallengeOcclusion        & \basicDroneOcclusion                                   \\ \cline{2-4}
 		                                                                     & \ref{sec:ref_hw} ReS hardware                       & \basicChallengeReSHW            & \basicDroneReSHW                                       \\ \cline{2-4}
 		                                                                     & \ref{sec:ref_processing} ReS labeling               & \basicChallengeReSLabling       & \basicDroneReSLabling                                  \\ \cline{2-4}
