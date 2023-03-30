@@ -40,7 +40,7 @@
 \usepackage{booktabs}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
-\usepackage{graphicx}
+\usepackage{multirow,graphicx}
 \usepackage{textcomp}
 \usepackage[nolist, nohyperlinks, printonlyused]{acronym} % For consistent acronyms
 
@@ -634,27 +634,23 @@ However, if the OuT forwards these probabilities to the downstream driving polic
 
 In the simplest case, the test oracle can threshold the existence probability at a fixed value and take the maximum probability out of all classifications.
 Other oracles might also be reasonable.
-For example, if the test oracle refuses to match deterministic OuT bicycles with ReS cars, it might still allow such a match on probabilistic data by considering also the OuT's second most likely classification, e.g. $p_\text{car} = 0.96$, $p_\text{bicycle} = 0.95$.
+For example, if the test oracle refuses to deterministically match OuT bicycles with ReS cars, it might still allow such a match on probabilistic data if the OuT's second most likely classification matches, e.g. $p_\text{OuT,bicycle} = 0.96$ is incorrect, but $p_\text{OuT,car} = 0.95$ is correct for a ReS car.
 
-Furthermore, the oracle's policy for identifying FNs behind occlusions could include a variable threshold for the existence probability that depends on how much the target is occluded.
+Furthermore, an oracle's policy for identifying or not identifying FNs behind occlusions could mean that its existence probability threshold, above which it assumes OuT objects as present, is lower the more the object is occluded.
 
-\subsubsection{Probabilistic multi-object matching}
-\label{sec:prob_matching}
+% \subsubsection{Probabilistic multi-object matching}
+% \label{sec:prob_matching}
 % THIS IS A BIT EXPERIMENTAL AND I MIGHT DELETE IT LATER
-
-
-TODO CONTINUE HERE.
-
-No binary matches, but rather match probabilities. 
-Just as done with association in probabilistic filters for object tracking (e.g. LMB). 
+% No binary matches, but rather match probabilities. 
+% Just as done with association in probabilistic filters for object tracking (e.g. LMB). 
+% I know too little about that to write about it! Leave it out for now!
 
 
 
 \section{Example Case Studies}
 
-Or outsource them to the next paper?
-
-Use as much mathematical notation as possible here! (Really?)
+% Or outsource them to the next paper? No, then it would be too theoretical!
+% Use as much mathematical notation as possible here! Really? -> Actually, no, this paper will not contain mathematical notation!
 
 \subsection{Submission at Perception Challenge}
 \label{sec:perception_challenge}
@@ -676,32 +672,28 @@ Use the Lanelet2 map (converted to the omega format) to include and exclude cert
 	\caption{Test oracles expressed in the terminology of this paper}
 	\label{table:case_study}
 	\begin{tabularx}{\linewidth}{
-			>{\hsize=0.40\hsize}X 
-			>{\hsize=0.8\hsize}X 
-			>{\hsize=0.8\hsize}X 
-		} 
+			>{\hsize=0.03\hsize}X
+			>{\hsize=0.47\hsize}X 
+			>{\hsize=0.75\hsize}X 
+			>{\hsize=0.75\hsize}X 
+		}
 		\toprule
-		\textbf{Criterion} & \textbf{Waymo Challenge} & \textbf{Drone Testing} \\
-		\midrule
-		Simple aspects %
-		& stuff
-		& stuff \\
-		\hline
-		Temporal aspects 
-		& stuff
-		& stuff  \\ 
-		\hline
-		Probabilistic aspects 
-		& stuff
-		& stuff  \\ 
-		\bottomrule
+	\multicolumn{2}{>{\hsize=\dimexpr0.5\hsize+0.5\tabcolsep+\arrayrulewidth\relax}X}{\textbf{Criterion}}      & \textbf{Waymo Challenge} & \textbf{Drone Testing} \\ \midrule
+		a & Deterministic example 1 & stuff                    & stuff                  \\ \hline
+		a & Deterministic example 2 & stuff                    & stuff                  \\ \midrule
+		b & Temporal example 1      & stuff                    & stuff                  \\ \hline
+		b & Temporal example 2      & stuff                    & stuff                  \\ \midrule
+		c & Probabilistic example   & stuff                    & stuff
 	\end{tabularx}
 \end{table*}
+% \multicolumn{2}{>{\hsize=0.5\hsize}X}{\textbf{Criterion}}
+% \multicolumn{2}{|>{\hsize=\dimexpr0.5\hsize+0.5\tabcolsep+\arrayrulewidth\relax}X|}{\textbf{Criterion}}
+% \parbox[t]{2mm}{\multirow{1}{*}{\rotatebox[origin=c]{90}{aaa}}}
 
-
-\subsection{How do TP statistics change when the oracle criteria vary?}
-
-I could include such a case study on simulated data. The omega format with the perception testing dashboard would be handy for that.
+%\subsection{How do TP statistics change when the oracle criteria vary?}
+%I could include such a case study on simulated data. The omega format with the perception testing dashboard would be handy for that.
+% It is good for illustration purposes, but shows nothing special because it is only expected that the statistics change. 
+% Though, it could serve as a demonstration of *how much* statistics change. 
 
 
 \section{Discussion of Research Questions}
@@ -773,7 +765,7 @@ Florbäck et al. \cite{Florbaeck2016.matching.offline} and Sondell and Svensson 
 \section{Conclusion}
 \label{sec:conclusion}
 
-Future work includes a more formal description of a test oracle, potentially by means of a domain-specific language.
+Future work includes a more formal description of a test oracle, potentially by means of mathematical notation or a domain-specific language.
 
 \section*{Acknowledgment}
 \label{sec:acknowledgment}
