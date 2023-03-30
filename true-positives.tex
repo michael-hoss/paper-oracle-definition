@@ -672,18 +672,28 @@ Use the Lanelet2 map (converted to the omega format) to include and exclude cert
 	\caption{Test oracles expressed in the terminology of this paper}
 	\label{table:case_study}
 	\begin{tabularx}{\linewidth}{
-			>{\hsize=0.03\hsize}X
-			>{\hsize=0.47\hsize}X 
+			>{\hsize=0.02\hsize}X
+			>{\hsize=0.48\hsize}X 
 			>{\hsize=0.75\hsize}X 
 			>{\hsize=0.75\hsize}X 
 		}
 		\toprule
-	\multicolumn{2}{>{\hsize=\dimexpr0.5\hsize+0.5\tabcolsep+\arrayrulewidth\relax}X}{\textbf{Criterion}}      & \textbf{Waymo Challenge} & \textbf{Drone Testing} \\ \midrule
-		a & Deterministic example 1 & stuff                    & stuff                  \\ \hline
-		a & Deterministic example 2 & stuff                    & stuff                  \\ \midrule
-		b & Temporal example 1      & stuff                    & stuff                  \\ \hline
-		b & Temporal example 2      & stuff                    & stuff                  \\ \midrule
-		c & Probabilistic example   & stuff                    & stuff
+		\multicolumn{2}{>{\hsize=\dimexpr0.5\hsize+0.5\tabcolsep+\arrayrulewidth\relax}X}{\textbf{Criterion}}                           & \textbf{Waymo Challenge} & \textbf{Drone Testing} \\ \midrule
+		\parbox[t]{2mm}{\multirow{8}{*}{\rotatebox[origin=c]{90}{Deterministic}}} & \ref{sec:fov_ref} FoVs                              & stuff                    & stuff                  \\ \cline{2-4}
+		                                                                          & \ref{sec:occlusions} Occlusion handling             & stuff                    & stuff                  \\ \cline{2-4}
+		                                                                          & \ref{sec:ref_hw} ReS hardware                       & stuff                    & stuff                  \\ \cline{2-4}
+		                                                                          & \ref{sec:ref_processing} ReS labeling               & stuff                    & stuff                  \\ \cline{2-4}
+		                                                                          & \ref{sec:semantic_areas} Semantic areas             & stuff                    & stuff                  \\ \cline{2-4}
+		                                                                          & \ref{sec:geometrical_alignment} Geometr. alignment  & stuff                    & stuff                  \\ \cline{2-4}
+		                                                                          & \ref{sec:distance_function} Obj. distance func.     & stuff                    & stuff                  \\ \cline{2-4}
+		                                                                          & \ref{sec:multi_object_matching} Multi-obj. matching & stuff                    & stuff                  \\ \midrule
+		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{Temporal}}}      & \ref{sec:temp_sync} Synchronization                 & stuff                    & stuff                  \\ \cline{2-4}
+		                                                                          & \ref{sec:temp_matching} Matching                    & stuff                    & stuff                  \\ \cline{2-4}
+		                                                                          & \ref{sec:temp_incomplete} Incomplete tracks         & stuff                    & stuff                  \\ \cline{2-4}
+		                                                                          & \ref{sec:temp_latency} Delays \& latency            & stuff                    & stuff                  \\ \midrule
+		\parbox[t]{2mm}{\multirow{3}{*}{\rotatebox[origin=c]{90}{Prob.}}}         & \ref{sec:prob_fov} FoVs                             & stuff                    & stuff                  \\ \cline{2-4}
+		                                                                          & \ref{sec:prob_bbox} Obj. distance func.             & stuff                    & stuff                  \\ \cline{2-4}
+		                                                                          & \ref{sec:prob_thresholding} Obj. existence \& class & stuff                    & stuff                  \\ \bottomrule
 	\end{tabularx}
 \end{table*}
 % \multicolumn{2}{>{\hsize=0.5\hsize}X}{\textbf{Criterion}}
