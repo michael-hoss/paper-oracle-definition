@@ -302,7 +302,7 @@ Our method to do this primarily consists of noting down and structuring all aspe
 This experience consists of object-level online data fusion, object-level perception error modeling, testing of object perception against aerial reference data, and scenario elicitation from traffic recordings for safety assurance. 
 
 
-As we apply this experience-based oracle definition to a popular perception challenge (Sec. \ref{sec:perception_challenge}), we refine it and demonstrate its practical applicability. 
+As we apply this experience-based oracle definition to a popular perception challenge (Sec. \ref{sec:case_studies}), we refine it and demonstrate its practical applicability. 
 
 
 %oracle is also at least partially based on intuition that is naturally impossible to specify explicitly. 
@@ -648,6 +648,7 @@ Furthermore, an oracle's policy for identifying or not identifying FNs behind oc
 
 
 \section{Example Case Studies}
+\label{sec:case_studies}
 
 % Or outsource them to the next paper? No, then it would be too theoretical!
 % Use as much mathematical notation as possible here! Really? -> Actually, no, this paper will not contain mathematical notation!
@@ -667,33 +668,73 @@ Description of perception challenge\footnote{\url{https://waymo.com/open/data/pe
 Use inD data with a simulated ego vehicle and simulated data under test.
 Use the Lanelet2 map (converted to the omega format) to include and exclude certain areas.
 
+\newcommand{\basicDroneFoV}{}
+\newcommand{\basicDroneOcclusion}{stuff}
+\newcommand{\basicDroneReSHW}{stuff}
+\newcommand{\basicDroneReSLabling}{stuff}
+\newcommand{\basicDroneAreas}{stuff}
+\newcommand{\basicDroneGeometrAlign}{stuff}
+\newcommand{\basicDroneObjDistance}{stuff}
+\newcommand{\basicDroneMultiObjMatching}{stuff}
+
+\newcommand{\tempDroneSync}{stuff}
+\newcommand{\tempDroneMatching}{stuff}
+\newcommand{\tempDroneIncomplete}{stuff}
+\newcommand{\tempDroneDelays}{stuff}
+
+\newcommand{\probDroneFoV}{stuff}
+\newcommand{\probDroneObjDistance}{stuff}
+\newcommand{\probDroneExistClass}{stuff}
+
+
+
+
+
+\newcommand{\basicChallengeFoV}{What if this is some longer text that will inevitably break or overflow in the table itself?}
+\newcommand{\basicChallengeOcclusion}{stuff}
+\newcommand{\basicChallengeReSHW}{stuff}
+\newcommand{\basicChallengeReSLabling}{stuff}
+\newcommand{\basicChallengeAreas}{stuff}
+\newcommand{\basicChallengeGeometrAlign}{stuff}
+\newcommand{\basicChallengeObjDistance}{stuff}
+\newcommand{\basicChallengeMultiObjMatching}{stuff}
+
+\newcommand{\tempChallengeSync}{stuff}
+\newcommand{\tempChallengeMatching}{stuff}
+\newcommand{\tempChallengeIncomplete}{stuff}
+\newcommand{\tempChallengeDelays}{stuff}
+
+\newcommand{\probChallengeFoV}{stuff}
+\newcommand{\probChallengeObjDistance}{stuff}
+\newcommand{\probChallengeExistClass}{stuff}
+
 \begin{table*}[t]
 	\centering
 	\caption{Test oracles expressed in the terminology of this paper}
 	\label{table:case_study}
 	\begin{tabularx}{\linewidth}{
 			>{\hsize=0.02\hsize}X
-			>{\hsize=0.48\hsize}X 
-			>{\hsize=0.75\hsize}X 
-			>{\hsize=0.75\hsize}X 
+			>{\hsize=0.38\hsize}X 
+			>{\hsize=0.8\hsize}X 
+			>{\hsize=0.8\hsize}X 
 		}
 		\toprule
-		\multicolumn{2}{>{\hsize=\dimexpr0.5\hsize+0.5\tabcolsep+\arrayrulewidth\relax}X}{\textbf{Criterion}}                           & \textbf{Waymo Challenge} & \textbf{Drone Testing} \\ \midrule
-		\parbox[t]{2mm}{\multirow{8}{*}{\rotatebox[origin=c]{90}{Deterministic}}} & \ref{sec:fov_ref} FoVs                              & stuff                    & stuff                  \\ \cline{2-4}
-		                                                                          & \ref{sec:occlusions} Occlusion handling             & stuff                    & stuff                  \\ \cline{2-4}
-		                                                                          & \ref{sec:ref_hw} ReS hardware                       & stuff                    & stuff                  \\ \cline{2-4}
-		                                                                          & \ref{sec:ref_processing} ReS labeling               & stuff                    & stuff                  \\ \cline{2-4}
-		                                                                          & \ref{sec:semantic_areas} Semantic areas             & stuff                    & stuff                  \\ \cline{2-4}
-		                                                                          & \ref{sec:geometrical_alignment} Geometr. alignment  & stuff                    & stuff                  \\ \cline{2-4}
-		                                                                          & \ref{sec:distance_function} Obj. distance func.     & stuff                    & stuff                  \\ \cline{2-4}
-		                                                                          & \ref{sec:multi_object_matching} Multi-obj. matching & stuff                    & stuff                  \\ \midrule
-		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{Temporal}}}      & \ref{sec:temp_sync} Synchronization                 & stuff                    & stuff                  \\ \cline{2-4}
-		                                                                          & \ref{sec:temp_matching} Matching                    & stuff                    & stuff                  \\ \cline{2-4}
-		                                                                          & \ref{sec:temp_incomplete} Incomplete tracks         & stuff                    & stuff                  \\ \cline{2-4}
-		                                                                          & \ref{sec:temp_latency} Delays \& latency            & stuff                    & stuff                  \\ \midrule
-		\parbox[t]{2mm}{\multirow{3}{*}{\rotatebox[origin=c]{90}{Prob.}}}         & \ref{sec:prob_fov} FoVs                             & stuff                    & stuff                  \\ \cline{2-4}
-		                                                                          & \ref{sec:prob_bbox} Obj. distance func.             & stuff                    & stuff                  \\ \cline{2-4}
-		                                                                          & \ref{sec:prob_thresholding} Obj. existence \& class & stuff                    & stuff                  \\ \bottomrule
+		\multicolumn{2}{>{\hsize=\dimexpr0.4\hsize+0.4\tabcolsep+\arrayrulewidth\relax}X}{\textbf{Criterion}}                      & \textbf{Waymo Challenge}        & \textbf{Drone Testing \cite{Krajewski2020UsingDrones}} \\ \midrule
+		\parbox[t]{2mm}{\multirow{8}{*}{\rotatebox[origin=c]{90}{Basic}}}    & \ref{sec:fov_ref} FoVs                              & \basicChallengeFoV              & \basicDroneFoV                                         \\ \cline{2-4}
+		                                                                     & \ref{sec:occlusions} Occlusion handling             & \basicChallengeOcclusion        & \basicDroneOcclusion                                   \\ \cline{2-4}
+		                                                                     & \ref{sec:ref_hw} ReS hardware                       & \basicChallengeReSHW            & \basicDroneReSHW                                       \\ \cline{2-4}
+		                                                                     & \ref{sec:ref_processing} ReS labeling               & \basicChallengeReSLabling       & \basicDroneReSLabling                                  \\ \cline{2-4}
+		                                                                     & \ref{sec:semantic_areas} Semantic areas             & \basicChallengeAreas            & \basicDroneAreas                                       \\ \cline{2-4}
+		                                                                     & \ref{sec:geometrical_alignment} Geometr. alignment  & \basicChallengeGeometrAlign     & \basicDroneGeometrAlign                                \\ \cline{2-4}
+		                                                                     & \ref{sec:distance_function} Obj. distance func.     & \basicChallengeObjDistance      & \basicDroneObjDistance                                 \\ \cline{2-4}
+		                                                                     & \ref{sec:multi_object_matching} Multi-obj. matching & \basicChallengeMultiObjMatching & \basicDroneMultiObjMatching                            \\ \midrule
+		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{Temporal}}} & \ref{sec:temp_sync} Synchronization                 & \tempChallengeSync              & \tempDroneSync                                         \\ \cline{2-4}
+		                                                                     & \ref{sec:temp_matching} Matching                    & \tempChallengeMatching          & \tempDroneMatching                                     \\ \cline{2-4}
+		                                                                     & \ref{sec:temp_incomplete} Incomplete tracks         & \tempChallengeIncomplete        & \tempDroneIncomplete                                   \\ \cline{2-4}
+		                                                                     & \ref{sec:temp_latency} Delays \& latency            & \tempChallengeDelays            & \tempDroneDelays                                       \\ \midrule
+		\parbox[t]{2mm}{\multirow{3}{*}{\rotatebox[origin=c]{90}{Prob.}}}    & \ref{sec:prob_fov} FoVs                             & \probChallengeFoV               & \probDroneFoV                                          \\ \cline{2-4}
+		                                                                     & \ref{sec:prob_bbox} Obj. distance func.             & \probChallengeObjDistance       & \probDroneObjDistance                                  \\ \cline{2-4}
+		                                                                     & \ref{sec:prob_thresholding} Obj. exist. \& class.   & \probChallengeExistClass        & \probDroneExistClass                                   \\ \bottomrule
 	\end{tabularx}
 \end{table*}
 % \multicolumn{2}{>{\hsize=0.5\hsize}X}{\textbf{Criterion}}
