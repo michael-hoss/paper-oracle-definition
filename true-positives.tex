@@ -43,6 +43,7 @@
 \usepackage{multirow,graphicx}
 \usepackage{textcomp}
 \usepackage[nolist, nohyperlinks, printonlyused]{acronym} % For consistent acronyms
+\usepackage{tablefootnote}
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
@@ -654,7 +655,7 @@ Furthermore, an oracle's policy for identifying or not identifying FNs behind oc
 % Use as much mathematical notation as possible here! Really? -> Actually, no, this paper will not contain mathematical notation!
 
 The criteria from the previous section (Sec.~\ref{sec:criteria}) are illustrated by two exemplary test oracles in Table~\ref{table:case_study}.
-
+On the one hand, the nuScenes 3D tracking challenge\footnote{\url{https://www.nuscenes.org/tracking}}
 
 Describe nuScenes 3D tracking challenge and give link. 
 
@@ -680,10 +681,10 @@ The FoVs overlap in the analyzed area.}
 \newcommand{\basicDroneAreas}{Analyzed area: roads up to non-specified distances from the intersection center. Roads beyond, sidewalks, and anything else is excluded.}
 \newcommand{\basicDroneGeometrAlign}{Polynomial transformation of 3\textsuperscript{rd} order from ReS coordinates to OuT coordinates. Polynomial is fitted through corresponding pixels in an orthophoto and a stabilized drone image. 
 Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not further calculated.}
-\newcommand{\basicDroneObjDistance}{Centroid distance over the 2D ground}
+\newcommand{\basicDroneObjDistance}{2D center distance on the ground plane}
 \newcommand{\basicDroneMultiObjMatching}{Only car-car matching}
 
-\newcommand{\tempDroneSync}{Synchronization during post-processing by means of a mutually captured visual signal. Accuracy loss $\approx$\,\SI{0.14}{\meter}.}
+\newcommand{\tempDroneSync}{Both OuT and ReS operate at \SI{25}{\hertz}. Synchronization during post-processing by means of a mutually captured visual signal. Accuracy loss $\approx$\,\SI{0.14}{\meter}.}
 \newcommand{\tempDroneMatching}{Entire tracks are matched if their mean centroid distance (see above) during their lifetimes $<$\,\SI{1.5}{\meter}}
 \newcommand{\tempDroneIncomplete}{not published (related to occlusion handling, how did Fabian treat missing OuT frames in the middle of a ReS object?)}
 \newcommand{\tempDroneDelays}{Any temporally overhanging track parts are discarded as FNs or FPs.}
@@ -692,17 +693,17 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 \newcommand{\probDroneObjDistance}{-}
 \newcommand{\probDroneExistClass}{OuT objects were considered if their classification with highest probability was ``car" at least once during their lifetime. All existence probabilities were considered without any threshold.}
 
+\newcommand{\furtherDrone}{Modeling of how OuT deviates from ReS regarding TP object states}
 
 
 
-
-\newcommand{\basicChallengeFoV}{What if this is some longer text that will inevitably break or overflow in the table itself?}
-\newcommand{\basicChallengeOcclusion}{stuff}
-\newcommand{\basicChallengeReSHW}{stuff}
-\newcommand{\basicChallengeReSLabling}{stuff}
-\newcommand{\basicChallengeAreas}{stuff}
-\newcommand{\basicChallengeGeometrAlign}{stuff}
-\newcommand{\basicChallengeObjDistance}{stuff}
+\newcommand{\basicChallengeFoV}{OuT FoV $\subseteq$ ReS FoV. No clear FoV boundaries defined.}
+\newcommand{\basicChallengeOcclusion}{Only objects with at least 1 lidar or radar point are labeled, which implictly defines the occlusion handling.}
+\newcommand{\basicChallengeReSHW}{ReS HW (cameras, lidar, radar) is a superset of OuT HW}
+\newcommand{\basicChallengeReSLabling}{See labeling instructions\tablefootnote{\href{https://github.com/nutonomy/nuscenes-devkit/blob/master/docs/instructions_nuscenes.md}{https://github.com/nutonomy/nuscenes-devkit/blob/master/docs/instructions\_nuscenes.md}}. No labeling of bikes and motorcycles in bike racks.}
+\newcommand{\basicChallengeAreas}{No evaluation beyond class-specific maximum detection and tracking ranges; no evaluation of bikes and motorcycles inside bike racks.}
+\newcommand{\basicChallengeGeometrAlign}{same sensors, therefore perfectly aligned}
+\newcommand{\basicChallengeObjDistance}{2D center distance on the ground plane; threshold of \SI{2}{\meter}}
 \newcommand{\basicChallengeMultiObjMatching}{stuff}
 
 \newcommand{\tempChallengeSync}{stuff}
@@ -713,6 +714,10 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 \newcommand{\probChallengeFoV}{stuff}
 \newcommand{\probChallengeObjDistance}{stuff}
 \newcommand{\probChallengeExistClass}{stuff}
+
+\newcommand{\furtherChallenge}{Computation of metrics such as AMOTA and AMOTP for the online leaderboard}
+
+\newcommand{\furtherEvaluation}{Context: further evaluation after TP, FP, FN }
 
 \begin{table*}[t]
 	\centering
@@ -725,22 +730,23 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 			>{\hsize=0.8\hsize}X 
 		}
 		\toprule
-		\multicolumn{2}{>{\hsize=\dimexpr0.4\hsize+0.4\tabcolsep+\arrayrulewidth\relax}X}{\textbf{Criterion}}                      & \textbf{nuScenes tracking challenge}        & \textbf{Perception error modeling with a drone \cite{Krajewski2020UsingDrones}} \\ \midrule
-		\parbox[t]{2mm}{\multirow{8}{*}[-2cm]{\rotatebox[origin=c]{90}{Basic}}}    & \ref{sec:fov_ref} FoVs                              & \basicChallengeFoV              & \basicDroneFoV                                         \\ \cline{2-4}
-		                                                                     & \ref{sec:occlusions} Occlusion handling             & \basicChallengeOcclusion        & \basicDroneOcclusion                                   \\ \cline{2-4}
-		                                                                     & \ref{sec:ref_hw} ReS hardware                       & \basicChallengeReSHW            & \basicDroneReSHW                                       \\ \cline{2-4}
-		                                                                     & \ref{sec:ref_processing} ReS labeling               & \basicChallengeReSLabling       & \basicDroneReSLabling                                  \\ \cline{2-4}
-		                                                                     & \ref{sec:semantic_areas} Semantic areas             & \basicChallengeAreas            & \basicDroneAreas                                       \\ \cline{2-4}
-		                                                                     & \ref{sec:geometrical_alignment} Geometr. alignment  & \basicChallengeGeometrAlign     & \basicDroneGeometrAlign                                \\ \cline{2-4}
-		                                                                     & \ref{sec:distance_function} Obj. distance func.     & \basicChallengeObjDistance      & \basicDroneObjDistance                                 \\ \cline{2-4}
-		                                                                     & \ref{sec:multi_object_matching} Multi-obj. matching & \basicChallengeMultiObjMatching & \basicDroneMultiObjMatching                            \\ \midrule
-		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{Temporal}}} & \ref{sec:temp_sync} Synchronization                 & \tempChallengeSync              & \tempDroneSync                                         \\ \cline{2-4}
-		                                                                     & \ref{sec:temp_matching} Matching                    & \tempChallengeMatching          & \tempDroneMatching                                     \\ \cline{2-4}
-		                                                                     & \ref{sec:temp_incomplete} Incomplete tracks         & \tempChallengeIncomplete        & \tempDroneIncomplete                                   \\ \cline{2-4}
-		                                                                     & \ref{sec:temp_latency} Delays \& latency            & \tempChallengeDelays            & \tempDroneDelays                                       \\ \midrule
-		\parbox[t]{2mm}{\multirow{3}{*}{\rotatebox[origin=c]{90}{Prob.}}}    & \ref{sec:prob_fov} FoVs                             & \probChallengeFoV               & \probDroneFoV                                          \\ \cline{2-4}
-		                                                                     & \ref{sec:prob_bbox} Obj. distance func.             & \probChallengeObjDistance       & \probDroneObjDistance                                  \\ \cline{2-4}
-		                                                                     & \ref{sec:prob_thresholding} Obj. exist. \& class.   & \probChallengeExistClass        & \probDroneExistClass                                   \\ \bottomrule
+		\multicolumn{2}{>{\hsize=\dimexpr0.4\hsize+0.4\tabcolsep+\arrayrulewidth\relax}X}{\textbf{Criterion}}                         & \textbf{nuScenes tracking challenge} & \textbf{Perception error modeling with a drone \cite{Krajewski2020UsingDrones}} \\ \midrule
+		\parbox[t]{2mm}{\multirow{8}{*}[-2cm]{\rotatebox[origin=c]{90}{Basic}}} & \ref{sec:fov_ref} FoVs                              & \basicChallengeFoV                   & \basicDroneFoV                                                                  \\ \cline{2-4}
+		                                                                        & \ref{sec:occlusions} Occlusion handling             & \basicChallengeOcclusion             & \basicDroneOcclusion                                                            \\ \cline{2-4}
+		                                                                        & \ref{sec:ref_hw} ReS hardware                       & \basicChallengeReSHW                 & \basicDroneReSHW                                                                \\ \cline{2-4}
+		                                                                        & \ref{sec:ref_processing} ReS labeling               & \basicChallengeReSLabling            & \basicDroneReSLabling                                                           \\ \cline{2-4}
+		                                                                        & \ref{sec:semantic_areas} Semantic areas             & \basicChallengeAreas                 & \basicDroneAreas                                                                \\ \cline{2-4}
+		                                                                        & \ref{sec:geometrical_alignment} Geometr. alignment  & \basicChallengeGeometrAlign          & \basicDroneGeometrAlign                                                         \\ \cline{2-4}
+		                                                                        & \ref{sec:distance_function} Obj. distance func.     & \basicChallengeObjDistance           & \basicDroneObjDistance                                                          \\ \cline{2-4}
+		                                                                        & \ref{sec:multi_object_matching} Multi-obj. matching & \basicChallengeMultiObjMatching      & \basicDroneMultiObjMatching                                                     \\ \midrule
+		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{Temporal}}}    & \ref{sec:temp_sync} Synchronization                 & \tempChallengeSync                   & \tempDroneSync                                                                  \\ \cline{2-4}
+		                                                                        & \ref{sec:temp_matching} Matching                    & \tempChallengeMatching               & \tempDroneMatching                                                              \\ \cline{2-4}
+		                                                                        & \ref{sec:temp_incomplete} Incomplete tracks         & \tempChallengeIncomplete             & \tempDroneIncomplete                                                            \\ \cline{2-4}
+		                                                                        & \ref{sec:temp_latency} Delays \& latency            & \tempChallengeDelays                 & \tempDroneDelays                                                                \\ \midrule
+		\parbox[t]{2mm}{\multirow{3}{*}{\rotatebox[origin=c]{90}{Prob.}}}       & \ref{sec:prob_fov} FoVs                             & \probChallengeFoV                    & \probDroneFoV                                                                   \\ \cline{2-4}
+		                                                                        & \ref{sec:prob_bbox} Obj. distance func.             & \probChallengeObjDistance            & \probDroneObjDistance                                                           \\ \cline{2-4}
+		                                                                        & \ref{sec:prob_thresholding} Obj. exist. \& class.   & \probChallengeExistClass             & \probDroneExistClass                                                            \\ \midrule
+		\multicolumn{2}{>{\hsize=\dimexpr0.4\hsize+0.4\tabcolsep+\arrayrulewidth\relax}X}{\furtherEvaluation}                         & \furtherChallenge                    & \furtherDrone                                                                   \\ \bottomrule
 	\end{tabularx}
 \end{table*}
 % \multicolumn{2}{>{\hsize=0.5\hsize}X}{\textbf{Criterion}}
