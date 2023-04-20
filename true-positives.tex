@@ -630,15 +630,15 @@ A probabilistic version of the \textit{IoU} for rotated 3D bounding boxes is the
 \subsubsection{Probabilistic object existence and classification}
 \label{sec:prob_thresholding}
 
-OuTs often compute a probability for the existence of an object and probabilities for its belonging to the different road user classes.
+OuTs often compute a confidence for the existence of an object and confidences for its belonging to the different road user classes.
 If the OuT does the thresholding itself and only outputs a binary existence and a unique classification, then the deterministic test oracle criteria from Sec. \ref{sec:oracle_simple} can be applied. 
 However, if the OuT forwards these probabilities to the downstream driving policy, which could make use of them, then the test oracle should also consider them. 
 
-In the simplest case, the test oracle can threshold the existence probability at a fixed value and take the maximum probability out of all classifications.
+In the simplest case, the test oracle can threshold the existence confidence at a fixed value and take the class with the maximum classification confidence.
 Other oracles might also be reasonable.
 For example, if the test oracle refuses to deterministically match OuT bicycles with ReS cars, it might still allow such a match on probabilistic data if the OuT's second most likely classification matches, e.g. $p_\text{OuT,bicycle} = 0.96$ is incorrect, but $p_\text{OuT,car} = 0.95$ is correct for a ReS car.
 
-Furthermore, an oracle's policy for identifying or not identifying FNs behind occlusions could mean that its existence probability threshold, above which it assumes OuT objects as present, is lower the more the object is occluded.
+Furthermore, an oracle's policy for identifying or not identifying FNs behind occlusions could mean that its existence confidence threshold, above which it assumes OuT objects as present, is lower the more the object is occluded.
 
 % \subsubsection{Probabilistic multi-object matching}
 % \label{sec:prob_matching}
@@ -676,6 +676,20 @@ However, the level of detail of Table~\ref{table:case_study} is still partially 
 %Use inD data with a simulated ego vehicle and simulated data under test.
 %Use the Lanelet2 map (converted to the omega format) to include and exclude certain areas.
 
+
+% CONTEXT
+\newcommand{\scenariosDrone}{Ego vehicle statically observes an urban intersection from a sidewalk.}
+\newcommand{\outDrone}{Single lidar sensor with integrated object detection and tracking}
+\newcommand{\furtherDrone}{Modeling of how OuT deviates from ReS regarding TP object states}
+
+\newcommand{\scenariosChallenge}{Ego vehicle dynamically participates in various urban traffic scenarios.}
+\newcommand{\furtherChallenge}{Computation of metrics such as AMOTA and AMOTP \cite{weng2019baseline} for the online leaderboard}
+\newcommand{\outChallenge}{Submitted detection and tracking algorithms that operate on either camera-only, lidar-only, or all raw sensor data}
+
+
+
+
+% DRONE TEST ORACLE
 \newcommand{\basicDroneFoV}{ReS FoV is rectangular (about \SI{85}{\meter} $\times$ \SI{45}{\meter}), whereas OuT FoV is \SI{145}{\degree} wide and $\approx$\,\SI{80}{\meter} long. 
 The FoVs overlap in the analyzed area.}
 \newcommand{\basicDroneOcclusion}{Not published: all time steps in which an OuT object was at least marginally occluded to the OuT were removed from its track. % Was the occlusion identified on the OuT object list or on the ReS object list?
@@ -695,9 +709,10 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 
 \newcommand{\probDroneFoV}{OuT FoV is acknowledged to have a fuzzy range, but its fuzziness is not explicitly modeled.}
 \newcommand{\probDroneObjDistance}{Deterministic distance function only}
-\newcommand{\probDroneExistClass}{Not published: Objects of any existence probability were considered without any threshold. No documentation of the criterium for when an OuT track was considered a car.}
+\newcommand{\probDroneExistClass}{Not published: Objects of any existence confidence were considered without any threshold. Only those parts of OuT tracks during which \textit{car} was the most likely classification were extracted and considered for matching.}
 
 
+% NUSCENES CHALLENGE TEST ORACLE
 \newcommand{\basicChallengeFoV}{ReS FoV $\supseteq$ OuT FoV, both from ego perspective. Ranges are partially defined, but the oracle cuts off ReS and OuT objects beyond class-specific distances.}
 \newcommand{\basicChallengeOcclusion}{Implicitly defined by sensor mounting positions and labeling policy. ReS can hardly see behind occlusions of OuT except for a slightly higher mounting position of ReS lidar w.r.t. a camera-only OuT.}
 \newcommand{\basicChallengeReSHW}{ReS HW (cameras, lidar, radar, GNSS+IMU) $\supseteq$ OuT HW}
@@ -715,16 +730,8 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 
 \newcommand{\probChallengeFoV}{FoVs are not modeled probabilistically}
 \newcommand{\probChallengeObjDistance}{Deterministic distance function only}
-\newcommand{\probChallengeExistClass}{The oracle expects a \textit{tracking score} $\in [0,1]$, which expresses existence probability, and a temporally constant \textit{tracking name} $\in \{\textrm{car}, \textrm{pedestrian}, \dots\}$.  Metrics in further evaluation \cite{weng2019baseline} average per class over 40 different recall values, which stem from a varied existence probability threshold of the oracle. } % Note: the existencd probability of a TP object is called "score" in https://github.com/xinshuoweng/AB3DMOT/blob/master/scripts/KITTI/evaluate.py#L365
+\newcommand{\probChallengeExistClass}{The oracle expects an existence confidence $\in [0,1]$ in each time step, and a temporally constant classification $\in \{\textrm{car}, \textrm{pedestrian}, \dots\}$.  Metrics in further evaluation \cite{weng2019baseline} average per class over 40 different recall values, which stem from a varied existence confidence threshold of the oracle. } % Note: the existence confidence of a TP object is called "score" in https://github.com/xinshuoweng/AB3DMOT/blob/master/scripts/KITTI/evaluate.py#L365
 
-% CONTEXT
-\newcommand{\scenariosDrone}{Ego vehicle statically observes an urban intersection from a sidewalk.}
-\newcommand{\outDrone}{Single lidar sensor with integrated object detection and tracking}
-\newcommand{\furtherDrone}{Modeling of how OuT deviates from ReS regarding TP object states}
-
-\newcommand{\scenariosChallenge}{Ego vehicle dynamically participates in various urban traffic scenarios.}
-\newcommand{\furtherChallenge}{Computation of metrics such as AMOTA and AMOTP \cite{weng2019baseline} for the online leaderboard}
-\newcommand{\outChallenge}{Submitted detection and tracking algorithms that operate on either camera-only, lidar-only, or all raw sensor data}
 
 
 
