@@ -193,6 +193,7 @@ This requires closing the gap between straightforward safety-agnostic metrics an
 %comprehensible to humans, and straightforward to compute all at the same time. 
 
 \subsection{Contributions}
+\label{sec:introduction_contrib}
 While one could make safety-relevant metrics less complex, the present paper aims at making straightforward metrics better usable for safety assurance. 
 Specifically, we aim at defining TPs, FPs, and FNs clearly enough such that statistics of them represent meaningful evidences for safety claims \cite{Borg2022smirk}. 
 %Differentiation between metric types:
@@ -441,7 +442,7 @@ To avoid needless test efforts, one could define no-test-areas, where no evaluat
 For example, the KITTI object development kit\footnote{\url{https://www.cvlibs.net/datasets/kitti}} contains \textit{DontCare} labels where no reference data was labeled. 
 
 The exclusion of objects from such areas can occur in different stages of the testing activity (Fig. \ref{fig:oracle_in_taxonomy}). 
-They might already be excluded from the reference data; they might be included in the reference data, but excluded from the identification of TPs, FPs, and FNs; or, they could still be part of the TPs, FPs, and FNs, but excluded from a potential further evaluation.
+They might already be excluded from the reference data; they might be included in the reference data, but excluded from the identification of TPs, FPs, and FNs; or, they could still be part of the TPs, FPs, and FNs, but excluded in a potential further evaluation.
 
 In any case, a clear definition of no-test areas is crucial for a comprehensible test oracle. 
 They could be defined by individual polygons or by generally applicable rules (e.g. farther away than \SI{20}{\meter} from any road surface or sidewalk).
@@ -655,9 +656,14 @@ Furthermore, an oracle's policy for identifying or not identifying FNs behind oc
 % Or outsource them to the next paper? No, then it would be too theoretical!
 % Use as much mathematical notation as possible here! Really? -> Actually, no, this paper will not contain mathematical notation!
 
-The criteria from the previous section (Sec.~\ref{sec:criteria}) are illustrated by two exemplary test oracles in Table~\ref{table:case_study}.
-They are used in different contexts, but can still be characterized in detail by the proposed criteria.
+The criteria from the previous section (Sec.~\ref{sec:criteria}) are illustrated by two exemplary test oracles in Table~\ref{table:case_study}, namely the evaluation of the nuScenes perception challenge \cite{caesar2019nuscenes} and our own previous test activity \cite{Krajewski2020UsingDrones}. 
+
+
+Both oracles can be characterized fairly well by the proposed criteria despite their different purposes (ranking of submissions in a leaderboard vs. perception error modeling) and their different reference systems (human labeling on ego vehicle sensor data vs. automated extraction from a hovering drone).
+
+
 However, even the level of detail of Table~\ref{table:case_study} still does not comprise all relevant information and leaves open uncertainties, especially in terms of ReS data processing and labeling (Sec.~\ref{sec:ref_processing}).
+
 
 % Mention that these descriptions are still super high-level, and more detail is given (and should be given) in the respective papers and documentation.
 
@@ -692,7 +698,7 @@ However, even the level of detail of Table~\ref{table:case_study} still does not
 % DRONE TEST ORACLE
 \newcommand{\basicDroneFoV}{ReS FoV is rectangular (about \SI{85}{\meter} $\times$ \SI{45}{\meter}), whereas OuT FoV is \SI{145}{\degree} wide and $\approx$\,\SI{80}{\meter} long. 
 The FoVs overlap in the analyzed area.}
-\newcommand{\basicDroneOcclusion}{Not published: all time steps in which an OuT object was at least marginally occluded to the OuT were removed from its track. % Was the occlusion identified on the OuT object list or on the ReS object list?
+\newcommand{\basicDroneOcclusion}{\textit{Not published:} all time steps in which an OuT object was at least marginally occluded to the OuT were removed from its track. % Was the occlusion identified on the OuT object list or on the ReS object list?
 }
 \newcommand{\basicDroneReSHW}{Camera-equipped drone with 4K resolution hovering in a steady state disturbed by wind.}
 \newcommand{\basicDroneReSLabling}{Same as in inD dataset; high-level description of entirely offline post-processing: correcting lens distortion, stabilizing wind disturbances, semantic segmentation by UNet, vehicle localization, then tracking and smoothing by Kalman Filter.}
@@ -700,16 +706,16 @@ The FoVs overlap in the analyzed area.}
 \newcommand{\basicDroneGeometrAlign}{Polynomial transformation of 3\textsuperscript{rd} order from ReS coordinates to OuT coordinates. Polynomial is fitted through corresponding pixels in an orthophoto and a stabilized drone image. 
 Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not further calculated.}
 \newcommand{\basicDroneObjDistance}{2D center distance on the ground plane (threshold below); only car-car matching.}
-\newcommand{\basicDroneMultiObjMatching}{Entire tracks are matched (see below). Not published: Multiple OuT tracks can be matched to one ReS track (also at the same time), but only one ReS track can be matched to an OuT track (1-to-n).}
+\newcommand{\basicDroneMultiObjMatching}{Entire tracks are matched (see below). \textit{Not published:} Multiple OuT tracks can be matched to one ReS track (also at the same time), but only one ReS track can be matched to an OuT track (1-to-n).}
 
-\newcommand{\tempDroneSync}{Asynchronous OuT and ReS at \SI{25}{\hertz}; synchronization in post-processing through a mutually captured visual signal; resulting accuracy loss $\approx$\,\SI{0.14}{\meter}. Not published: Once synchronized, OuT tracks were interpolated to the matched ReS time stamps, which left overhanging ReS measurements unused.}
+\newcommand{\tempDroneSync}{Asynchronous OuT and ReS at \SI{25}{\hertz}; synchronization in post-processing through a mutually captured visual signal; resulting accuracy loss $\approx$\,\SI{0.14}{\meter}. \textit{Not published:} Once synchronized, OuT tracks were interpolated to the matched ReS time stamps, which left overhanging ReS measurements unused.}
 \newcommand{\tempDroneMatching}{Entire tracks are matched if their mean center distance (see above) during their non-occluded lifetimes $<$\,\SI{1.5}{\meter}.}
-\newcommand{\tempDroneIncomplete}{Not published: Two or more incomplete OuT tracks could be matched with one ReS track (see above)}
-\newcommand{\tempDroneDelays}{Temporally overhanging track parts are discarded by counting them as FNs or FPs. Not published: The closest overhanging OuT measurement was still used for the interpolation onto the ReS time stamp.}
+\newcommand{\tempDroneIncomplete}{\textit{Not published:} Two or more incomplete OuT tracks could be matched with one ReS track (see above)}
+\newcommand{\tempDroneDelays}{Temporally overhanging track parts are discarded by counting them as FNs or FPs. \textit{Not published:} The closest overhanging OuT measurement was still used for the interpolation onto the ReS time stamp.}
 
 \newcommand{\probDroneFoV}{OuT FoV is acknowledged to have a fuzzy range, but its fuzziness is not explicitly modeled.}
 \newcommand{\probDroneObjDistance}{Deterministic distance function only}
-\newcommand{\probDroneExistClass}{Not published: Objects of any existence confidence were considered without any threshold. Only those parts of OuT tracks during which \textit{car} was the most likely classification were extracted and considered for matching.}
+\newcommand{\probDroneExistClass}{\textit{Not published:} Objects of any existence confidence were considered without any threshold. Only those parts of OuT tracks during which \textit{car} was the most likely classification were extracted and considered for matching.}
 
 
 % NUSCENES CHALLENGE TEST ORACLE
@@ -748,7 +754,7 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 			>{\hsize=0.8\hsize}X 
 		}
 		\toprule
-		\multicolumn{2}{>{\hsize=\dimexpr0.4\hsize+0.4\tabcolsep+\arrayrulewidth\relax}X}{\textbf{Criterion}}                                         & \textbf{nuScenes tracking challenge\tnote{a}} & \textbf{Perception error modeling with a drone \cite{Krajewski2020UsingDrones}} \\ \midrule
+		\multicolumn{2}{>{\hsize=\dimexpr0.4\hsize+0.4\tabcolsep+\arrayrulewidth\relax}X}{\textbf{Criterion}}                                         & \textbf{Evaluation of nuScenes tracking challenge\tnote{a}} & \textbf{Obtaining TPs for perception error modeling \cite{Krajewski2020UsingDrones}} \\ \midrule
 		\parbox[t]{2mm}{\multirow{3}{*}[-0.4cm]{\rotatebox[origin=c]{90}{(\textit{Context})}}} & Scenarios                                           & \scenariosChallenge                  & \scenariosDrone                                                                 \\ \cline{2-4}
 																								& OuT                                                 & \outChallenge                        & \outDrone                                                                       \\ \cline{2-4}
 		                                                                                        & Further evaluation after TP, FP, FN                 & \furtherChallenge                    & \furtherDrone                                                                   \\ \midrule
@@ -788,21 +794,31 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 \section{Discussion of Research Questions}
 \label{sec:discussion}
 
-TODO: organize this discussion logically: w.r.t. research questions, but also w.r.t. what else I found out. 
+% TODO: organize this discussion logically: w.r.t. research questions, but also w.r.t. what else I found out. 
 
-\subsection{Relevance for the driving task encoded into TPs, FPs, FNs}
-
-Identifying TPs, FPs, and FNs does not need to be the last step of a test activity (Fig. \ref{fig:oracle_in_taxonomy}). 
-There may be further evaluation steps that put the identified TPs, FPs, and FNs into perspective. 
-For example, one might first opt for identifying as many FPs and FNs as possible by initially omitting any no-test areas and by including also all objects inside one system's FoV, but outside the other system's FoV. 
-The ``Potential further evaluation" could then apply further criteria for the relevance of the test results to the driving task. 
+This section discusses the three research questions introduced in the Introduction (Sec. \ref{sec:introduction_contrib}). 
 
 
-TODO: show a graphic with FPs and FNs that do not matter, but also with missing FPs and missing FNs that would matter. 
+\subsection{RQ1: Can TP, FP, and FN be objectively defined?}
+\label{sec:discussion_rq1}
+
+No, due to ambiguity in ReS labeling (Sec. \ref{sec:ref_processing}), which needs either human work or neural networks, both of which is impossible to fully specify. 
+
+But it can be defined as objectively as possible or feasible, and this paper is a major step in this direction. 
+
+\subsection{RQ2: How relevant are TP, FP, and FN for task-oriented perception metrics?}
+\label{sec:discussion_rq2}
 
 
 
-\subsection{Rest of the discussion}
+\subsection{RQ3: Can statistics of TP, FP, and FN contribute to a safety argumentation?}
+\label{sec:discussion_rq3}
+
+TODO mention that even our own test oracle was originally not fully described in the original publication. We had to look up source code for certain information in Table~\ref{table:case_study}.
+
+
+
+\subsection{REST OF STUFF THAT I WANT TO INCLUDE IN THE DISCUSSION (UNORGANIZED)}
 
 We have presented a generic set of relevant conditions for specifying a test oracle that identifies TP, FP, and FN. 
 However, even this set of conditions might not be generic enough to specify all possible concepts of such a test oracle. 
