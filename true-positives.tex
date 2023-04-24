@@ -796,13 +796,21 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 
 % TODO: organize this discussion logically: w.r.t. research questions, but also w.r.t. what else I found out. 
 
-This section discusses the three research questions introduced in the Introduction (Sec. \ref{sec:introduction_contrib}). 
+This section discusses the earlier mentioned three research questions (Sec. \ref{sec:introduction_contrib}). 
 
 
 \subsection{RQ1: Can TP, FP, and FN be objectively defined?}
 \label{sec:discussion_rq1}
 
 No, due to ambiguity in ReS labeling (Sec. \ref{sec:ref_processing}), which needs either human work or neural networks, both of which is impossible to fully specify. 
+
+The reasons for incomplete specification are:
+
+Symbol grounding problem (what is a pedestrian?) \cite{Salay2019partialspecifications} is an issue not only for the OuT, but also for the labeling of the ReS. This uncertainty in the definition of road user types consequently makes their identification as TP, FP, FN uncertain.
+
+Open context problem: 
+Fully specifying a perception function that operates in the real world is not possible \cite{Abrecht2021testing}. 
+A major reason for why one cannot fully specify symbols such as ``pedestrian" is because they are part of a so-called \textit{open context} \cite{poddey2019opencontext}, which consists of a possibly infinite number of unforeseen circumstances.
 
 But it can be defined as objectively as possible or feasible, and this paper is a major step in this direction. 
 
@@ -861,10 +869,12 @@ Future work how far a formal description can go without unnecessarily prescribin
 \section{Related Work}
 \label{sec:related_work}
 
-Only related work here that is about the definition of TPs, FPs, and FNs. 
-All further relevant literature sources that do not explicitly focus on defining TPs will be referenced as they become relevant in other sections. 
+First, only related work here that is about the actual definition of TPs, FPs, and FNs. 
+%All further relevant literature sources that do not explicitly focus on defining TPs will be referenced as they become relevant in other sections. 
 
 Florbäck et al. \cite{Florbaeck2016.matching.offline} and Sondell and Svensson \cite{Sondell2018} investigate how machine learning can reproduce human associations of objects under test to reference objects.
+
+Some other literature that treats test oracles: \cite{Abrecht2021testing}.
 
 
 \section{Conclusion}
