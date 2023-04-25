@@ -148,6 +148,8 @@ We find it challenging to characterize all aspects relevant for identifying TP, 
 Nevertheless, we encourage practitioners to define these aspects in their publications as formally as feasible. 
 Uncertainties in these definitions likely remain and should therefore be accounted for in the induction of safety claims from statistics of TP, FP, and FN. 
 
+% TODO: not only the classical oracle problem (what should be the output?), but also the role of practical test implementation details reference data. 
+
 \end{abstract}
 
 % -------------------------- KEYWORDS -------------------------------
@@ -167,7 +169,7 @@ Uncertainties in these definitions likely remain and should therefore be account
 
 The task of object-based environment perception for automated driving systems (ADS) receives much focus through public perception challenges, % that benchmark different approaches.
 which publish datasets of raw sensor data along with reference labels for training purposes. 
-Their leaderboards then rank individual submissions according to their similarity to the non-public reference labels on the test part of the dataset.
+Their leaderboards then rank individual submissions according to their similarity to the non-public reference labels on the test split of the dataset.
 
 Common metrics of such leaderboards consist of aggregations of true-positive objects (TPs), false-positive objects (FPs), and false-negative objects (FNs). 
 These direct metrics from the perception domain are comprehensible, straightforward to compute, and highly popular, but not necessarily adapted to the driving task. 
@@ -178,13 +180,13 @@ For example, it is typically unclear which FPs or FNs also lead to vehicle-level
 To reduce and forecast vehicle-level failures, the field of safety assurance for automated driving has gained much popularity. 
 One method of achieving provable safety is to decompose the driving automation system into different subsystems and establish dependable interfaces between them. 
 The perception subsystem can be defined to consist of sensor hardware and computation for world modeling, excluding any prediction or planning into the future. 
-Its dependability requires a sufficiently low mean time between events that induce vehicle-level failures. 
+Its dependability requires a sufficiently low mean time between events that induce vehicle-level failures \cite{Oboril2022mtbf_ieee}. 
 %Demonstrating this dependability is an active research questions that this paper aims to contribute to. 
 
 % Or at least estimate how the perception outputs differ from the ground truth to construct sensor models for simulation tests.
 
 The demonstration of this dependability is an active topic of research, where one of the most crucial issues is the identification of perception outputs that are not safe for the driving task. 
-Task-oriented and safety-relevant perception metrics are therefore currently being proposed. 
+Task-oriented and safety-relevant perception metrics are therefore currently being proposed \cite[Sec. VI-C3]{Hoss2023rollingreview}. 
 In contrast to the most popular perception leaderboard metrics, safety-oriented metrics tend to be more complex and incomprehensible due to their additional consideration of the downstream driving function and of safety in road traffic. 
 %Popularity of direct metrics that are based on TP, FP, FN still orders of magnitude higher than the popularity of task-oriented metrics. 
 
@@ -195,7 +197,7 @@ This requires closing the gap between straightforward safety-agnostic metrics an
 \subsection{Contributions}
 \label{sec:introduction_contrib}
 While one could make safety-relevant metrics less complex, the present paper aims at making straightforward metrics better usable for safety assurance. 
-Specifically, we aim at defining TPs, FPs, and FNs clearly enough such that statistics of them represent meaningful evidences for safety claims \cite{Borg2022smirk}. 
+Specifically, we aim at defining TPs, FPs, and FNs clearly enough such that statistics of them represent meaningful evidences for safety cases such as \cite{Borg2022smirk}. 
 %Differentiation between metric types:
 %In contrast, downstream metrics from the safety domain are adapted to the driving task, but more difficult to understand, more difficult to compute, and still not as well researched. 
 %These metrics, however, directly detect and penalize failures relevant to the driving task. 
@@ -802,17 +804,32 @@ This section discusses the earlier mentioned three research questions (Sec. \ref
 \subsection{RQ1: Can TP, FP, and FN be objectively defined?}
 \label{sec:discussion_rq1}
 
-No, due to ambiguity in ReS labeling (Sec. \ref{sec:ref_processing}), which needs either human work or neural networks, both of which is impossible to fully specify. 
+No. After having put together the oracle definitions (Sec. \ref{sec:criteria}), we find that at least ReS labeling \& data processing (Sec. \ref{sec:ref_processing}) suffers from subjective ambiguity of either human labelers or automated labeling. 
+This finding is confirmed by previous considerations about the inherent oracle problem for machine learning applications \cite{Abrecht2021testing}. 
+In particular, since the \textit{symbol grounding problem} prevents a full specification of road user classes \cite{Salay2019partialspecifications}, also the test oracle for detecting these road users cannot be fully specified.
 
-The reasons for incomplete specification are:
+Even a theoretical solution to this challenge of test oracles for machine learning would still leave open several degrees of freedom of its practical implementation (ReS hardware, FoVs, temporal synchronization, geometrical alignment).
 
-Symbol grounding problem (what is a pedestrian?) \cite{Salay2019partialspecifications} is an issue not only for the OuT, but also for the labeling of the ReS. This uncertainty in the definition of road user types consequently makes their identification as TP, FP, FN uncertain.
 
-Open context problem: 
-Fully specifying a perception function that operates in the real world is not possible \cite{Abrecht2021testing}. 
-A major reason for why one cannot fully specify symbols such as ``pedestrian" is because they are part of a so-called \textit{open context} \cite{poddey2019opencontext}, which consists of a possibly infinite number of unforeseen circumstances.
 
 But it can be defined as objectively as possible or feasible, and this paper is a major step in this direction. 
+
+% Things I want to cite from Abrecht2021testing:
+% - Top-down and bottom-up specification approaches?
+
+Probably I also want to cite (and obtain in the first place) \cite{Frtunikj2019engineering}. 
+
+% The reasons for incomplete specification are:
+
+% Symbol grounding problem (what is a pedestrian?) \cite{Salay2019partialspecifications} is an issue not only for the OuT, but also for the labeling of the ReS. This uncertainty in the definition of road user types consequently makes their identification as TP, FP, FN uncertain.
+
+%Open context problem: 
+%Fully specifying a perception function that operates in the real world is not possible \cite{Abrecht2021testing}. 
+% A major reason for why one cannot fully specify symbols such as ``pedestrian" is because they are part of a so-called \textit{open context} \cite{poddey2019opencontext}, which consists of a possibly infinite number of unforeseen circumstances.
+
+
+
+
 
 \subsection{RQ2: How relevant are TP, FP, and FN for task-oriented perception metrics?}
 \label{sec:discussion_rq2}
