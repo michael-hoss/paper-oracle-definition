@@ -137,14 +137,13 @@ Despite being the only author, the first person plural (``we") is used to comply
 %Single paragraph up to 250 words. Mini-version of the paper that includes context, state of the art, why it is not good enough, the research question, the methods, the evaluation and conclusions.
 Test methods for the perception subsystem of driving automation systems commonly identify true-positive (TP), false-positive (FP), and false-negative (FN) objects. % general term for TP, FP, FN
 Despite a common understanding, the implementation of these concepts varies across testing activities.
-However, clear definitions are needed for their comparability and for a potential usage within a safety case. 
-Therefore, this paper provides a set of relevant criteria for identifying TP, FP, and FN objects. % in an ideally unambiguous way.
+Since clear definitions are needed for their comparability and for a potential usage within a safety case, this paper provides a set of relevant criteria for identifying TP, FP, and FN objects. % in an ideally unambiguous way.
 % The criteria generally cover 
 %that cover the generation of reference objects and their association to objects under test. 
 Emphasized details are the tested object representations (e.g. detections or tracks), reference sensor characteristics, labeling policies, object distance functions, % in state space including penalties and thresholds, 
 multi-object association, fields of view, areas of importance, incomplete tracks, asynchronous time stamps, and probabilistic object representations. 
 % While a majority of aspects can be formalized, a case study illustrates the remaining challenges towards an entirely formal description. 
-We find it challenging to characterize all aspects relevant for identifying TP, FP, and FN through adequate formal criteria due to both the open context problem and the symbol grounding problem.
+We find it challenging to formally characterize all aspects relevant for identifying TP, FP, and FN due to the symbol grounding problem in an open context and due to degrees of freedom in the oracle implementation.
 Nevertheless, we encourage practitioners to define these aspects in their publications as formally as feasible. 
 Uncertainties in these definitions likely remain and should therefore be accounted for in the induction of safety claims from statistics of TP, FP, and FN. 
 
@@ -196,7 +195,7 @@ This requires closing the gap between straightforward safety-agnostic metrics an
 
 \subsection{Contributions}
 \label{sec:introduction_contrib}
-While one could make safety-relevant metrics less complex (top-down approach), the present paper aims at making straightforward metrics better usable for safety assurance (bottom-up approach). 
+While one could make safety-relevant metrics less complex, the present paper aims at making straightforward metrics better usable for safety assurance. 
 Specifically, we aim at defining TPs, FPs, and FNs clearly enough such that statistics of them represent meaningful evidences for safety cases such as \cite{Borg2022smirk}. 
 %Differentiation between metric types:
 %In contrast, downstream metrics from the safety domain are adapted to the driving task, but more difficult to understand, more difficult to compute, and still not as well researched. 
@@ -806,18 +805,19 @@ This section discusses the earlier mentioned three research questions (Sec. \ref
 
 No. After having put together the oracle definitions (Sec. \ref{sec:criteria}), we find that at least ReS labeling \& data processing (Sec. \ref{sec:ref_processing}) suffers from subjective ambiguity of either human labelers or automated labeling. 
 This finding is confirmed by previous considerations about the inherent oracle problem for machine learning applications \cite{Abrecht2021testing}. 
-In particular, since the \textit{symbol grounding problem} prevents a full specification of road user classes \cite{Salay2019partialspecifications}, also the test oracle for detecting these road users cannot be fully specified.
+In particular, since the symbol grounding problem prevents a full specification of road user classes in an open context \cite{Salay2019partialspecifications, Abrecht2021testing}, also the test oracle for detecting these road users cannot be fully specified.
 
-Even a theoretical solution to this challenge of test oracles for machine learning would still leave open several degrees of freedom of its practical implementation (ReS hardware, FoVs, temporal synchronization, geometrical alignment).
+Moreover, many practical implementation details of a test oracle influence its results (e.g. ReS hardware, FoVs, temporal synchronization, or geometrical alignment).
+We marked those that we did not publish in our own earlier study to illustrate how they are often omitted (Table~\ref{table:case_study}). 
 
 
+To alleviate the mentioned challenges, the present paper provided a comprehensive list of aspects that define a real-world test oracle along with guidance for characterizing each aspect. 
 
-But it can be defined as objectively as possible or feasible, and this paper is a major step in this direction. 
 
 % Things I want to cite from Abrecht2021testing:
 % - Top-down and bottom-up specification approaches?
 
-Probably I also want to cite (and obtain in the first place) \cite{Frtunikj2019engineering}. 
+% \cite{Frtunikj2019engineering} does not offer much new insight for me. 
 
 % The reasons for incomplete specification are:
 
@@ -834,70 +834,57 @@ Probably I also want to cite (and obtain in the first place) \cite{Frtunikj2019e
 \subsection{RQ2: How relevant are TP, FP, and FN for task-oriented perception metrics?}
 \label{sec:discussion_rq2}
 
-
+They are directly relevant for oracle-dependent metrics, but irrelevant for oracle-independent metrics.
+For oracle-dependent metrics, which are aggregates of TP, FP, and FN objects, a clearer and more objective oracle directly results in clearer and more objective metrics. 
+In the current literature of task-oriented perception metrics, the following metrics are oracle-dependent:
+\begin{itemize}
+	\item cite them all
+\end{itemize}
+and the following metrics are oracle-independent (instead, they typically depend on a behavior policy and a threat metric):
+\begin{itemize}
+	\item cite them all
+\end{itemize}
 
 \subsection{RQ3: Can statistics of TP, FP, and FN contribute to a safety argumentation?}
 \label{sec:discussion_rq3}
 
-TODO mention that even our own test oracle was originally not fully described in the original publication. We had to look up source code for certain information in Table~\ref{table:case_study}.
+That depends.
+
+As mentioned earlier, there is ambiguity in what a TP is, and safety argumentations should reduce ambiguity as far as possible.
+
+
+There is ambiguity in specifying and implementing a test oracle for TP, FP, and FN objects. 
+If one instead uses oracle-independent metrics in the safety argumentation, other types of ambiguity come into play like which behavior policy to use for propagating perceptual uncertainties to the vehicle level, and how to measure threats and criticality in traffic. 
+
+Task-oriented metrics are not automatically suited for a safety argumentation.
+
+The voting version of UL4600 \cite[Sec. 8.4.1.2]{UL4600_voting_2019} suggest providing statistics of FPs and FNs. 
 
 
 
-\subsection{REST OF STUFF THAT I WANT TO INCLUDE IN THE DISCUSSION (UNORGANIZED)}
 
-We have presented a generic set of relevant conditions for specifying a test oracle that identifies TP, FP, and FN. 
-However, even this set of conditions might not be generic enough to specify all possible concepts of such a test oracle. 
-
-
-\subsubsection{Awareness of Symbol Grounding Problem}
-
-TODO
-
-Just like it is hard to define what e.g. a pedestrian is, it is also hard to define what a true positive is. 
-Humans that use these terms in their natural language have learned their meanings over time, but are often not fully aware of the exact criteria that define a pedestrian or a true positive, for example.  
-
-Humans tend to say ``the ADS did not see the pedestrian". While for some world model instances, such a statement is obvious, for other world model instances, it is highly complex to unambiguously define what it means that one road user sees another one. 
-
-
-\subsubsection{Design of Future Safety-Oriented Perception Metrics}
-
-Metrics that rely on a distinction between, TPs, FPs, FNs have these difficulties. 
-
-In contrast, Task-Oriented Metrics that employ a downstream driving function or assumptions thereof don't manually feature-engineer the criteria for must-see objects, but have that additional complexity. 
-
-
-\subsection{Compliance with standards}
-
-TODO
-
-Some standards, e.g. UL4600 \cite[Sec. 8.4.1.2]{UL4600_voting_2019} suggest providing statistics of FPs and FNs. 
-Since a safety argumentation to comply with a standard should contain the least possible ambiguity, this paper aims at providing guidance to define FPs and FNs as clearly as possible. 
-
-
-
-\subsection{More formal definition of test oracle}
-
-It is hard because some things are hard to formalize.
-A modular technical description of a test oracle would already partially predetermine the arrangement of its modules, or the internal structure of the test oracle. This, however, can be flexible. For example, certain objects or semantic areas could be ignored at the very beginning of the testing activity, or at the very end. 
-Future work how far a formal description can go without unnecessarily prescribing internals of the test oracle. 
 
 
 
 \section{Related Work}
 \label{sec:related_work}
 
-First, only related work here that is about the actual definition of TPs, FPs, and FNs. 
-%All further relevant literature sources that do not explicitly focus on defining TPs will be referenced as they become relevant in other sections. 
+For completeness, this section contains those relevant literature sources that have not been part of earlier sections.
 
 Florbäck et al. \cite{Florbaeck2016.matching.offline} and Sondell and Svensson \cite{Sondell2018} investigate how machine learning can reproduce human associations of objects under test to reference objects.
 
-Some other literature that treats test oracles: \cite{Abrecht2021testing}.
+
 
 
 \section{Conclusion}
 \label{sec:conclusion}
 
+
+
+
 Future work includes a more formal description of a test oracle, potentially by means of mathematical notation or a domain-specific language.
+Future work can be about how far a formal description can go without unnecessarily prescribing internals of the test oracle. 
+
 
 \section*{Acknowledgment}
 \label{sec:acknowledgment}
@@ -921,3 +908,43 @@ Besides this, the present work was conducted independently without related \href
 }
 
 \end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Graveyard of old stuff that I did not include in the end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{REST OF STUFF THAT I WANT TO INCLUDE IN THE DISCUSSION (UNORGANIZED)}
+
+We have presented a generic set of relevant conditions for specifying a test oracle that identifies TP, FP, and FN. 
+However, even this set of conditions might not be generic enough to specify all possible concepts of such a test oracle. 
+
+
+\subsubsection{Awareness of Symbol Grounding Problem}
+
+
+Just like it is hard to define what e.g. a pedestrian is, it is also hard to define what a true positive is. 
+Humans that use these terms in their natural language have learned their meanings over time, but are often not fully aware of the exact criteria that define a pedestrian or a true positive, for example.  
+
+Humans tend to say ``the ADS did not see the pedestrian". While for some world model instances, such a statement is obvious, for other world model instances, it is highly complex to unambiguously define what it means that one road user sees another one. 
+
+
+\subsubsection{Design of Future Safety-Oriented Perception Metrics}
+
+Metrics that rely on a distinction between, TPs, FPs, FNs have these difficulties. 
+
+In contrast, Task-Oriented Metrics that employ a downstream driving function or assumptions thereof don't manually feature-engineer the criteria for must-see objects, but have that additional complexity. 
+
+
+\subsection{Compliance with standards}
+
+TODO put this in the RQ3 answer.
+
+Some standards, e.g. UL4600 \cite[Sec. 8.4.1.2]{UL4600_voting_2019} suggest providing statistics of FPs and FNs. 
+Since a safety argumentation to comply with a standard should contain the least possible ambiguity, this paper aims at providing guidance to define FPs and FNs as clearly as possible. 
+
+\subsection{More formal definition of test oracle}
+
+It is hard because some things are hard to formalize.
+A modular technical description of a test oracle would already partially predetermine the arrangement of its modules, or the internal structure of the test oracle. This, however, can be flexible. For example, certain objects or semantic areas could be ignored at the very beginning of the testing activity, or at the very end. 
+Future work can be about how far a formal description can go without unnecessarily prescribing internals of the test oracle. 
+
