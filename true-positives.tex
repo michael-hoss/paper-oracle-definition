@@ -252,15 +252,24 @@ From ISO 23150:2021 \cite{ISO_23150_2021_data_communication}:
 ``representation of a real-world entity with defined boundaries and characteristics in the vehicle coordinate system".
 This paper narrows down this definition to Layer 4 of the 6-layer-model \cite{Scholtes20216lmAccess}. An object can span over one or multiple time steps. 
 
-\subsubsection{Object under Test (OuT)} \label{def:out} Perception subsystem of a driving automation system. It comprises both hardware and software and it outputs an object list in each time step. Note: The ``object" in OuT must not be confused with the more general \textit{object} defined above (Sec. \ref{def:object}).
+\subsubsection{Object under Test (OuT)} \label{def:out} Perception subsystem of a driving automation system. It comprises both hardware and software and it outputs an object list in each time step. 
+%An object (Sec. \ref{def:object}) perceived by the OuT is referred to as an OuT object.
 
-\subsubsection{True Positive (TP)} \label{def:tp} The circumstance that an object in the data under test matches with an object in the reference data (Fig. \ref{fig:top_down_all}, 1).
+\subsubsection{Reference System (ReS)}
+\label{def:reference_system}
+Perception system that observes the scenario and whose outputted object list serves as a desired reference for the OuT's object list. 
 
-\subsubsection{False Positive (FP)} \label{def:fp} The circumstance that an object in the data under test does not match with any object in the reference data (Fig. \ref{fig:top_down_all}, 2). 
+\subsubsection{Object matching} \label{def:association} 
+As part of testing, finding corresponding objects between the OuT object list and the ReS object list.
+Not to be confused with object \textit{association}, which is a matter of a perception algorithm (finding correspondences between novel detections and existing tracks; adopted from \cite{Luiten2020hota}).
 
-\subsubsection{False Negative (FN)} \label{def:fn} The circumstance that no object in the data under test matches with a given object in the reference data (Fig. \ref{fig:top_down_all}, 3).
+\subsubsection{True Positive (TP)} \label{def:tp} The circumstance that an OuT object matches with a ReS object (Fig. \ref{fig:top_down_all}, A).
 
-\subsubsection{True Negative (TN)} \label{def:tn} The circumstance that the non-existence of an object in the data under test matches with the non-existence of an object in the reference data. Since world modeling in form of object lists represents the non-existence of objects only implicitly, TNs are not quantifiable in the context of this paper.
+\subsubsection{False Positive (FP)} \label{def:fp} The circumstance that an OuT object does not match with any ReS object (Fig. \ref{fig:top_down_all}, B). 
+
+\subsubsection{False Negative (FN)} \label{def:fn} The circumstance that no OuT object matches with a given ReS object (Fig. \ref{fig:top_down_all}, C).
+
+\subsubsection{True Negative (TN)} \label{def:tn} The circumstance that the non-existence of an OuT object matches with the non-existence of a ReS object. Since world modeling in form of object lists represents the non-existence of objects only implicitly, TNs are not quantifiable in the context of this paper.
 
 %\subsubsection{Matching method} \label{def:matching_method} Those parts of the test method that influence the identification of TPs, FPs, and FNs. 
 % based on an object list under test and a reference object list. 
@@ -272,15 +281,13 @@ This paper narrows down this definition to Layer 4 of the 6-layer-model \cite{Sc
 
 %\subsubsection{Matching} As part of a test method, identifying TPs, FPs, and FNs based on the object lists of OuT and reference system. 
 
-\subsubsection{Object association} \label{def:association} As part of a perception algorithm, deciding which existing object track a novel object detection belongs to. Not to be confused with \textit{matching}, which is a concept of the test method (adopted from \cite{Luiten2020hota}).
+
 
 \subsubsection{(Test) oracle} \label{def:oracle} 
 %The mechanism that determines whether a test passes or fails (see also survey by Barr et al. \cite{Barr2015oracle}).
 In the present paper, \textit{(test) oracle} refers to the mechanism that identifies TPs, FPs, and FNs, where the test scenario and the OuT are given (Fig. \ref{fig:oracle_in_taxonomy}).
 
-\subsubsection{Reference System (ReS)}
-\label{def:reference_system}
-Perception system that observes the scenario and whose outputted object list serves as a desired reference for the object list under test. 
+
 
 % oracle problem in \cite{Zhang2022ml_testing}
 
@@ -299,7 +306,7 @@ When human experts observe a top-down view representation of a traffic scene wit
 
 We currently assume that an ideal test oracle exactly reproduces such human expert statements when it identifies TPs, FNs, and FPs correspondingly.
 A human reference for the definition of a test oracle is beneficial for the human comprehensibility of the overall safety argumentation. 
-However, for the sake of comparability of test results, the actual oracle should ideally be exactly reproducible and therefore contain as little human intuition as possible. 
+However, for the sake of comparability of test results, the actual oracle should ideally be exactly reproducible and therefore contain as little arbitrary human intuition as possible. 
 
 Consequently, we aim at encoding our human intuition for a test oracle into unambiguous criteria. 
 Our method to do this primarily consists of noting down and structuring all aspects that we consider relevant based on our previous experience. 
@@ -359,7 +366,7 @@ This section details the aspects illustrated in the mentioned figures in natural
 % We intentionally avoid a more formal, more technical, or more specific description in order to keep it generally applicable to as many test oracles as possible without prescribing an internal structure and without . 
 % DO THIS WHY NATURAL LANGUAGE HERE IN THE DISCUSSION!
 It first treats the simple case of deterministic object representations in a single time frame (Sec. \ref{sec:oracle_simple}) and then covers temporal aspects (Sec. \ref{sec:oracle_time}) and probabilistic object descriptions (\ref{sec:oracle_probabilistic}).
-The actual aspects that collectively define the workings of the test oracle are given one level of section structure deeper (e.g. Sec. \ref{sec:fov_ref}, \ref{sec:ref_hw}, \dots). 
+% The actual aspects that collectively define the workings of the test oracle are given one level of section structure deeper (e.g. Sec. \ref{sec:fov_ref}, \ref{sec:ref_hw}, \dots). 
 
 %In this whole section, we assume that any FP or FN is an undesired penalty to the OuT. % is is just "one system saw something that the other system did not see" or is it "" MAYBE DEAL WITH THIS TOPIC IN ANOTHER SECTION??
 
@@ -437,6 +444,8 @@ A higher-level reference system or evaluation procedure (``reference of the refe
 
 \subsubsection{Semantic areas and no-test areas}
 \label{sec:semantic_areas}
+
+TODO briefly cite the recent zone approaches from my rolling review.
 
 Certain areas on or next to the road surface might be irrelevant to the traffic scenario and therefore be not worth while perceiving. 
 To avoid needless test efforts, one could define no-test-areas, where no evaluation of TPs, FPs, and FNs takes place (Fig.~\ref{fig:top_down_all}, pedestrian D). 
@@ -600,7 +609,7 @@ In example c) (Fig.~\ref{fig:timeline}), the oracle could
 	\item identify just one single TP track, but mark it as detected with an initial delay.
 \end{itemize}
 
-Hence, the time that the OuT takes to output a newly appeared object can be considered by the test method implicitly through initial FNs, or explicitly as a property of TPs.
+Hence, the time that the OuT takes to output a newly appeared object can be considered by the test method implicitly through initial FNs, or explicitly as a property of TPs (as in the average delay metric \cite{Mao2019delay}).
 The same concept holds for FPs in case of sustained OuT tracks after the lifetime of a ReS track.
 
 
@@ -660,7 +669,7 @@ Furthermore, an oracle's policy for identifying or not identifying FNs behind oc
 The criteria from the previous section (Sec.~\ref{sec:criteria}) are illustrated by two exemplary test oracles in Table~\ref{table:case_study}, namely the evaluation of the nuScenes perception challenge \cite{caesar2019nuscenes} and our own previous test activity \cite{Krajewski2020UsingDrones}. 
 
 
-Both oracles can be characterized fairly well by the proposed criteria despite their different purposes (ranking of submissions in a leaderboard vs. perception error modeling) and their different reference systems (human labeling on ego vehicle sensor data vs. automated extraction from a hovering drone).
+Both oracles can be characterized fairly well by the same proposed criteria despite their different purposes (ranking of submissions in a leaderboard vs. perception error modeling) and despite their different reference systems (human labeling on ego vehicle sensor data vs. automated extraction from a hovering drone).
 
 
 However, even the level of detail of Table~\ref{table:case_study} still does not comprise all relevant information and leaves open uncertainties, especially in terms of ReS data processing and labeling (Sec.~\ref{sec:ref_processing}).
@@ -803,12 +812,12 @@ This section discusses the earlier mentioned three research questions (Sec. \ref
 \subsection{RQ1: Can TP, FP, and FN be objectively defined?}
 \label{sec:discussion_rq1}
 
-No. After having put together the oracle definitions (Sec. \ref{sec:criteria}), we find that at least ReS labeling \& data processing (Sec. \ref{sec:ref_processing}) suffers from subjective ambiguity of either human labelers or automated labeling. 
+No. After having put together the oracle definitions (Sec.~\ref{sec:criteria}), we find that at least ReS labeling \& data processing (Sec.~\ref{sec:ref_processing}) suffers from subjective ambiguity of either human labelers or automated labeling. 
 This finding is confirmed by previous considerations about the inherent oracle problem for machine learning applications \cite{Abrecht2021testing}. 
 In particular, since the symbol grounding problem prevents a full specification of road user classes in an open context \cite{Salay2019partialspecifications, Abrecht2021testing}, also the test oracle for detecting these road users cannot be fully specified.
 
 Moreover, many practical implementation details of a test oracle influence its results (e.g. ReS hardware, FoVs, temporal synchronization, or geometrical alignment).
-We marked those that we did not publish in our own earlier study to illustrate how they are often omitted (Table~\ref{table:case_study}). 
+We marked those details that we did not publish in our own earlier study to illustrate how they are often omitted (Table~\ref{table:case_study}). 
 
 
 To alleviate the mentioned challenges, the present paper provided a comprehensive list of aspects that define a real-world test oracle along with guidance for characterizing each aspect. 
@@ -838,11 +847,15 @@ They are directly relevant for oracle-dependent metrics, but irrelevant for orac
 For oracle-dependent metrics, which are aggregates of TP, FP, and FN objects, a clearer and more objective oracle directly results in clearer and more objective metrics. 
 In the current literature of task-oriented perception metrics, the following metrics are oracle-dependent:
 \begin{itemize}
-	\item cite them all
+	\item Volk et al. \cite{Volk2020metric}
+	\item Lyssenko et al. \cite{Lyssenko2021relevance}
+	\item Wolf et al. \cite{Wolf2021people}
+	\item Bansal et al. \cite{Bansal2021riskrankedrecall}
+	\item Topan et al. \cite{Topan2022zones}
 \end{itemize}
 and the following metrics are oracle-independent (instead, they typically depend on a behavior policy and a threat metric):
 \begin{itemize}
-	\item cite them all
+	\item Philion et al. \cite{Philion2020planner_centric}
 \end{itemize}
 
 \subsection{RQ3: Can statistics of TP, FP, and FN contribute to a safety argumentation?}
@@ -871,7 +884,7 @@ The voting version of UL4600 \cite[Sec. 8.4.1.2]{UL4600_voting_2019} suggest pro
 
 For completeness, this section contains those relevant literature sources that have not been part of earlier sections.
 
-Florbäck et al. \cite{Florbaeck2016.matching.offline} and Sondell and Svensson \cite{Sondell2018} investigate how machine learning can reproduce human associations of objects under test to reference objects.
+Florbäck et al. \cite{Florbaeck2016.matching.offline} and Sondell and Svensson \cite{Sondell2018} investigate how machine learning can reproduce human associations of OuT objects to ReS objects.
 
 
 
