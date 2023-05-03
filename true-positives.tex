@@ -304,16 +304,22 @@ When human experts observe a top-down view representation of a traffic scene wit
 	\item the ADS saw a road user \textit{that did not exist}.
 \end{itemize}
 
-We currently assume that an ideal test oracle exactly reproduces such human expert statements when it identifies TPs, FNs, and FPs correspondingly.
-A human reference for the definition of a test oracle is beneficial for the human comprehensibility of the overall safety argumentation. 
-However, for the sake of comparability of test results, the actual oracle should ideally be exactly reproducible and therefore contain as little arbitrary human intuition as possible. 
+We currently assume that an ideal test oracle reproduces such human expert statements, as this would maximize the human comprehensibility of safety assurance.
+% However, to compare test results, the oracle should be specifiable as much as possible, which means it should contain as little arbitrary human intuition as possible. 
+Consequently, our method is to encode our human intuition for a test oracle into criteria for its unambiguous technical definition. 
+Furthermore, we 
+oracle aspects from the current literature
+implementation details from our own experience.
 
-Consequently, we aim at encoding our human intuition for a test oracle into unambiguous criteria. 
-Our method to do this primarily consists of noting down and structuring all aspects that we consider relevant based on our previous experience. 
-This experience consists of object-level online data fusion, object-level perception error modeling, testing of object perception against aerial reference data, and scenario elicitation from traffic recordings for safety assurance. 
+TODO other criteria for exclusion like TTC too high.
 
 
-As we apply this experience-based oracle definition to a popular perception challenge (Sec. \ref{sec:case_studies}), we refine it and demonstrate its practical applicability. 
+
+% Our method to do this primarily consists of noting down and structuring all aspects that we consider relevant based on our previous experience in the field.  
+% This experience consists of object-level online data fusion, object-level perception error modeling, testing of object perception against aerial reference data, and scenario elicitation from traffic recordings for safety assurance. 
+
+
+We refine the criteria for defining test oracles as we describe two real-world test oracles through them (Sec. \ref{sec:case_studies}). 
 
 
 %oracle is also at least partially based on intuition that is naturally impossible to specify explicitly. 
