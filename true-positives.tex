@@ -451,17 +451,16 @@ A higher-level reference system or evaluation procedure (``reference of the refe
 \subsubsection{Semantic areas and no-test areas}
 \label{sec:semantic_areas}
 
-TODO briefly cite the recent zone approaches from my rolling review.
-
-Certain areas on or next to the road surface might be irrelevant to the traffic scenario and therefore be not worth while perceiving. 
+While certain areas on or next to the road surface are relevant to the traffic scenario, others might not be worth while perceiving. 
 To avoid needless test efforts, one could define no-test-areas, where no evaluation of TPs, FPs, and FNs takes place (Fig.~\ref{fig:top_down_all}, pedestrian D). 
 For example, the KITTI object development kit\footnote{\url{https://www.cvlibs.net/datasets/kitti}} contains \textit{DontCare} labels where no reference data was labeled. 
+The current literature also defines relevant areas where road users should be perceived \cite{Philipp2022systematization, Topan2022zones, Butz2020soca, Wolf2021people, Chu2023sotif}.
 
-The exclusion of objects from such areas can occur in different stages of the testing activity (Fig. \ref{fig:oracle_in_taxonomy}). 
+The exclusion of objects from no-test areas can occur in different stages of the testing activity (Fig. \ref{fig:oracle_in_taxonomy}). 
 They might already be excluded from the reference data; they might be included in the reference data, but excluded from the identification of TPs, FPs, and FNs; or, they could still be part of the TPs, FPs, and FNs, but excluded in a potential further evaluation.
 
 In any case, a clear definition of no-test areas is crucial for a comprehensible test oracle. 
-They could be defined by individual polygons or by generally applicable rules (e.g. farther away than \SI{20}{\meter} from any road surface or sidewalk).
+They could be defined by individual polygons or by generally applicable rules (e.g. farther away than \SI{20}{\meter} from any road surface or sidewalk; or above/below a criticality metric threshold).
 The definition of no-test areas can be delicate due to the risk of omitting objects that are in fact safety-relevant. 
 For example, pedestrian D in Fig.~\ref{fig:top_down_all} might be running towards the intersection or be throwing objects at it.
 
@@ -507,7 +506,7 @@ For example, if the matched cyclists should go into the same direction, the dist
 Additionally, the matching of vulnerable road users (VRUs) of one system with cars or trucks of the other system could be completely prevented for the sake of separate statistics of both groups. 
 In this setting, the matching policy for ``unknown" object classifications could become important.
 
-
+Matching could also be performed by a machine-learned system instead of a hand-crafted distance function \cite{Sondell2018}.
 
 
 
@@ -853,15 +852,16 @@ They are directly relevant for oracle-dependent metrics, but irrelevant for orac
 For oracle-dependent metrics, which are aggregates of TP, FP, and FN objects, a clearer and more objective oracle directly results in clearer and more objective metrics. 
 In the current literature of task-oriented perception metrics, the following metrics are oracle-dependent:
 \begin{itemize}
-	\item Volk et al. \cite{Volk2020metric}
-	\item Lyssenko et al. \cite{Lyssenko2021relevance}
-	\item Wolf et al. \cite{Wolf2021people}
-	\item Bansal et al. \cite{Bansal2021riskrankedrecall}
-	\item Topan et al. \cite{Topan2022zones}
+	\item Volk et al. (safety score based on CLEAR and RSS) \cite{Volk2020metric}
+	\item Lyssenko et al. ($dIoU_\delta$) \cite{Lyssenko2021relevance}
+	\item Wolf et al. (weighted F1-score, precision, recall) \cite{Wolf2021people}
+	\item Bansal et al. (risk ranked recall $R^3$) \cite{Bansal2021riskrankedrecall}
+	\item Topan et al. (interaction-dynamics-aware metrics based on safety zones) \cite{Topan2022zones}
 \end{itemize}
-and the following metrics are oracle-independent (instead, they typically depend on a behavior policy and a threat metric):
+Contrarily, the following metrics are oracle-independent (they do compare OuT and ReS object lists, but don't explicitly compute TPs, FPs, and FNs): % (they typically depend on a behavior policy and a threat metric):
 \begin{itemize}
-	\item Philion et al. \cite{Philion2020planner_centric}
+	\item Philion et al. (PKL) \cite{Philion2020planner_centric}
+	\item Shalev-Shwartz et al. (safety-critical ghosts/misses) \cite{shalevshwartz2017formalRSS}
 \end{itemize}
 
 \subsection{RQ3: Can statistics of TP, FP, and FN contribute to a safety argumentation?}
@@ -889,6 +889,8 @@ The voting version of UL4600 \cite[Sec. 8.4.1.2]{UL4600_voting_2019} suggest pro
 \label{sec:related_work}
 
 For completeness, this section contains those relevant literature sources that have not been part of earlier sections.
+
+TODO maybe eliminate this related work altogether and just include the references where they best fit in the oracle definition?
 
 Florbäck et al. \cite{Florbaeck2016.matching.offline} and Sondell and Svensson \cite{Sondell2018} investigate how machine learning can reproduce human associations of OuT objects to ReS objects.
 
