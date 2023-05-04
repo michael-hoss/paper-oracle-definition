@@ -291,6 +291,16 @@ In the present paper, \textit{(test) oracle} refers to the mechanism that identi
 
 % oracle problem in \cite{Zhang2022ml_testing}
 
+\section{Related Work}
+\label{sec:related_work}
+
+We are aware of literature on test oracles that generally treats software testing \cite{Barr2015oracle} and that discusses safety-oriented ADS perception testing \cite{Abrecht2021testing}.
+However, we have not yet found a comprehensive compilation of aspects that constitute an implemented test oracle for our application.
+
+Related publications that focus on parts of the entire test oracle (e.g. only labeling policies, safety-relevant zones, or object matching) are referred to directly in the corresponding subsections of the oracle definition (Sec.~\ref{sec:criteria}) or of the discussion (Sec.~\ref{sec:discussion}).
+
+
+
 
 \section{Methods}
 \label{sec:method}
@@ -311,9 +321,8 @@ Furthermore, we
 oracle aspects from the current literature
 implementation details from our own experience.
 
-TODO other criteria for exclusion like TTC too high.
 
-
+TODO TIDY THIS UP
 
 % Our method to do this primarily consists of noting down and structuring all aspects that we consider relevant based on our previous experience in the field.  
 % This experience consists of object-level online data fusion, object-level perception error modeling, testing of object perception against aerial reference data, and scenario elicitation from traffic recordings for safety assurance. 
@@ -858,7 +867,7 @@ In the current literature of task-oriented perception metrics, the following met
 	\item Bansal et al. (risk ranked recall $R^3$) \cite{Bansal2021riskrankedrecall}
 	\item Topan et al. (interaction-dynamics-aware metrics based on safety zones) \cite{Topan2022zones}
 \end{itemize}
-Contrarily, the following metrics are oracle-independent (they do compare OuT and ReS object lists, but don't explicitly compute TPs, FPs, and FNs): % (they typically depend on a behavior policy and a threat metric):
+Contrarily, the following metrics are oracle-independent (they don't explicitly compute TPs, FPs, and FNs): % (they typically depend on a behavior policy and a threat metric):
 \begin{itemize}
 	\item Philion et al. (PKL) \cite{Philion2020planner_centric}
 	\item Shalev-Shwartz et al. (safety-critical ghosts/misses) \cite{shalevshwartz2017formalRSS}
@@ -878,22 +887,6 @@ If one instead uses oracle-independent metrics in the safety argumentation, othe
 Task-oriented metrics are not automatically suited for a safety argumentation.
 
 The voting version of UL4600 \cite[Sec. 8.4.1.2]{UL4600_voting_2019} suggest providing statistics of FPs and FNs. 
-
-
-
-
-
-
-
-\section{Related Work}
-\label{sec:related_work}
-
-For completeness, this section contains those relevant literature sources that have not been part of earlier sections.
-
-TODO maybe eliminate this related work altogether and just include the references where they best fit in the oracle definition?
-
-Florbäck et al. \cite{Florbaeck2016.matching.offline} and Sondell and Svensson \cite{Sondell2018} investigate how machine learning can reproduce human associations of OuT objects to ReS objects.
-
 
 
 
