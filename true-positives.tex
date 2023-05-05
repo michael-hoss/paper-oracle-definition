@@ -139,7 +139,7 @@ Despite being the only author, the first person plural (``we") is used to comply
 %Single paragraph up to 250 words. Mini-version of the paper that includes context, state of the art, why it is not good enough, the research question, the methods, the evaluation and conclusions.
 Popular test oracles for the perception subsystem of driving automation systems identify true-positive (TP), false-positive (FP), and false-negative (FN) objects.
 Their transparency is needed for comparing test results and for safety cases.
-To date, there exists a common notion of TPs, FPs, and FNs for this application, but apparently no published way to comprehensively characterize entire real-world test oracles. 
+To date, there exists a common notion of TPs, FPs, and FNs for this application, but apparently no published way to comprehensively characterize entire concrete test oracles. 
 % Despite a common understanding, the implementation of these concepts varies across testing activities.
 Therefore, this paper provides a checklist of aspects to define such test oracles.
 Besides labeling policies of the test set, we cover sensor hardware, fields of view, safety-relevant areas, matching criteria, temporal and probabilistic issues, and other aspects.
@@ -293,11 +293,10 @@ In the present paper, \textit{(test) oracle} refers to the mechanism that identi
 \label{sec:related_work}
 
 Besides general literature on software test oracles \cite{Barr2015oracle}, we are aware of Abrecht et al. \cite{Abrecht2021testing}, who discuss test oracle generation for visual perception of ADS.
-Abrecht et al. specifically focus on functional properties of deep neural networks (DNNs), which leaves non-functional aspects and implementation details of test oracles unaddressed.
+Abrecht et al. specifically focus on functional properties of deep neural networks (DNNs), which leaves practical aspects of oracle implementation outside of their scope.
+To the best of our knowledge, we have not yet found a comprehensive compilation of aspects to define an implemented test oracle.
 
-To the best of our knowledge, we have not yet found a comprehensive compilation of aspects that constitute an implemented test oracle for our application.
-
-Related publications that focus on parts of the entire test oracle (e.g. only labeling policies, safety-relevant zones, or object matching) are referred to directly in the corresponding subsections of the oracle definition (Sec.~\ref{sec:criteria}) or of the discussion (Sec.~\ref{sec:discussion}).
+The numerous sources that focus on only parts of the entire test oracle (e.g. labeling policies, safety-relevant areas, or matching criteria) are referred to directly in the corresponding subsections of the oracle definition (Sec.~\ref{sec:criteria}) or of the discussion (Sec.~\ref{sec:discussion}).
 
 
 
@@ -307,22 +306,27 @@ Related publications that focus on parts of the entire test oracle (e.g. only la
 
 % We define the criteria for identifying TP, FP, and FN in the following way.
 
-When human experts observe a top-down view representation of a traffic scene with an overlaid object list under test (Fig. \ref{fig:top_down_all}), they can typically make the following statements:
+When human experts observe a bird's-eye view representation of a traffic scene with an overlaid OuT object list (Fig.~\ref{fig:top_down_all}), they can typically make the following statements:
 \begin{itemize}
-	\item the ADS \textit{did} see the other road user
-	\item the ADS \textit{did not} see the other road user 
-	\item the ADS saw a road user \textit{that did not exist}.
+	\item the OuT \textit{did} see the other road user
+	\item the OuT \textit{did not} see the other road user 
+	\item the OuT saw a road user \textit{that did not exist}.
 \end{itemize}
 
-We currently assume that an ideal test oracle reproduces such human expert statements, as this would maximize the human comprehensibility of safety assurance.
-% However, to compare test results, the oracle should be specifiable as much as possible, which means it should contain as little arbitrary human intuition as possible. 
-Consequently, our method is to encode our human intuition for a test oracle into criteria for its unambiguous technical definition. 
-Furthermore, we 
-oracle aspects from the current literature
-implementation details from our own experience.
+Our goal is to define a technical system that can both obtain this bird's eye view and perform this differentiation with as little human ambiguity as possible.
+Still, the definition of this technical system should stay comprehensible to humans to keep safety argumentations understandable.
 
+The generation of our checklist did not follow a specific technique, but we incorporated the following aspects as a meta-level checklist:
+\begin{itemize}
+\item the literature on task-oriented perception testing
+\item a popular test oracle (nuScenes tracking challenge)
+\item own experiences in safety-oriented perception testing
+\item classical test oracle issues (OuT vs. ground truth)
+\item practical issues of reference data (ReS vs. ground truth)
+\item practical issues of comparison (OuT vs. ReS)
+\item structuring the checklist comprehensibly
+\end{itemize}
 
-TODO TIDY THIS UP
 
 % Our method to do this primarily consists of noting down and structuring all aspects that we consider relevant based on our previous experience in the field.  
 % This experience consists of object-level online data fusion, object-level perception error modeling, testing of object perception against aerial reference data, and scenario elicitation from traffic recordings for safety assurance. 
@@ -357,7 +361,7 @@ TODO TIDY THIS UP
 
 
 
-\section{Definition of a test oracle for TPs, FPs, FNs}
+\section{Checklist to define an oracle for TP, FP, FN}
 \label{sec:criteria}
 
 
@@ -769,7 +773,7 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 \begin{table*}[htbp]
 	\begin{threeparttable}
 	\centering
-	\caption{Different test oracles for TP, FP, FN, expressed in the terminology of this paper}
+	\caption{Different test oracles for TP, FP, FN, expressed by the checklist of this paper}
 	\label{table:case_study}
 	\begin{tabularx}{\linewidth}{
 			>{\hsize=0.02\hsize}X
@@ -778,7 +782,7 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 			>{\hsize=0.8\hsize}X 
 		}
 		\toprule
-		\multicolumn{2}{>{\hsize=\dimexpr0.4\hsize+0.4\tabcolsep+\arrayrulewidth\relax}X}{\textbf{Criterion}}                                         & \textbf{Evaluation of nuScenes tracking challenge\tnote{a}} & \textbf{Obtaining TPs for perception error modeling \cite{Krajewski2020UsingDrones}} \\ \midrule
+		\multicolumn{2}{>{\hsize=\dimexpr0.4\hsize+0.4\tabcolsep+\arrayrulewidth\relax}X}{\textbf{Criterion of checklist}}                                         & \textbf{Evaluation of nuScenes tracking challenge\tnote{a}} & \textbf{Obtaining TPs for perception error modeling \cite{Krajewski2020UsingDrones}} \\ \midrule
 		\parbox[t]{2mm}{\multirow{3}{*}[-0.4cm]{\rotatebox[origin=c]{90}{(\textit{Context})}}} & Scenarios                                           & \scenariosChallenge                  & \scenariosDrone                                                                 \\ \cline{2-4}
 																								& OuT                                                 & \outChallenge                        & \outDrone                                                                       \\ \cline{2-4}
 		                                                                                        & Further evaluation after TP, FP, FN                 & \furtherChallenge                    & \furtherDrone                                                                   \\ \midrule
@@ -786,7 +790,7 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 		                                                                                        & \ref{sec:occlusions} Occlusion handling             & \basicChallengeOcclusion             & \basicDroneOcclusion                                                            \\ \cline{2-4}
 		                                                                                        & \ref{sec:ref_hw} ReS hardware                       & \basicChallengeReSHW                 & \basicDroneReSHW                                                                \\ \cline{2-4}
 		                                                                                        & \ref{sec:ref_processing} ReS labeling               & \basicChallengeReSLabling            & \basicDroneReSLabling                                                           \\ \cline{2-4}
-		                                                                                        & \ref{sec:semantic_areas} No-test areas             & \basicChallengeAreas                 & \basicDroneAreas                                                                \\ \cline{2-4}
+		                                                                                        & \ref{sec:semantic_areas} Relevant areas             & \basicChallengeAreas                 & \basicDroneAreas                                                                \\ \cline{2-4}
 		                                                                                        & \ref{sec:geometrical_alignment} Geometr. alignment  & \basicChallengeGeometrAlign          & \basicDroneGeometrAlign                                                         \\ \cline{2-4}
 		                                                                                        & \ref{sec:distance_function} Obj. distance func.     & \basicChallengeObjDistance           & \basicDroneObjDistance                                                          \\ \cline{2-4}
 		                                                                                        & \ref{sec:multi_object_matching} Multi-obj. matching & \basicChallengeMultiObjMatching      & \basicDroneMultiObjMatching                                                     \\ \midrule
