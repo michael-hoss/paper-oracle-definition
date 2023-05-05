@@ -82,7 +82,9 @@
 
 % -------------------------- TITLE -------------------------------
 
-\title{Definition of Test Oracles for Identifying TP, FP, and FN in Object Perception for Automated Driving}
+\title{Checklist to Define Test Oracles for Identifying \\TP, FP, and FN Objects in Automated Driving}
+
+%\title{Definition of Test Oracles for Identifying TP, FP, and FN in Object Perception of Automated Driving}
 
 %\title{Relevant Criteria for Identifying TP, FP, and FN in Dependability Assessment of Object Perception}
 
@@ -135,17 +137,13 @@ Despite being the only author, the first person plural (``we") is used to comply
 
 
 %Single paragraph up to 250 words. Mini-version of the paper that includes context, state of the art, why it is not good enough, the research question, the methods, the evaluation and conclusions.
-Test methods for the perception subsystem of driving automation systems commonly identify true-positive (TP), false-positive (FP), and false-negative (FN) objects. % general term for TP, FP, FN
-Despite a common understanding, the implementation of these concepts varies across testing activities.
-Since clear definitions are needed for their comparability and for a potential usage within a safety case, this paper provides a set of relevant criteria for identifying TP, FP, and FN objects. % in an ideally unambiguous way.
-% The criteria generally cover 
-%that cover the generation of reference objects and their association to objects under test. 
-Emphasized details are the tested object representations (e.g. detections or tracks), reference sensor characteristics, labeling policies, object distance functions, % in state space including penalties and thresholds, 
-multi-object association, fields of view, areas of importance, incomplete tracks, asynchronous time stamps, and probabilistic object representations. 
-% While a majority of aspects can be formalized, a case study illustrates the remaining challenges towards an entirely formal description. 
-We find it challenging to formally characterize all aspects relevant for identifying TP, FP, and FN due to the symbol grounding problem in an open context and due to degrees of freedom in the oracle implementation.
-Nevertheless, we encourage practitioners to define these aspects in their publications as formally as feasible. 
-Uncertainties in these definitions likely remain and should therefore be accounted for in the induction of safety claims from statistics of TP, FP, and FN. 
+Popular test oracles for the perception subsystem of driving automation systems identify true-positive (TP), false-positive (FP), and false-negative (FN) objects.
+Their transparency is needed for comparing test results and for safety cases.
+To date, there exists a common notion of TPs, FPs, and FNs for this application, but apparently no published way to comprehensively characterize entire real-world test oracles. 
+% Despite a common understanding, the implementation of these concepts varies across testing activities.
+Therefore, this paper provides a checklist of aspects to define such test oracles.
+Besides labeling policies of the test set, we cover sensor hardware, fields of view, safety-relevant areas, matching criteria, temporal and probabilistic issues, and other aspects.
+While our checklist for oracle definition can hardly be formalized, it can help practitioners describe their oracles with maximized clarity, which makes statements on object perception more reliable and comparable.
 
 % TODO: not only the classical oracle problem (what should be the output?), but also the role of practical test implementation details reference data. 
 
