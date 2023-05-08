@@ -139,7 +139,7 @@ Despite being the only author, the first person plural (``we") is used to comply
 %Single paragraph up to 250 words. Mini-version of the paper that includes context, state of the art, why it is not good enough, the research question, the methods, the evaluation and conclusions.
 Popular test oracles for the perception subsystem of driving automation systems identify true-positive (TP), false-positive (FP), and false-negative (FN) objects.
 Their transparency is needed for comparing test results and for safety cases.
-To date, there exists a common notion of TPs, FPs, and FNs for this application, but apparently no published way to comprehensively characterize entire concrete test oracles. 
+To date, there exists a common notion of TPs, FPs, and FNs for this application, but apparently no published way to comprehensively characterize entire implemented oracles. 
 % Despite a common understanding, the implementation of these concepts varies across testing activities.
 Therefore, this paper provides a checklist of aspects to define such test oracles.
 Besides labeling policies of the test set, we cover sensor hardware, fields of view, safety-relevant areas, matching criteria, temporal and probabilistic issues, and further aspects.
@@ -171,7 +171,7 @@ Their leaderboards then rank individual submissions according to their similarit
 
 Common metrics of such leaderboards consist of aggregations of true-positive objects (TPs), false-positive objects (FPs), and false-negative objects (FNs). 
 These direct metrics from the perception domain are comprehensible, straightforward to compute, and highly popular, but not necessarily adapted to the driving task. 
-For example, it is typically unclear which FPs or FNs also lead to vehicle-level failures. 
+For example, it is typically unclear which FPs or FNs also lead to vehicle-level failures \cite{Topan2022zones}. 
 % Assuming that every FP and FN leads to a vehicle-level failure would render the achievement of 
 %Assuming that every FP or FN leads to a vehicle-level failure would be a tremendous overestimation that would 
 
@@ -184,18 +184,20 @@ Its dependability requires a sufficiently low mean time between events that indu
 % Or at least estimate how the perception outputs differ from the ground truth to construct sensor models for simulation tests.
 
 The demonstration of this dependability is an active topic of research, where one of the most crucial issues is the identification of perception outputs that are not safe for the driving task. 
-Task-oriented and safety-relevant perception metrics are therefore currently being proposed \cite[Sec. VI-C3]{Hoss2023rollingreview}. 
+Task-oriented and safety-relevant perception metrics are therefore currently being proposed (see  \cite{Lyssenko2022safety, Hoss2023rollingreview}). 
+% my section of these metrics in the rolling review [Sec. VI-C3]
 In contrast to the most popular perception leaderboard metrics, safety-oriented metrics tend to be more complex and incomprehensible due to their additional consideration of the downstream driving function and of safety in road traffic. 
 %Popularity of direct metrics that are based on TP, FP, FN still orders of magnitude higher than the popularity of task-oriented metrics. 
 
-Ideally, novel perception metrics combine all desired properties such that they are helpful to both perception developers and verification and validation engineers. 
-This requires closing the gap between straightforward safety-agnostic metrics and highly complex safety-relevant metrics. 
+Ideally, novel perception metrics combine all desired properties such that they are helpful to both perception developers and verification \textit{and} validation engineers. 
+This requires closing the gap between straightforward safety-agnostic metrics and more complex safety-relevant metrics. 
 %comprehensible to humans, and straightforward to compute all at the same time. 
 
 \subsection{Contributions}
 \label{sec:introduction_contrib}
-While one could make safety-relevant metrics less complex, the present paper aims at making straightforward metrics better usable for safety assurance. 
-Specifically, we aim at defining TPs, FPs, and FNs clearly enough such that statistics of them represent meaningful evidences for safety cases such as \cite{Borg2022smirk}. 
+% While one could make safety-relevant metrics less complex, 
+% The present paper aims at making metrics based on TPs, FPs, and FNs better usable for safety assurance. 
+The present paper aims at defining TPs, FPs, and FNs clearly enough such that metrics based on them are better comparable and represent meaningful evidences for safety cases such as \cite{Borg2022smirk}. 
 %Differentiation between metric types:
 %In contrast, downstream metrics from the safety domain are adapted to the driving task, but more difficult to understand, more difficult to compute, and still not as well researched. 
 %These metrics, however, directly detect and penalize failures relevant to the driving task. 
@@ -205,7 +207,8 @@ Specifically, we aim at defining TPs, FPs, and FNs clearly enough such that stat
 %Specifically, we aim at defining popular aspects of direct metrics clearly enough such that they can represent meaningful evidences for safety-relevant claims.  
 Our main contributions are:
 \begin{itemize}
-\item A set of criteria to define how a test oracle identifies TPs, FPs, and FNs (Sec. \ref{sec:criteria})
+\item A checklist to define how a test oracle identifies TPs, FPs, and FNs (Sec. \ref{sec:criteria}, Table \ref{table:case_study})
+% \item A description of two oracles by this checklist (Sec. \ref{sec:case_studies})
 \item A discussion of the relevance of TPs, FPs, and FNs in the safety assurance context (Sec. \ref{sec:discussion})
 \end{itemize}
 
@@ -224,11 +227,11 @@ The discussion will treat the following research questions:
 \begin{itemize}
 
 
-\item {RQ1}: \textit{Can TP, FP, and FN be objectively defined?}
+\item {RQ1}: \textit{Can TPs, FPs, and FNs be objectively defined?}
 
-\item {RQ2}: \textit{How relevant are TP, FP, and FN for task-oriented perception metrics?}
+\item {RQ2}: \textit{How relevant are TPs, FPs, and FNs for task-oriented perception metrics?}
 
-\item {RQ3}: \textit{Can statistics of TP, FP, and FN contribute to a safety argumentation?}
+\item {RQ3}: \textit{Can statistics of TPs, FPs, and FNs contribute to a safety argumentation?}
 \end{itemize}
 
 \begin{figure*}[t]
@@ -243,7 +246,7 @@ The discussion will treat the following research questions:
 \end{figure*}
 
 
-\subsection{Definition of terms \& abbreviations}
+\subsection{Definition of terms \& acronyms}
 Unless stated otherwise, the following term definitions and acronyms hold throughout this paper.
 
 \subsubsection{Object} \label{def:object}
@@ -294,10 +297,10 @@ In the present paper, \textit{(test) oracle} refers to the mechanism that identi
 \label{sec:related_work}
 
 Besides general literature on software test oracles \cite{Barr2015oracle}, we are aware of Abrecht et al. \cite{Abrecht2021testing}, who discuss test oracle generation for visual perception of ADS.
-Abrecht et al. specifically focus on functional properties of deep neural networks (DNNs), which leaves practical aspects of oracle implementation outside of their scope.
+Abrecht et al. specifically focus on functional properties of deep neural networks (DNNs), which leaves practical aspects of oracle implementation outside of their scope, even though such practical aspects can still influence the oracle's behavior.
 To the best of our knowledge, we have not yet found a comprehensive compilation of aspects to define an implemented test oracle.
 
-The numerous sources that focus on only parts of the entire test oracle (e.g. labeling policies, safety-relevant areas, or matching criteria) are referred to directly in the corresponding subsections of the oracle definition (Sec.~\ref{sec:criteria}) or of the discussion (Sec.~\ref{sec:discussion}).
+The numerous sources that focus on specific parts of the test oracle (e.g. labeling policies, safety-relevant areas, or matching criteria) are referred to directly in the corresponding subsections of the checklist (Sec.~\ref{sec:criteria}) or of the discussion (Sec.~\ref{sec:discussion}).
 
 
 
@@ -307,25 +310,28 @@ The numerous sources that focus on only parts of the entire test oracle (e.g. la
 
 % We define the criteria for identifying TP, FP, and FN in the following way.
 
-When human experts observe a bird's-eye view representation of a traffic scene with an overlaid OuT object list (Fig.~\ref{fig:top_down_all}), they can typically make the following statements:
+When human experts are given bird's-eye view representation of a traffic scene with an overlaid OuT object list (Fig.~\ref{fig:top_down_all}), they can identify TPs, FPs, and FNs.
+% make the following statements:
+%\begin{itemize}
+%	\item the OuT \textit{did} see the other road user
+%	\item the OuT \textit{did not} see the other road user 
+%	\item the OuT saw a road user \textit{that did not exist}.
+%\end{itemize}
+Our goal is to define a technical system that can both obtain this bird's eye view and perform this identification with as little human ambiguity as possible.
+% Still, the definition of this technical system should stay comprehensible to humans to keep safety argumentations understandable.
+The generation of our checklist did not follow a specific technique, which also means that we cannot prove its completeness. 
+Still, we considered the following as a meta-level checklist:
 \begin{itemize}
-	\item the OuT \textit{did} see the other road user
-	\item the OuT \textit{did not} see the other road user 
-	\item the OuT saw a road user \textit{that did not exist}.
-\end{itemize}
+\item human comprehensibility of the checklist's aspects \newline (to keep safety argumentations understandable)
+\item the literature on task-oriented perception testing \newline (to incorporate the academic state of the art)
+\item being able to define a commonly used test oracle \newline (Sec. \ref{sec:case_studies}; to incorporate the practical state of the art)
+\item being able to define an alternative test oracle \newline (Sec. \ref{sec:case_studies}; for versatility)
+%\item classical test oracle issues (OuT vs. ground truth)
+%\item practical issues of reference data (ReS vs. ground truth)
+%\item practical issues of comparison (OuT vs. ReS)
+\item own experiences of what influences a test oracle's results
 
-Our goal is to define a technical system that can both obtain this bird's eye view and perform this differentiation with as little human ambiguity as possible.
-Still, the definition of this technical system should stay comprehensible to humans to keep safety argumentations understandable.
-
-The generation of our checklist did not follow a specific technique, but we incorporated the following aspects as a meta-level checklist:
-\begin{itemize}
-\item the literature on task-oriented perception testing
-\item a popular test oracle (nuScenes tracking challenge)
-\item own experiences in safety-oriented perception testing
-\item classical test oracle issues (OuT vs. ground truth)
-\item practical issues of reference data (ReS vs. ground truth)
-\item practical issues of comparison (OuT vs. ReS)
-\item structuring the checklist comprehensibly
+% \item structuring the checklist comprehensibly
 \end{itemize}
 
 
@@ -380,12 +386,13 @@ The generation of our checklist did not follow a specific technique, but we inco
 \end{figure*}
 
 
-A test oracle that identifies TPs, FPs, and FNs is a logical part of a testing activity (Fig. \ref{fig:oracle_in_taxonomy}), it deals with spatial relations in a traffic scene (Fig. \ref{fig:top_down_all}), and with temporal aspects of object matching (Fig. \ref{fig:timeline}).
-
-This section details the aspects illustrated in the mentioned figures in natural language. 
+A test oracle can be regarded from different perspectives: as part of a testing activity (Fig. \ref{fig:oracle_in_taxonomy}), in space (Fig. \ref{fig:top_down_all}), and in time (Fig. \ref{fig:timeline}).
+This section's lowest-level subsections detail these and further issues in the form of a checklist, whose items are visually summarized in Table \ref{table:case_study}. 
 % We intentionally avoid a more formal, more technical, or more specific description in order to keep it generally applicable to as many test oracles as possible without prescribing an internal structure and without . 
 % DO THIS WHY NATURAL LANGUAGE HERE IN THE DISCUSSION!
-It first treats the simple case of deterministic object representations in a single time frame (Sec. \ref{sec:oracle_simple}) and then covers temporal aspects (Sec. \ref{sec:oracle_time}) and probabilistic object descriptions (\ref{sec:oracle_probabilistic}).
+
+They first treat the simple case of deterministic object representations in a single time frame (Sec. \ref{sec:oracle_simple}) and then cover temporal aspects (Sec. \ref{sec:oracle_time}) and probabilistic object representations (\ref{sec:oracle_probabilistic}).
+The following paragraphs outline how each aspect can influence a test oracle's behavior, along with guidance for characterizing an oracle in terms of it. 
 % The actual aspects that collectively define the workings of the test oracle are given one level of section structure deeper (e.g. Sec. \ref{sec:fov_ref}, \ref{sec:ref_hw}, \dots). 
 
 %In this whole section, we assume that any FP or FN is an undesired penalty to the OuT. % is is just "one system saw something that the other system did not see" or is it "" MAYBE DEAL WITH THIS TOPIC IN ANOTHER SECTION??
@@ -413,7 +420,7 @@ Whether or not the OuT should be penalized for missing pedestrian E in Fig. \ref
 If only the perception software is tested, then one might want to remove all objects from overhanging areas of the ReS to enable a fair evaluation.
 However, if the sensor hardware's FoV of the OuT is put under test, too, and it is supposed to cover the entire ReS's FoV, then the ReS's FoV should not be trimmed and pedestrian E should be identified as a FN. 
 
-In summary, a clear definition of the ReS's FoV relative to the OuT's FoV is crucial for a clearly defined test oracle. 
+% In summary, a clear definition of the ReS's FoV relative to the OuT's FoV is crucial for a clearly defined test oracle. 
 
 \subsubsection{Perspective-related occlusions}
 \label{sec:occlusions}
@@ -445,14 +452,14 @@ For example, if the ReS hardware is better adapted to adverse weather conditions
 \subsubsection{Reference system labeling and data processing}
 \label{sec:ref_processing}
 
-The method by which an object list is extracted from the raw reference data influences the test oracle's identification of TPs, FPs, and FNs. 
-This method can consist of programmed software, machine-learned modules, and human interaction. 
-
+The method by which an object list is extracted from the raw reference data % influences the test oracle's identification of TPs, FPs, and FNs. 
+% This method 
+can consist of programmed software, machine-learned modules, and human interaction. 
 Labeling policy specifications, as being used by perception challenges and for outsourcing labeling activities to subcontractors, describe this extraction of object lists from raw reference data. 
 These labeling policies include details such as how objects are classified, criteria for including and omitting objects, which parts of objects shall be inside or outside their bounding boxes, or how to label in case of partial or full occlusions\footnote{\url{https://github.com/waymo-research/waymo-open-dataset/blob/master/docs/labeling_specifications.md}}.
 
 Even with a well-defined labeling policy, the actual labels can be uncertain \cite{wang2020inferring} or might sometimes differ from the policy. 
-Therefore, test oracle is defined more clearly if the labeling is characterized also beyond its policy specification.
+Therefore, a test oracle is defined most clearly if the labeling is characterized also beyond its policy specification.
 %For example, labeling can be fully automated, semi-automated, or manual, where each way impacts the labeling quality in a different way. 
 
 On the one hand, this further characterization can include the internal workings, such as 
@@ -689,8 +696,6 @@ The criteria from the previous section (Sec.~\ref{sec:criteria}) are illustrated
 
 
 Both oracles can be characterized fairly well by the same proposed criteria despite their different purposes (ranking of submissions in a leaderboard vs. perception error modeling) and despite their different reference systems (human labeling on ego vehicle sensor data vs. automated extraction from a hovering drone).
-
-
 However, even the level of detail of Table~\ref{table:case_study} still does not comprise all relevant information and leaves open uncertainties, especially in terms of ReS data processing and labeling (Sec.~\ref{sec:ref_processing}).
 
 
@@ -805,7 +810,7 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 	\end{tabularx}
 	\begin{tablenotes}
 		\item [a] \href{https://www.nuscenes.org/tracking}{https://www.nuscenes.org/tracking}
-		\item [b] \href{https://github.com/nutonomy/nuscenes-devkit/blob/master/docs/instructions_nuscenes.md}{https://github.com/nutonomy/nuscenes-devkit/blob/master/docs/instructions\_nuscenes.md}
+		\item [b] \href{https://github.com/nutonomy/nuscenes-devkit/blob/da3c9a977112fca05413dab4e944d911769385a9/docs/instructions_nuscenes.md}{https://github.com/nutonomy/nuscenes-devkit/blob/master/docs/instructions\_nuscenes.md}
 	%	\item [c] \href{https://github.com/nutonomy/nuscenes-devkit/issues/366}{https://github.com/nutonomy/nuscenes-devkit/issues/366}
 	\end{tablenotes}
 	\end{threeparttable}
@@ -831,7 +836,7 @@ This section discusses the earlier mentioned three research questions (Sec. \ref
 \subsection{RQ1: Can TP, FP, and FN be objectively defined?}
 \label{sec:discussion_rq1}
 
-No. After having put together the oracle definitions (Sec.~\ref{sec:criteria}), we find that at least ReS labeling \& data processing (Sec.~\ref{sec:ref_processing}) suffers from subjective ambiguity of either human labelers or automated labeling. 
+No. After having put together the checklist (Sec.~\ref{sec:criteria}), we find that at least ReS labeling \& data processing (Sec.~\ref{sec:ref_processing}) suffers from subjective ambiguity of either human labelers or automated labeling. 
 This finding is confirmed by previous considerations about the inherent oracle problem for machine learning applications \cite{Abrecht2021testing}. 
 In particular, since the symbol grounding problem prevents a full specification of road user classes in an open context \cite{Salay2019partialspecifications, Abrecht2021testing}, also the test oracle for detecting these road users cannot be fully specified.
 
@@ -839,7 +844,7 @@ Moreover, many practical implementation details of a test oracle influence its r
 We marked those details that we did not publish in our own earlier study to illustrate how they are often omitted (Table~\ref{table:case_study}). 
 
 
-To alleviate the mentioned challenges, the present paper provided a comprehensive list of aspects that define a real-world test oracle along with guidance for characterizing each aspect. 
+To alleviate the mentioned challenges, the present paper provided a comprehensive, but not provably complete, checklist of aspects that define a real-world test oracle along with guidance for characterizing each aspect. 
 
 
 % Things I want to cite from Abrecht2021testing:
