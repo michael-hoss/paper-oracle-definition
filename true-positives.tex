@@ -330,6 +330,7 @@ Still, we considered the following as a meta-level checklist:
 %\item practical issues of reference data (ReS vs. ground truth)
 %\item practical issues of comparison (OuT vs. ReS)
 \item own experiences of what influences a test oracle's results
+(to raise awareness of previously unpublished issues)
 
 % \item structuring the checklist comprehensibly
 \end{itemize}
@@ -833,18 +834,17 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 This section discusses the earlier mentioned three research questions (Sec. \ref{sec:introduction_contrib}). 
 
 
-\subsection{RQ1: Can TP, FP, and FN be objectively defined?}
+\subsection{RQ1: Can TPs, FPs, and FNs be objectively defined?}
 \label{sec:discussion_rq1}
 
-No. After having put together the checklist (Sec.~\ref{sec:criteria}), we find that at least ReS labeling \& data processing (Sec.~\ref{sec:ref_processing}) suffers from subjective ambiguity of either human labelers or automated labeling. 
+No. Objectively defining what TPs, FPs, and FNs are means objectively defining how the test oracle functions, which is not possible. After having put together the checklist, we find that at least ReS labeling \& data processing (Sec.~\ref{sec:ref_processing}) suffers from subjective ambiguity of either human labelers or automated labeling. 
 This finding is confirmed by previous considerations about the inherent oracle problem for machine learning applications \cite{Abrecht2021testing}. 
 In particular, since the symbol grounding problem prevents a full specification of road user classes in an open context \cite{Salay2019partialspecifications, Abrecht2021testing}, also the test oracle for detecting these road users cannot be fully specified.
 
-Moreover, many practical implementation details of a test oracle influence its results (e.g. ReS hardware, FoVs, temporal synchronization, or geometrical alignment).
-We marked those details that we did not publish in our own earlier study to illustrate how they are often omitted (Table~\ref{table:case_study}). 
-
-
-To alleviate the mentioned challenges, the present paper provided a comprehensive, but not provably complete, checklist of aspects that define a real-world test oracle along with guidance for characterizing each aspect. 
+Moreover, also some implementation aspects that influence the oracle's behavior cannot be exactly defined.
+For example, the behavior of ReS hardware is partially uncertain and a millimeter-accuracy FoV description is hardly feasible.
+Nevertheless, other implementation details such as synchronization or the exact object matching method, are well definable and publishable.
+We marked those details that we did not publish in our own earlier study to highlight this issue and encourage more transparent oracles (Table~\ref{table:case_study}). 
 
 
 % Things I want to cite from Abrecht2021testing:
@@ -864,11 +864,11 @@ To alleviate the mentioned challenges, the present paper provided a comprehensiv
 
 
 
-\subsection{RQ2: How relevant are TP, FP, and FN for task-oriented perception metrics?}
+\subsection{RQ2: How relevant are TPs, FPs, and FNs for task-oriented perception metrics?}
 \label{sec:discussion_rq2}
 
 They are directly relevant for oracle-dependent metrics, but irrelevant for oracle-independent metrics.
-For oracle-dependent metrics, which are aggregates of TP, FP, and FN objects, a clearer and more objective oracle directly results in clearer and more objective metrics. 
+For oracle-dependent metrics, which are aggregates of TP, FP, and FN objects, a clearer and more transparent oracle directly results in clearer and more transparent metrics. 
 In the current literature of task-oriented perception metrics, the following metrics are oracle-dependent:
 \begin{itemize}
 	\item Volk et al. (safety score based on CLEAR and RSS) \cite{Volk2020metric}
@@ -883,10 +883,15 @@ Contrarily, the following metrics are oracle-independent (they don't explicitly 
 	\item Shalev-Shwartz et al. (safety-critical ghosts/misses) \cite{shalevshwartz2017formalRSS}
 \end{itemize}
 
-\subsection{RQ3: Can statistics of TP, FP, and FN contribute to a safety argumentation?}
+\subsection{RQ3: Can statistics of TPs, FPs, and FNs contribute to a safety argumentation?}
 \label{sec:discussion_rq3}
 
-That depends.
+That depends. Only if there are clear definitions for it such that these are not randomly tweaked bullshit statistics.
+
+Clear definitions are difficult already.
+However, it is even more difficult to describe \textit{safety-relevant} TPs, FPs, and FNs by clear definitions!
+
+Also: Not all TPs are safe (wrong velocity estimation or wrong lateral position could still lead to crashes)
 
 As mentioned earlier, there is ambiguity in what a TP is, and safety argumentations should reduce ambiguity as far as possible.
 
@@ -898,12 +903,12 @@ Task-oriented metrics are not automatically suited for a safety argumentation.
 
 The voting version of UL4600 \cite[Sec. 8.4.1.2]{UL4600_voting_2019} suggest providing statistics of FPs and FNs. 
 
-
+Also mention that safety case of SMIRK again that made use of TP statistics \cite{Borg2022smirk}.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-
+To alleviate the mentioned challenges, the present paper provided a comprehensive, but not provably complete, checklist of aspects that define a real-world test oracle along with guidance for characterizing each aspect.
 
 
 Future work includes a more formal description of a test oracle, potentially by means of mathematical notation or a domain-specific language.
