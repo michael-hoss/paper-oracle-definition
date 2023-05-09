@@ -189,7 +189,7 @@ Task-oriented and safety-relevant perception metrics are therefore currently bei
 In contrast to the most popular perception leaderboard metrics, safety-oriented metrics tend to be more complex and incomprehensible due to their additional consideration of the downstream driving function and of safety in road traffic. 
 %Popularity of direct metrics that are based on TP, FP, FN still orders of magnitude higher than the popularity of task-oriented metrics. 
 
-Ideally, novel perception metrics combine all desired properties such that they are helpful to both perception developers and verification \textit{and} validation engineers. 
+Ideally, novel perception metrics combine all desired properties such that they are helpful to both perception developers \textit{and} verification and validation engineers. 
 This requires closing the gap between straightforward safety-agnostic metrics and more complex safety-relevant metrics. 
 %comprehensible to humans, and straightforward to compute all at the same time. 
 
@@ -802,7 +802,7 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 		                                                                                        & \ref{sec:distance_function} Obj. distance func.     & \basicChallengeObjDistance           & \basicDroneObjDistance                                                          \\ \cline{2-4}
 		                                                                                        & \ref{sec:multi_object_matching} Multi-obj. matching & \basicChallengeMultiObjMatching      & \basicDroneMultiObjMatching                                                     \\ \midrule
 		\parbox[t]{2mm}{\multirow{4}{*}[-1.2cm]{\rotatebox[origin=c]{90}{Temporal}}}            & \ref{sec:temp_sync} Synchronization                 & \tempChallengeSync                   & \tempDroneSync                                                                  \\ \cline{2-4}
-		                                                                                        & \ref{sec:temp_matching} Matching                    & \tempChallengeMatching               & \tempDroneMatching                                                              \\ \cline{2-4}
+		                                                                                        & \ref{sec:temp_matching} Matching in time                    & \tempChallengeMatching               & \tempDroneMatching                                                              \\ \cline{2-4}
 		                                                                                        & \ref{sec:temp_incomplete} Incomplete tracks         & \tempChallengeIncomplete             & \tempDroneIncomplete                                                            \\ \cline{2-4}
 		                                                                                        & \ref{sec:temp_latency} Delays \& latency            & \tempChallengeDelays                 & \tempDroneDelays                                                                \\ \midrule
 		\parbox[t]{2mm}{\multirow{3}{*}[-0.2cm]{\rotatebox[origin=c]{90}{Probabilistic}}}       & \ref{sec:prob_fov} FoVs                             & \probChallengeFoV                    & \probDroneFoV                                                                   \\ \cline{2-4}
@@ -886,6 +886,8 @@ Contrarily, the following metrics are oracle-independent (they don't explicitly 
 \subsection{RQ3: Can statistics of TPs, FPs, and FNs contribute to a safety argumentation?}
 \label{sec:discussion_rq3}
 
+TODO STRUCTURE THIS!
+
 That depends. Only if there are clear definitions for it such that these are not randomly tweaked bullshit statistics.
 
 Clear definitions are difficult already.
@@ -901,15 +903,15 @@ If one instead uses oracle-independent metrics in the safety argumentation, othe
 
 Task-oriented metrics are not automatically suited for a safety argumentation.
 
-The voting version of UL4600 \cite[Sec. 8.4.1.2]{UL4600_voting_2019} suggest providing statistics of FPs and FNs. 
+The public voting version of UL4600 \cite[Sec. 8.4.1.2]{UL4600_voting_2019} suggest providing statistics of FPs and FNs. 
 
 Also mention that safety case of SMIRK again that made use of TP statistics \cite{Borg2022smirk}.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-To alleviate the mentioned challenges, the present paper provided a comprehensive, but not provably complete, checklist of aspects that define a real-world test oracle along with guidance for characterizing each aspect.
-
+To alleviate the mentioned challenges, the present paper provided a comprehensive checklist of aspects that define a real-world test oracle along with guidance for characterizing each aspect.
+We cannot prove that the checklist is complete in terms of aspects and we know that at least in the aspect of reference data labeling, a test oracle cannot be fully specified. 
 
 Future work includes a more formal description of a test oracle, potentially by means of mathematical notation or a domain-specific language.
 Future work can be about how far a formal description can go without unnecessarily prescribing internals of the test oracle. 
