@@ -22,9 +22,9 @@ jobs:
       - name: Compile latex document
         uses: xu-cheng/latex-action@v2
         with:
-          root_file: rolling_review_updates.tex
+          root_file: oracle-definition.tex
       - name: Rename generated PDF file
-        run: mv rolling_review_updates.pdf rolling_review_updates_${{ steps.date.outputs.date_without_time }}.pdf
+        run: mv oracle-definition.pdf oracle-definition_${{ steps.date.outputs.date_without_time }}.pdf
         shell: bash
       - name: Create tag with current date
         uses: tvdias/github-tagger@v0.0.1
@@ -35,7 +35,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           tag: v${{ steps.date.outputs.date_without_time }}
-          artifacts: rolling_review_updates_${{ steps.date.outputs.date_without_time }}.pdf
+          artifacts: oracle-definition_${{ steps.date.outputs.date_without_time }}.pdf
           body: |
             :warning: The exported manuscript is not yet officially published.
             
@@ -48,7 +48,7 @@ jobs:
               title        = {Checklist to Define Test Oracles for Identifying {TP, FP, and FN} Objects in Automated Driving},
               year         = {${{ steps.date.outputs.year }}},
               timestamp    = {${{ steps.date.outputs.date_without_time }}},
-              url          = {https://github.com/michael-hoss/paper-true-positives/releases/v${{ steps.date.outputs.date_without_time }}},
+              url          = {https://github.com/michael-hoss/paper-oracle-definition/releases/v${{ steps.date.outputs.date_without_time }}},
             }
             ```
           token: ${{ secrets.GITHUB_TOKEN }}
