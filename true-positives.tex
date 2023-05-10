@@ -917,6 +917,10 @@ Especially, choosing which objects or areas are relevant (Sec. \ref{sec:basic_ar
 Moreover, even though certain oracle-independent metrics might be task-oriented, %such as PKL 
 they might not necessarily be sufficient for safety evidences and come with additional challenges.
 
+\addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
+% on the last page of the document manually. It shortens the textheight of the last page by a suitable amount.
+% This command does not take effect until the next pageso it should come on the page before the last. Make sure that you do not shorten the textheight too much.
+
 \section{Conclusion}
 \label{sec:conclusion}
 
@@ -971,23 +975,6 @@ Humans that use these terms in their natural language have learned their meaning
 Humans tend to say ``the ADS did not see the pedestrian". While for some world model instances, such a statement is obvious, for other world model instances, it is highly complex to unambiguously define what it means that one road user sees another one. 
 
 
-\subsubsection{Design of Future Safety-Oriented Perception Metrics}
-
-Metrics that rely on a distinction between, TPs, FPs, FNs have these difficulties. 
-
-In contrast, Task-Oriented Metrics that employ a downstream driving function or assumptions thereof don't manually feature-engineer the criteria for must-see objects, but have that additional complexity. 
 
 
-\subsection{Compliance with standards}
-
-TODO put this in the RQ3 answer.
-
-Some standards, e.g. UL4600 \cite[Sec. 8.4.1.2]{UL4600_voting_2019} suggest providing statistics of FPs and FNs. 
-Since a safety argumentation to comply with a standard should contain the least possible ambiguity, this paper aims at providing guidance to define FPs and FNs as clearly as possible. 
-
-\subsection{More formal definition of test oracle}
-
-It is hard because some things are hard to formalize.
-A modular technical description of a test oracle would already partially predetermine the arrangement of its modules, or the internal structure of the test oracle. This, however, can be flexible. For example, certain objects or semantic areas could be ignored at the very beginning of the testing activity, or at the very end. 
-Future work can be about how far a formal description can go without unnecessarily prescribing internals of the test oracle. 
 
