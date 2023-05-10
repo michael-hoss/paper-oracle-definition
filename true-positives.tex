@@ -232,6 +232,8 @@ The discussion will treat the following research questions:
 \item {RQ2}: \textit{How relevant are TPs, FPs, and FNs for task-oriented perception metrics?}
 
 \item {RQ3}: \textit{Can statistics of TPs, FPs, and FNs contribute to a safety argumentation?}
+
+\item {RQ4}: \textit{Do TP/FP/FN-independent metrics avoid the given oracle challenges?}
 \end{itemize}
 
 \begin{figure*}[t]
@@ -636,8 +638,10 @@ In example c) (Fig.~\ref{fig:timeline}), the oracle could
 	\item identify just one single TP track, but mark it as detected with an initial delay.
 \end{itemize}
 
-Hence, the time that the OuT takes to output a newly appeared object can be considered by the test method implicitly through initial FNs, or explicitly as a property of TPs (as in the average delay metric \cite{Mao2019delay}).
-The same concept holds for FPs in case of sustained OuT tracks after the lifetime of a ReS track.
+Hence, the time that the OuT takes to output a newly appeared object can be considered by the test method implicitly through initial FNs, but also explicitly as a property of TPs (as in the average delay metric \cite{Mao2019delay}).
+Note that the test oracle can transform lags due to slow inference speed into functional perception failures if it predicts the objects of outdated sensor time stamps to the moment when the OuT actually outputs them. In this way, the OuT is not penalized for its inference speed, but instead for initially missed objects and for their prediction-induced reduced precision.
+
+%The same concept holds for FPs in case of sustained OuT tracks after the lifetime of a ReS track.
 
 
 
@@ -657,7 +661,7 @@ Otherwise, undesired FPs and FNs are possible in these distant regions where one
 
 \subsubsection{Probabilistic object distance functions}
 \label{sec:prob_bbox}
-OuTs often estimate error covariances of the detected objects' positions, orientations, dimensions, and velocities. 
+OuTs often estimate error variances and covariances of the detected objects' positions, orientations, dimensions, and velocities. 
 Also the ReS objects' properties are generally uncertain unless they stem from a simulated ground truth \cite{Wang2020inferring_iros}.
 It is worth while evaluating the accuracy of these covariances due to their relevance for the downstream driving policy, which could, for example, maintain a higher safety distance to uncertainly perceived objects.
 
@@ -676,7 +680,7 @@ In the simplest case, the test oracle can threshold the existence confidence at 
 Other oracles might also be reasonable.
 For example, if the test oracle refuses to deterministically match OuT bicycles with ReS cars, it might still allow such a match on probabilistic data if the OuT's second most likely classification matches, e.g. $p_\text{OuT,bicycle} = 0.96$ is incorrect, but $p_\text{OuT,car} = 0.95$ is correct for a ReS car.
 
-Furthermore, an oracle's policy for identifying or not identifying FNs behind occlusions could mean that its existence confidence threshold, above which it assumes OuT objects as present, is lower the more the object is occluded.
+Furthermore, an oracle's existence confidence threshold could depend on how much an object is occluded. % policy % for identifying or not identifying FNs behind occlusions could mean that its existence confidence threshold, above which it assumes OuT objects as present, is lower the more the object is occluded.
 
 % \subsubsection{Probabilistic multi-object matching}
 % \label{sec:prob_matching}
@@ -693,7 +697,7 @@ Furthermore, an oracle's policy for identifying or not identifying FNs behind oc
 % Or outsource them to the next paper? No, then it would be too theoretical!
 % Use as much mathematical notation as possible here! Really? -> Actually, no, this paper will not contain mathematical notation!
 
-The criteria from the previous section (Sec.~\ref{sec:criteria}) are illustrated by two exemplary test oracles in Table~\ref{table:case_study}, namely the evaluation of the nuScenes perception challenge \cite{caesar2019nuscenes} and our own previous test activity \cite{Krajewski2020UsingDrones}. 
+The checklist criteria from the previous section (Sec.~\ref{sec:criteria}) are illustrated by two exemplary test oracles in Table~\ref{table:case_study}, namely the evaluation of the nuScenes perception challenge \cite{caesar2019nuscenes} and our own previous test activity \cite{Krajewski2020UsingDrones}. 
 
 
 Both oracles can be characterized fairly well by the same proposed criteria despite their different purposes (ranking of submissions in a leaderboard vs. perception error modeling) and despite their different reference systems (human labeling on ego vehicle sensor data vs. automated extraction from a hovering drone).
@@ -843,7 +847,7 @@ In particular, since the symbol grounding problem prevents a full specification 
 
 Moreover, also some implementation aspects that influence the oracle's behavior cannot be exactly defined.
 For example, the behavior of ReS hardware is partially uncertain and a millimeter-accuracy FoV description is hardly feasible.
-Nevertheless, other implementation details such as synchronization or the exact object matching method, are well definable and publishable.
+Nevertheless, other implementation details such as synchronization or the exact object matching method, are often well definable and publishable.
 We marked those details that we did not publish in our own earlier study to highlight this issue and encourage more transparent oracles (Table~\ref{table:case_study}). 
 
 
@@ -886,26 +890,30 @@ Contrarily, the following metrics are oracle-independent (they don't explicitly 
 \subsection{RQ3: Can statistics of TPs, FPs, and FNs contribute to a safety argumentation?}
 \label{sec:discussion_rq3}
 
-TODO STRUCTURE THIS!
+Statistics of TPs, FPs and FNs have been suggested for usage in safety argumentations (public voting version of UL4600 \cite[Sec. 8.4.1.2]{UL4600_voting_2019}), and have already been used in the SMIRK safety case \cite[Sec. 6.3.1]{Borg2022smirk}.
+We argue that such statistics can only make a reliable contribution to safety assurance (as compared to quality assurance) as long as the identification of TPs, FPs, and FNs is clearly defined. 
+Otherwise, if, for example, major aspects of the presented checklist are defined only sloppily or not at all, the ambiguity in what a TP object actually is becomes unreasonably high. 
 
-That depends. Only if there are clear definitions for it such that these are not randomly tweaked bullshit statistics.
+Moreover, even a fully specified test oracle for TPs, FPs, and FNs might not take into account all task-relevant and safety-relevant objects. 
+We consider the realization of a clearly-defined \textit{and} safety-sufficient test oracle as a crucial challenge of the field.
+% Therefore, an oracle should be using an oracle that is both defined as much as feasible \textit{and} sufficiently safety-relevant is essential.
 
-Clear definitions are difficult already.
-However, it is even more difficult to describe \textit{safety-relevant} TPs, FPs, and FNs by clear definitions!
+Additionally, even the absence of FPs and FNs is not necessarily sufficient for full perception safety because a wrong estimation of TP properties could still lead to accidents under an ideal planner.
 
-Also: Not all TPs are safe (wrong velocity estimation or wrong lateral position could still lead to crashes)
+\subsection{RQ4: Do TP/FP/FN-independent metrics avoid the mentioned oracle challenges?}
+\label{sec:discussion_rq4}
 
-As mentioned earlier, there is ambiguity in what a TP is, and safety argumentations should reduce ambiguity as far as possible.
+Oracle-independent metrics %such as PKL \cite{Philion2020planner_centric} or safety-critical ghosts/misses \cite{shalevshwartz2017formalRSS} 
+do avoid the arbitrariness of some checklist aspects:
+\begin{itemize}
+\item stuff
+\end{itemize}
+but otherwise, face the same challenges.
 
 
-There is ambiguity in specifying and implementing a test oracle for TP, FP, and FN objects. 
-If one instead uses oracle-independent metrics in the safety argumentation, other types of ambiguity come into play like which behavior policy to use for propagating perceptual uncertainties to the vehicle level, and how to measure threats and criticality in traffic. 
+Even when using oracle-independent metrics, the same challenges in deciding which objects or areas are safety-relevant or not come into play (either as safety-relevant areas for TP metrics or as some behavior policy in terms of which the tested object list is compared to the ReS object list).
 
-Task-oriented metrics are not automatically suited for a safety argumentation.
-
-The public voting version of UL4600 \cite[Sec. 8.4.1.2]{UL4600_voting_2019} suggest providing statistics of FPs and FNs. 
-
-Also mention that safety case of SMIRK again that made use of TP statistics \cite{Borg2022smirk}.
+Also: Task-oriented metrics such as PKL might be safety-relevant, but not necessarily sufficient for safety evidences.
 
 \section{Conclusion}
 \label{sec:conclusion}
