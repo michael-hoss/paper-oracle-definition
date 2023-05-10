@@ -899,7 +899,7 @@ We consider the realization of a clearly-defined \textit{and} safety-sufficient 
 % Therefore, an oracle should be using an oracle that is both defined as much as feasible \textit{and} sufficiently safety-relevant is essential.
 Additionally, even the absence of FPs and FNs is not necessarily sufficient for full perception safety because a wrong estimation of TP properties could still lead to accidents under an ideal planner.
 
-\subsection{RQ4: Do TP/FP/FN-independent metrics avoid the oracle's challenges?}
+\subsection{RQ4: Do TP/FP/FN-independent metrics avoid the \newline oracle's challenges?}
 \label{sec:discussion_rq4}
 
 Oracle-independent metrics %such as PKL \cite{Philion2020planner_centric} or safety-critical ghosts/misses \cite{shalevshwartz2017formalRSS} 
@@ -912,19 +912,21 @@ can avoid arbitrariness in the oracle's judgment of the following checklist aspe
 \item incomplete or delayed tracks (Secs. \ref{sec:temp_incomplete}, \ref{sec:temp_latency})
 \end{itemize}
 However, they are similarly subjected to the challenges of the remaining aspects.
-Especially, choosing which objects or areas are relevant and reliably labeling ReS data seem to be universal challenges or ADS perception testing.
+Especially, choosing which objects or areas are relevant (Sec. \ref{sec:basic_areas}), as well as reliably labeling ReS data (Sec. \ref{sec:basic_ref_labeling}), seems necessary for ADS perception testing even if no explicit TPs, FPs, or FNs are computed. %seem to be universal challenges or ADS perception testing.
 % (either as safety-relevant areas for TP metrics or as some behavior policy in terms of which the tested object list is compared to the ReS object list).
 Moreover, even though certain oracle-independent metrics might be task-oriented, %such as PKL 
-they might not necessarily be sufficient for safety evidences and come with their own additional challenges.
+they might not necessarily be sufficient for safety evidences and come with additional challenges.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-To alleviate the mentioned challenges, the present paper provided a comprehensive checklist of aspects that define a real-world test oracle along with guidance for characterizing each aspect.
-We cannot prove that the checklist is complete in terms of aspects and we know that at least in the aspect of reference data labeling, a test oracle cannot be fully specified. 
+This paper provided a comprehensive checklist of aspects that define an implemented test oracle for TPs, FPs, and FNs, along with guidance for characterizing an oracle in each aspect.
+Even though uncertainty and ambiguity are inherent in some aspects, an oracle definition according to the checklist increases the transparency and comparability of TP/FP/FN-based metrics.
+Consequently, such metrics can represent more reliable evidences in safety argumentations.
 
-Future work includes a more formal description of a test oracle, potentially by means of mathematical notation or a domain-specific language.
-Future work can be about how far a formal description can go without unnecessarily prescribing internals of the test oracle. 
+Future work can either show the checklist's completeness and adequacy, or otherwise suggest extensions, refinements, and new structures. 
+
+% Future work could add potentially missing aspects to the checklist and investigate the feasibility of a partially formal oracle description. % without unnecessarily prescribing internals of the oracle
 
 
 \section*{Acknowledgment}
