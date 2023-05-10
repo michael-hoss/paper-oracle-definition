@@ -233,7 +233,7 @@ The discussion will treat the following research questions:
 
 \item {RQ3}: \textit{Can statistics of TPs, FPs, and FNs contribute to a safety argumentation?}
 
-\item {RQ4}: \textit{Do TP/FP/FN-independent metrics avoid the given oracle challenges?}
+\item {RQ4}: \textit{Do TP/FP/FN-independent metrics avoid the \newline oracle's challenges?}
 \end{itemize}
 
 \begin{figure*}[t]
@@ -396,19 +396,19 @@ This section's lowest-level subsections detail these and further issues in the f
 
 They first treat the simple case of deterministic object representations in a single time frame (Sec. \ref{sec:oracle_simple}) and then cover temporal aspects (Sec. \ref{sec:oracle_time}) and probabilistic object representations (\ref{sec:oracle_probabilistic}).
 The following paragraphs outline how each aspect can influence a test oracle's behavior, along with guidance for characterizing an oracle in terms of it. 
-% The actual aspects that collectively define the workings of the test oracle are given one level of section structure deeper (e.g. Sec. \ref{sec:fov_ref}, \ref{sec:ref_hw}, \dots). 
+% The actual aspects that collectively define the workings of the test oracle are given one level of section structure deeper (e.g. Sec. \ref{sec:basic_fov_ref}, \ref{sec:basic_ref_hw}, \dots). 
 
 %In this whole section, we assume that any FP or FN is an undesired penalty to the OuT. % is is just "one system saw something that the other system did not see" or is it "" MAYBE DEAL WITH THIS TOPIC IN ANOTHER SECTION??
 
 %In general: matching of tracks under test to reference tracks. This boils down to:
 
-\subsection{Matching deterministic objects in a single time frame}
+\subsection{Deterministic objects in a single time frame}
 \label{sec:oracle_simple}
 
 In this subsection, we assume that the object lists of OuT and ReS are perfectly temporally synchronized. 
 
 \subsubsection{Field of view of reference data}
-\label{sec:fov_ref}
+\label{sec:basic_fov_ref}
 In general, the fields of view (FoV) can differ between OuT and ReS. This can lead to undesired FNs and FPs in areas where only one of both FoVs is present. 
 In Fig. \ref{fig:top_down_all}, the OuT has no chance to detect pedestrian E, given its FoV. 
 Likewise, the ReS has no chance to detect pedestrians K and J, given its FoV. 
@@ -426,7 +426,7 @@ However, if the sensor hardware's FoV of the OuT is put under test, too, and it 
 % In summary, a clear definition of the ReS's FoV relative to the OuT's FoV is crucial for a clearly defined test oracle. 
 
 \subsubsection{Perspective-related occlusions}
-\label{sec:occlusions}
+\label{sec:basic_occlusions}
 
 If OuT and ReS observe the scenario from different perspectives, certain traffic participants can be visible for one system, but occluded for the other, which can lead to FPs and FNs. 
 In Fig.~\ref{fig:top_down_all}, truck A occludes both cyclist G and pedestrian K for the OuT. 
@@ -439,7 +439,7 @@ On the other hand, one could argue that the OuT does not need to see behind any 
 
 
 \subsubsection{Reference system hardware}
-\label{sec:ref_hw}
+\label{sec:basic_ref_hw}
 
 The way in which the ReS hardware differs from the OuT hardware influences the test oracle's identification of TPs, FPs, and FNs. 
 In the simplest case, ReS and OuT share the very same sensor hardware and just differ in their data processing. 
@@ -453,7 +453,7 @@ For example, if the ReS hardware is better adapted to adverse weather conditions
 
 
 \subsubsection{Reference system labeling and data processing}
-\label{sec:ref_processing}
+\label{sec:basic_ref_labeling}
 
 The method by which an object list is extracted from the raw reference data % influences the test oracle's identification of TPs, FPs, and FNs. 
 % This method 
@@ -473,7 +473,7 @@ A higher-level reference system or evaluation procedure (``reference of the refe
 
 
 \subsubsection{Semantic areas and no-test areas}
-\label{sec:semantic_areas}
+\label{sec:basic_areas}
 
 While certain areas on or next to the road surface are relevant to the traffic scenario, others might not be worth while perceiving. 
 To avoid needless test efforts, one could define no-test-areas, where no evaluation of TPs, FPs, and FNs takes place (Fig.~\ref{fig:top_down_all}, pedestrian D). 
@@ -489,14 +489,14 @@ The definition of no-test areas can be delicate due to the risk of omitting obje
 For example, pedestrian D in Fig.~\ref{fig:top_down_all} might be running towards the intersection or be throwing objects at it.
 
 \subsubsection{Coordinate transformation from ReS to OuT}
-\label{sec:geometrical_alignment}
+\label{sec:basic_spatial_alignment}
 
 Comparing the OuT's object list to the ReS object list requires both to be in the same coordinate system. 
 Typically, the OuT's vehicle coordinate system is used for the comparison. 
 Therefore, if the ReS internally uses a distinct coordinate system, the ReS object list must be transformed to the OuT's coordinate system. 
 
 Ideally, uncertainties inherent in this geometric alignment are negligible. 
-However, these uncertainties can skew the reference objects' positions, which affects the pairwise object distances for object matching (Sec. \ref{sec:distance_function}), which, in turn, affects the resulting TPs, FPs, and FNs.  
+However, these uncertainties can skew the reference objects' positions, which affects the pairwise object distances for object matching (Sec. \ref{sec:basic_dist_func}), which, in turn, affects the resulting TPs, FPs, and FNs.  
  
 Especially, inaccuracies in the sensor orientation angles result in large cartesian offsets in a large radial distance from the sensor.
 For reference sensors on the ego vehicle, such uncertainties could stem from the calibration of sensor mounting positions. 
@@ -506,7 +506,7 @@ This includes a generally uncertain localization of the ego vehicle and of the e
 A comprehensively defined test oracle should therefore state the positional uncertainty resulting from the geometrical alignment to illustrate how this can affect the matching of object pairs.
 
 \subsubsection{Object distance function for matching}
-\label{sec:distance_function}
+\label{sec:basic_dist_func}
 
 Once both object lists share the same coordinate system, the pairwise distances between ReS objects and OuT objects can be computed to find candidates for TPs. 
 Commonly used distance functions are the euclidean distance between bounding box centroids, with common threshold values around \SI{2}{\metre}; or $1 - IoU$, where the threshold value could be $0.5$.
@@ -522,7 +522,7 @@ Still, thresholds should also not be unnecessarily large to prevent unrelated mi
 
 Furthermore, an object pair that falls below the distance function's threshold does not automatically represent a TP. 
 For example, the OuT bounding box of cyclist F (Fig.~\ref{fig:top_down_all}) could have a below-threshold centroid distance to both ReS bounding boxes nearby. 
-If only a 1:1 matching is allowed (Sec. \ref{sec:multi_object_matching}), situation F would hold one TP and one additional FN.
+If only a 1:1 matching is allowed (Sec. \ref{sec:basic_multi_obj_matching}), situation F would hold one TP and one additional FN.
 
 If not only statistics, but also individual occurrences of FPs and FNs are important to the testing approach, one might have a preference about which ReS bounding box the OuT cyclist F should be matched with. 
 For example, if the matched cyclists should go into the same direction, the distance function could include additional penalty terms for differing velocities or heading angles, which is already popular for distance functions in online object tracking. 
@@ -536,11 +536,11 @@ Matching could also be performed by a machine-learned system instead of a hand-c
 
 
 \subsubsection{Multi-object matching algorithm}
-\label{sec:multi_object_matching}
+\label{sec:basic_multi_obj_matching}
 
 With all pairwise object distances given, a multi-object matching algorithm can finally identify the resulting TPs, FPs, and FNs. 
 Often, algorithms only match one OuT object with one ReS object (1:1), but 1:n or n:n matches could also be allowed \cite[Sec. 11.3]{Brahmi2020diss}. 
-For cyclists F in Fig.~\ref{fig:top_down_all}, the algorithm would match the OuT bounding box to the ReS bounding box with the closest distance function value as long as the distance is below the threshold (Sec. \ref{sec:distance_function}). 
+For cyclists F in Fig.~\ref{fig:top_down_all}, the algorithm would match the OuT bounding box to the ReS bounding box with the closest distance function value as long as the distance is below the threshold (Sec. \ref{sec:basic_dist_func}). 
 With n:n matching and both distances below the threshold, there would be no FN in F.
 
 While the object list matching in Fig.~\ref{fig:top_down_all} is straightforward, there may also be complex scenes like a political demonstration, where each pedestrian bounding box could have more than five potential matches. % and the matrix of matching object distances has non-sparse blocks. 
@@ -654,7 +654,7 @@ While the previous two sections assumed deterministic object representations, th
 \label{sec:prob_fov}
 
 The FoVs of active sensors often have no clear-cut borders, but their performance can be regarded as degrading probabilistically with increasing distance. 
-If a sensor system software does not cut off object hypotheses after a fixed distance, but instead detects objects as far as possible, then a clear distinction of intersecting and overhanging FoV areas of OuT and ReS (Sec. \ref{sec:fov_ref}) is no longer possible.
+If a sensor system software does not cut off object hypotheses after a fixed distance, but instead detects objects as far as possible, then a clear distinction of intersecting and overhanging FoV areas of OuT and ReS (Sec. \ref{sec:basic_fov_ref}) is no longer possible.
 In such a case, it could be the test oracle that cuts off uncertain FoV regions to reduce the problem to the previously explained deterministic case.
 Otherwise, undesired FPs and FNs are possible in these distant regions where one system might randomly still detect an object that the other system might not detect (even though both systems might work perfectly closer to the sensor).
 
@@ -701,7 +701,7 @@ The checklist criteria from the previous section (Sec.~\ref{sec:criteria}) are i
 
 
 Both oracles can be characterized fairly well by the same proposed criteria despite their different purposes (ranking of submissions in a leaderboard vs. perception error modeling) and despite their different reference systems (human labeling on ego vehicle sensor data vs. automated extraction from a hovering drone).
-However, even the level of detail of Table~\ref{table:case_study} still does not comprise all relevant information and leaves open uncertainties, especially in terms of ReS data processing and labeling (Sec.~\ref{sec:ref_processing}).
+However, even the level of detail of Table~\ref{table:case_study} still does not comprise all relevant information and leaves open uncertainties, especially in terms of ReS data processing and labeling (Sec.~\ref{sec:basic_ref_labeling}).
 
 
 % Mention that these descriptions are still super high-level, and more detail is given (and should be given) in the respective papers and documentation.
@@ -797,14 +797,14 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 		\parbox[t]{2mm}{\multirow{3}{*}[-0.4cm]{\rotatebox[origin=c]{90}{(\textit{Context})}}} & Scenarios                                           & \scenariosChallenge                  & \scenariosDrone                                                                 \\ \cline{2-4}
 																								& OuT                                                 & \outChallenge                        & \outDrone                                                                       \\ \cline{2-4}
 		                                                                                        & Further evaluation after TP, FP, FN                 & \furtherChallenge                    & \furtherDrone                                                                   \\ \midrule
-		\parbox[t]{2mm}{\multirow{8}{*}[-2.5cm]{\rotatebox[origin=c]{90}{Basic}}}               & \ref{sec:fov_ref} FoVs                              & \basicChallengeFoV                   & \basicDroneFoV                                                                  \\ \cline{2-4}
-		                                                                                        & \ref{sec:occlusions} Occlusion handling             & \basicChallengeOcclusion             & \basicDroneOcclusion                                                            \\ \cline{2-4}
-		                                                                                        & \ref{sec:ref_hw} ReS hardware                       & \basicChallengeReSHW                 & \basicDroneReSHW                                                                \\ \cline{2-4}
-		                                                                                        & \ref{sec:ref_processing} ReS labeling               & \basicChallengeReSLabling            & \basicDroneReSLabling                                                           \\ \cline{2-4}
-		                                                                                        & \ref{sec:semantic_areas} Relevant areas             & \basicChallengeAreas                 & \basicDroneAreas                                                                \\ \cline{2-4}
-		                                                                                        & \ref{sec:geometrical_alignment} Geometr. alignment  & \basicChallengeGeometrAlign          & \basicDroneGeometrAlign                                                         \\ \cline{2-4}
-		                                                                                        & \ref{sec:distance_function} Obj. distance func.     & \basicChallengeObjDistance           & \basicDroneObjDistance                                                          \\ \cline{2-4}
-		                                                                                        & \ref{sec:multi_object_matching} Multi-obj. matching & \basicChallengeMultiObjMatching      & \basicDroneMultiObjMatching                                                     \\ \midrule
+		\parbox[t]{2mm}{\multirow{8}{*}[-2.5cm]{\rotatebox[origin=c]{90}{Basic}}}               & \ref{sec:basic_fov_ref} FoVs                              & \basicChallengeFoV                   & \basicDroneFoV                                                                  \\ \cline{2-4}
+		                                                                                        & \ref{sec:basic_occlusions} Occlusion handling             & \basicChallengeOcclusion             & \basicDroneOcclusion                                                            \\ \cline{2-4}
+		                                                                                        & \ref{sec:basic_ref_hw} ReS hardware                       & \basicChallengeReSHW                 & \basicDroneReSHW                                                                \\ \cline{2-4}
+		                                                                                        & \ref{sec:basic_ref_labeling} ReS labeling               & \basicChallengeReSLabling            & \basicDroneReSLabling                                                           \\ \cline{2-4}
+		                                                                                        & \ref{sec:basic_areas} Relevant areas             & \basicChallengeAreas                 & \basicDroneAreas                                                                \\ \cline{2-4}
+		                                                                                        & \ref{sec:basic_spatial_alignment} Geometr. alignment  & \basicChallengeGeometrAlign          & \basicDroneGeometrAlign                                                         \\ \cline{2-4}
+		                                                                                        & \ref{sec:basic_dist_func} Obj. distance func.     & \basicChallengeObjDistance           & \basicDroneObjDistance                                                          \\ \cline{2-4}
+		                                                                                        & \ref{sec:basic_multi_obj_matching} Multi-obj. matching & \basicChallengeMultiObjMatching      & \basicDroneMultiObjMatching                                                     \\ \midrule
 		\parbox[t]{2mm}{\multirow{4}{*}[-1.2cm]{\rotatebox[origin=c]{90}{Temporal}}}            & \ref{sec:temp_sync} Synchronization                 & \tempChallengeSync                   & \tempDroneSync                                                                  \\ \cline{2-4}
 		                                                                                        & \ref{sec:temp_matching} Matching in time                    & \tempChallengeMatching               & \tempDroneMatching                                                              \\ \cline{2-4}
 		                                                                                        & \ref{sec:temp_incomplete} Incomplete tracks         & \tempChallengeIncomplete             & \tempDroneIncomplete                                                            \\ \cline{2-4}
@@ -841,7 +841,7 @@ This section discusses the earlier mentioned three research questions (Sec. \ref
 \subsection{RQ1: Can TPs, FPs, and FNs be objectively defined?}
 \label{sec:discussion_rq1}
 
-No. Objectively defining what TPs, FPs, and FNs are means objectively defining how the test oracle functions, which is not possible. After having put together the checklist, we find that at least ReS labeling \& data processing (Sec.~\ref{sec:ref_processing}) suffers from subjective ambiguity of either human labelers or automated labeling. 
+No. Objectively defining what TPs, FPs, and FNs are means objectively defining how the test oracle functions, which is not possible. After having put together the checklist, we find that at least ReS labeling \& data processing (Sec.~\ref{sec:basic_ref_labeling}) suffers from subjective ambiguity of either human labelers or automated labeling. 
 This finding is confirmed by previous considerations about the inherent oracle problem for machine learning applications \cite{Abrecht2021testing}. 
 In particular, since the symbol grounding problem prevents a full specification of road user classes in an open context \cite{Salay2019partialspecifications, Abrecht2021testing}, also the test oracle for detecting these road users cannot be fully specified.
 
@@ -897,23 +897,25 @@ Otherwise, if, for example, major aspects of the presented checklist are defined
 Moreover, even a fully specified test oracle for TPs, FPs, and FNs might not take into account all task-relevant and safety-relevant objects. 
 We consider the realization of a clearly-defined \textit{and} safety-sufficient test oracle as a crucial challenge of the field.
 % Therefore, an oracle should be using an oracle that is both defined as much as feasible \textit{and} sufficiently safety-relevant is essential.
-
 Additionally, even the absence of FPs and FNs is not necessarily sufficient for full perception safety because a wrong estimation of TP properties could still lead to accidents under an ideal planner.
 
-\subsection{RQ4: Do TP/FP/FN-independent metrics avoid the mentioned oracle challenges?}
+\subsection{RQ4: Do TP/FP/FN-independent metrics avoid the oracle's challenges?}
 \label{sec:discussion_rq4}
 
 Oracle-independent metrics %such as PKL \cite{Philion2020planner_centric} or safety-critical ghosts/misses \cite{shalevshwartz2017formalRSS} 
-do avoid the arbitrariness of some checklist aspects:
+can avoid arbitrariness in the oracle's judgment of the following checklist aspects:
 \begin{itemize}
-\item stuff
+\item manual occlusion handling (Sec. \ref{sec:basic_occlusions})
+\item object matching (Secs. \ref{sec:basic_dist_func}, \ref{sec:basic_multi_obj_matching},
+\ref{sec:temp_matching},
+ \ref{sec:prob_bbox})
+\item incomplete or delayed tracks (Secs. \ref{sec:temp_incomplete}, \ref{sec:temp_latency})
 \end{itemize}
-but otherwise, face the same challenges.
-
-
-Even when using oracle-independent metrics, the same challenges in deciding which objects or areas are safety-relevant or not come into play (either as safety-relevant areas for TP metrics or as some behavior policy in terms of which the tested object list is compared to the ReS object list).
-
-Also: Task-oriented metrics such as PKL might be safety-relevant, but not necessarily sufficient for safety evidences.
+However, they are similarly subjected to the challenges of the remaining aspects.
+Especially, choosing which objects or areas are relevant and reliably labeling ReS data seem to be universal challenges or ADS perception testing.
+% (either as safety-relevant areas for TP metrics or as some behavior policy in terms of which the tested object list is compared to the ReS object list).
+Moreover, even though certain oracle-independent metrics might be task-oriented, %such as PKL 
+they might not necessarily be sufficient for safety evidences and come with their own additional challenges.
 
 \section{Conclusion}
 \label{sec:conclusion}
