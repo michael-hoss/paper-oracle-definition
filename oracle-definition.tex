@@ -227,13 +227,13 @@ The discussion will treat the following research questions:
 \begin{itemize}
 
 
-\item {RQ1}: \textit{Can TPs, FPs, and FNs be objectively defined?}
+\item \hyperref[sec:discussion_rq1]{RQ1}: \textit{Can TPs, FPs, and FNs be objectively defined?}
 
-\item {RQ2}: \textit{How relevant are TPs, FPs, and FNs for task-oriented perception metrics?}
+\item \hyperref[sec:discussion_rq2]{RQ2}: \textit{How relevant are TPs, FPs, and FNs for task-oriented perception metrics?}
 
-\item {RQ3}: \textit{Can statistics of TPs, FPs, and FNs contribute to a safety argumentation?}
+\item \hyperref[sec:discussion_rq3]{RQ3}: \textit{Can statistics of TPs, FPs, and FNs contribute to a safety argumentation?}
 
-\item {RQ4}: \textit{Do TP/FP/FN-independent metrics circumvent the oracle's challenges?}
+\item \hyperref[sec:discussion_rq4]{RQ4}: \textit{Do TP/FP/FN-independent perception metrics circumvent the oracle's challenges?}
 \end{itemize}
 
 \begin{figure*}[t]
@@ -310,8 +310,8 @@ The numerous sources that focus on specific parts of the test oracle (e.g. label
 \section{Methods} % for compiling the checklist}
 \label{sec:method}
 
-In our context, the workings of an oracle consist of obtaining a reference object list and then comparing it to the OuT's object list. 
-We compiled the following checklist (Sec.~\ref{sec:criteria}) to help increase the transparency of an oracle's workings, not to prescribe these workings themselves.
+The workings of an oracle in the present context consist of obtaining a reference object list and comparing it to the OuT's object list. 
+We compiled the following checklist (Sec.~\ref{sec:criteria}) to help increase the transparency of these workings for given oracles, not to prescribe them.
 Additionally, we considered the following criteria: % to be met or included:
 \begin{itemize}
 \item human comprehensibility of the checklist's aspects \newline (to keep safety argumentations understandable)
@@ -413,99 +413,99 @@ On the other hand, one could argue that the OuT does not need to see behind any 
 
 
 
-\subsubsection{Reference system hardware}
+\subsubsection{ReS hardware}
 \label{sec:basic_ref_hw}
 
-The way in which the ReS hardware differs from the OuT hardware influences the test oracle's identification of TPs, FPs, and FNs. 
 In the simplest case, ReS and OuT share the very same sensor hardware and just differ in their data processing. 
 This case would exclude unexpected FPs and FNs based on hardware differences, which is desired if only the OuT's software/data processing is focused. 
 
-If, however, also the OuT's hardware is focused, then the ReS should be superior enough to identify the OuT's hardware limitations. 
+If, however, also the OuT's hardware is explicitly put under test, then the ReS should be superior enough to identify the OuT's hardware limitations. 
 For example, if the ReS hardware is better adapted to adverse weather conditions, it could detect objects that the OuT cannot detect (FNs) or confirm the real-world absence of ghost objects (FPs). 
 %Depending on what part or parts of the OuT is focused in the testing activity (hardware/data processing), these FNs can be desired or undesired.
 
 
 
 
-\subsubsection{Reference system labeling and data processing}
+\subsubsection{ReS labeling and data processing}
 \label{sec:basic_ref_labeling}
 
 The method by which an object list is extracted from the raw reference data % influences the test oracle's identification of TPs, FPs, and FNs. 
 % This method 
-can consist of programmed software, machine-learned modules, and human interaction. 
+can comprise programmed software, machine-learned modules, and human interaction. 
 Labeling policy specifications, as being used by perception challenges and for outsourcing labeling activities to subcontractors, describe this extraction of object lists from raw reference data. 
 These labeling policies include details such as how objects are classified, criteria for including and omitting objects, which parts of objects shall be inside or outside their bounding boxes, or how to label in case of partial or full occlusions\footnote{\url{https://github.com/waymo-research/waymo-open-dataset/blob/master/docs/labeling_specifications.md}}.
 
-Even with a well-defined labeling policy, the actual labels can be uncertain \cite{wang2020inferring} or might sometimes differ from the policy. 
-Therefore, a test oracle is defined most clearly if the labeling is characterized also beyond its policy specification.
+Even with a thorough labeling policy, the actual labels can be uncertain \cite{wang2020inferring}, erroneous, or simply part of edge cases that the labeling policy did not consider or could not fully specify.
+To still describe the ReS labeling as transparently as possible, one could describe also the processes that implement the labeling policy.
 %For example, labeling can be fully automated, semi-automated, or manual, where each way impacts the labeling quality in a different way. 
 
-On the one hand, this further characterization can include the internal workings, such as 
+This can include
 %This aspect of the test oracle can be characterized by its internal workings and its outputted results. 
 the programmed modifications that the data undergo, the exact machine learning processes of any machine-learned modules, and the human interventions (when and how do humans manually label or otherwise interact with the data).
-On the other hand, the ReS labeling and data processing can be further characterized by statistics about labeling accuracy and precision regarding state, classification, and existence of objects.
-A higher-level reference system or evaluation procedure (``reference of the reference") would be needed for this purpose.
+Furthermore, statistics about labeling accuracy and precision regarding state, classification, and existence of objects can improve the ReS labeling transparency.
+A higher-level reference system or evaluation procedure (``reference of the reference") would be needed for this.
 
 
-\subsubsection{Semantic areas and no-test areas}
+\subsubsection{Relevant areas and no-test areas}
 \label{sec:basic_areas}
 
 While certain areas on or next to the road surface are relevant to the traffic scenario, others might not be worth while perceiving. 
-To avoid needless test efforts, one could define no-test-areas, where no evaluation of TPs, FPs, and FNs takes place (Fig.~\ref{fig:top_down_all}, pedestrian D). 
-For example, the KITTI object development kit\footnote{\url{https://www.cvlibs.net/datasets/kitti}} contains \textit{DontCare} labels where no reference data was labeled. 
-The current literature also defines relevant areas where road users should be perceived \cite{Philipp2022systematization, Topan2022zones, Butz2020soca, Wolf2021people, Chu2023sotif}.
+To allocate test efforts meaningfully, one can therefore define (safety-) relevant areas and no-test-areas \cite{Philipp2022systematization, Topan2022zones, Butz2020soca, Wolf2021people, Chu2023sotif}.
 
-The exclusion of objects from no-test areas can occur in different stages of the testing activity (Fig. \ref{fig:oracle_in_taxonomy}). 
+The exclusion of objects from no-test areas (e.g. pedestrian D in Fig.~\ref{fig:top_down_all}) can occur in different stages of the testing activity (Fig. \ref{fig:oracle_in_taxonomy}). 
 They might already be excluded from the reference data; they might be included in the reference data, but excluded from the identification of TPs, FPs, and FNs; or, they could still be part of the TPs, FPs, and FNs, but excluded in a potential further evaluation.
 
-In any case, a clear definition of no-test areas is crucial for a comprehensible test oracle. 
-They could be defined by individual polygons or by generally applicable rules (e.g. farther away than \SI{20}{\meter} from any road surface or sidewalk; or above/below a criticality metric threshold).
+In any case, a clear definition of such areas is crucial for a comprehensible test oracle (e.g. farther away than \SI{20}{\meter} from any road surface; or above/below a criticality metric threshold).
 The definition of no-test areas can be delicate due to the risk of omitting objects that are in fact safety-relevant. 
-For example, pedestrian D in Fig.~\ref{fig:top_down_all} might be running towards the intersection or be throwing objects at it.
+For example, the excluded pedestrian D in Fig.~\ref{fig:top_down_all} might still be running towards the intersection or be throwing items at it.
 
 \subsubsection{Coordinate transformation from ReS to OuT}
 \label{sec:basic_spatial_alignment}
 
-Comparing the OuT's object list to the ReS object list requires both to be in the same coordinate system. 
-Typically, the OuT's vehicle coordinate system is used for the comparison. 
-Therefore, if the ReS internally uses a distinct coordinate system, the ReS object list must be transformed to the OuT's coordinate system. 
+While certain oracle aspects such as safety-relevant evaluation areas can be seen as functional properties, the present aspect is more like a non-functional matter of implementation.
+If ReS and OuT use different coordinate systems, then the ReS objects' coordinates must be transformed to the OuT's coordinate system before matching can take place.
+Since uncertainties in this transformation can ultimately affect the matching of object pairs, a transparently defined test oracle should estimate the uncertainty inherent in the geometrical alignment. 
 
-Ideally, uncertainties inherent in this geometric alignment are negligible. 
-However, these uncertainties can skew the reference objects' positions, which affects the pairwise object distances for object matching (Sec. \ref{sec:basic_dist_func}), which, in turn, affects the resulting TPs, FPs, and FNs.  
+%Ideally, uncertainties inherent in this geometric alignment are negligible. 
+%However, these uncertainties can skew the reference objects' positions, which ultimately affects the resulting TPs, FPs, and FNs.  
+
  
-Especially, inaccuracies in the sensor orientation angles result in large cartesian offsets in a large radial distance from the sensor.
+Especially, uncertainties in the sensor orientation angles result in large cartesian offsets far away from the sensor.
 For reference sensors on the ego vehicle, such uncertainties could stem from the calibration of sensor mounting positions. 
 For external reference sensors such as moving drones or mounted infrastructure sensors, the geometrical alignment has further challenges. %there are multiple ways of ending up with a common coordinate system.  
-This includes a generally uncertain localization of the ego vehicle and of the external sensor because of uncertainties in RTK-GNSS measurements, uncertainties in localization on a map, uncertainties in determining position and orientation of the ego vehicle by the ReS, and the non-trivial transformation from the aerial perspective to a cartesian system over the ground. 
+This includes a generally uncertain localization of the ego vehicle and of the external sensor (using RTK-GNSS, an offline map, and/or perceiving each other), and a transformation from the aerial perspective to the OuT's coordinate system over the ground. 
 
-A comprehensively defined test oracle should therefore state the positional uncertainty resulting from the geometrical alignment to illustrate how this can affect the matching of object pairs.
+
 
 \subsubsection{Object distance function for matching}
 \label{sec:basic_dist_func}
 
-Once both object lists share the same coordinate system, the pairwise distances between ReS objects and OuT objects can be computed to find candidates for TPs. 
-Commonly used distance functions are the euclidean distance between bounding box centroids, with common threshold values around \SI{2}{\metre}; or $1 - IoU$, where the threshold value could be $0.5$.
-Some employed distance functions also qualify as mathematical metrics in a vector space of objects.
+Once both object lists share the same coordinate system, pairwise distances between ReS objects and OuT objects can be computed to find candidates for TPs. 
+Commonly used distance functions are the euclidean distance between bounding box centers or $1 - IoU$. %, with common respective threshold values around \SI{2}{\metre} %\footnote{\url{https://www.nuscenes.org/tracking}}
+%or $0.5$
+%\footnote{\url{https://www.cvlibs.net/datasets/kitti/eval_object.php?obj_benchmark=bev}}
+%.
+% Some employed distance functions also qualify as mathematical metrics in a vector space of objects.
 
-The chosen distance function and threshold values directly affect the identification of TPs. 
-While the bounding boxes of truck A (Fig.~\ref{fig:top_down_all}) should match for any reasonable choice, the situation is less obvious for truck H.
-Since only its rear end got detected by the OuT, both the centroid distance and $1 - IoU$ could prevent a match under the exemplary thresholds. 
+%The chosen distance function and threshold values (e.g. \SI{2}{\metre} or $0.5$, respectively) directly affect the identification of TPs. 
+
+While the bounding boxes of truck A (Fig.~\ref{fig:top_down_all}) should match for any reasonable choice of distance function and threshold value, the situation is less obvious for truck H.
+Since only its rear end got detected by the OuT, both the center distance and $1 - IoU$ could prevent a match under common thresholds like \SI{2}{\metre} or $0.5$. 
 Without a match, though, truck H would lead to a FP and a FN, which might be undesired given the fact that its property that is relevant to the driving task of ego vehicle, namely its rear end, got properly detected. 
-Still, thresholds should also not be unnecessarily large to prevent unrelated misdetections such as G and B from merging into an undesired TP candidate.
+Still, thresholds should also not be unnecessarily loose to prevent unrelated misdetections such as G and B from merging into an undesired TP candidate.
 
 %including penalties (object classifications?) and thresholds. 
 
 Furthermore, an object pair that falls below the distance function's threshold does not automatically represent a TP. 
 For example, the OuT bounding box of cyclist F (Fig.~\ref{fig:top_down_all}) could have a below-threshold centroid distance to both ReS bounding boxes nearby. 
 If only a 1:1 matching is allowed (Sec. \ref{sec:basic_multi_obj_matching}), situation F would hold one TP and one additional FN.
+To disambiguate the TP object pair, penalty terms such as estimated velocity mismatch could be added to the distance function.
 
-If not only statistics, but also individual occurrences of FPs and FNs are important to the testing approach, one might have a preference about which ReS bounding box the OuT cyclist F should be matched with. 
-For example, if the matched cyclists should go into the same direction, the distance function could include additional penalty terms for differing velocities or heading angles, which is already popular for distance functions in online object tracking. 
+Additionally, an oracle can choose to never match different road user classes with one another (see nuScenes challenge in Table \ref{table:case_study}). 
+While this yields separate statistics of each class, it might also lead to undesired FPs and FNs for misclassified objects that otherwise got perceived perfectly.
+% In this setting, the matching policy for ``unknown" object classifications could become important.
 
-Additionally, the matching of vulnerable road users (VRUs) of one system with cars or trucks of the other system could be completely prevented for the sake of separate statistics of both groups. 
-In this setting, the matching policy for ``unknown" object classifications could become important.
-
-Matching could also be performed by a machine-learned system instead of a hand-crafted distance function \cite{Sondell2018}.
+Matching can also be performed by a machine-learned system instead of a hand-crafted distance function \cite{Sondell2018}.
 
 
 
@@ -822,7 +822,7 @@ In particular, since the symbol grounding problem prevents a full specification 
 
 Moreover, also some implementation aspects that influence the oracle's behavior cannot be exactly defined.
 For example, the behavior of ReS hardware is partially uncertain and a millimeter-accuracy FoV description is hardly feasible.
-Nevertheless, other implementation details such as synchronization or the exact object matching method, are often well definable and publishable.
+Nevertheless, other implementation details such as synchronization or the exact object matching method are often well definable and publishable.
 We marked those details that we did not publish in our own earlier study to highlight this issue and encourage more transparent oracles (Table~\ref{table:case_study}). 
 
 
