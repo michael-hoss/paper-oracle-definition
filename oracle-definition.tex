@@ -130,7 +130,7 @@ Despite being the only author, the first person plural (``we") is used to comply
 \begin{abstract}
 %\input{sections/0_abstract}
 
-% Yannick feedback:
+% TODO incorporate Yannick's feedback:
 % - be more precise, more clear, and more confident in abstract
 % - probably use a more standardized templated abstract strcture
 % - maybe even put in abstract that I want to bring together the perception community and the v&v community
@@ -138,8 +138,8 @@ Despite being the only author, the first person plural (``we") is used to comply
 
 %Single paragraph up to 250 words. Mini-version of the paper that includes context, state of the art, why it is not good enough, the research question, the methods, the evaluation and conclusions.
 Popular test oracles for the perception subsystem of driving automation systems identify true-positive (TP), false-positive (FP), and false-negative (FN) objects.
-Their transparency is needed for comparing test results and for safety cases.
-To date, there exists a common notion of TPs, FPs, and FNs for this application, but apparently no published way to comprehensively characterize entire implemented oracles. 
+Oracle transparency is needed for comparing test results and for safety cases.
+To date, there exists a common notion of TPs, FPs, and FNs in the field, but apparently no published way to comprehensively characterize entire implemented oracles. 
 % Despite a common understanding, the implementation of these concepts varies across testing activities.
 Therefore, this paper provides a checklist of aspects to define such test oracles.
 Besides labeling policies of the test set, we cover fields of view, occlusion handling, safety-relevant areas, matching criteria, temporal and probabilistic issues, and further aspects.
@@ -147,6 +147,7 @@ Even though our checklist %for oracle definition
 can hardly be formalized, it can help practitioners maximize the transparency of their oracles, which, in turn, makes statements on object perception more reliable and comparable.
 
 % TODO: not only the classical oracle problem (what should be the output?), but also the role of practical test implementation details reference data. 
+% TODO I could frame this as functional and non-functional aspects of a test oracle
 
 \end{abstract}
 
@@ -184,7 +185,7 @@ Its dependability requires a sufficiently low mean time between events that indu
 % Or at least estimate how the perception outputs differ from the ground truth to construct sensor models for simulation tests.
 
 The demonstration of this dependability is an active topic of research, where one of the most crucial issues is the identification of perception outputs that are not safe for the driving task. 
-Task-oriented and safety-relevant perception metrics are therefore currently being proposed (see  \cite{Lyssenko2022safety, Hoss2023rollingreview} for overviews). 
+Task-oriented and safety-relevant perception metrics are therefore currently being proposed  \cite{Madala2023metrics,  Lyssenko2022safety, Hoss2023rollingreview}. 
 % my section of these metrics in the rolling review [Sec. VI-C3]
 In contrast to the most popular perception leaderboard metrics, safety-relevant metrics tend to be more complex and incomprehensible due to their additional consideration of the downstream driving function and of safety in road traffic. 
 %Popularity of direct metrics that are based on TP, FP, FN still orders of magnitude higher than the popularity of task-oriented metrics. 
@@ -490,7 +491,7 @@ Commonly used distance functions are the euclidean distance between bounding box
 %The chosen distance function and threshold values (e.g. \SI{2}{\metre} or $0.5$, respectively) directly affect the identification of TPs. 
 
 While the bounding boxes of truck A (Fig.~\ref{fig:top_down_all}) should match for any reasonable choice of distance function and threshold value, the situation is less obvious for truck H.
-Since only its rear end got detected by the OuT, both the center distance and $1 - IoU$ could prevent a match under common thresholds like \SI{2}{\metre} or $0.5$. 
+Since only its rear end got detected by the OuT, both the center distance and $1 - IoU$ could prevent a match under common thresholds like \SI{2}{\metre} or $0.5$, respectively. 
 Without a match, though, truck H would lead to a FP and a FN, which might be undesired given the fact that its property that is relevant to the driving task of ego vehicle, namely its rear end, got properly detected. 
 Still, thresholds should also not be unnecessarily loose to prevent unrelated misdetections such as G and B from merging into an undesired TP candidate.
 
@@ -518,9 +519,8 @@ Often, algorithms only match one OuT object with one ReS object (1:1), but 1:n o
 For cyclists F in Fig.~\ref{fig:top_down_all}, the algorithm would match the OuT bounding box to the ReS bounding box with the closest distance function value as long as the distance is below the threshold (Sec. \ref{sec:basic_dist_func}). 
 With n:n matching and both distances below the threshold, there would be no FN in F.
 
-While the object list matching in Fig.~\ref{fig:top_down_all} is straightforward, there may also be complex scenes like a political demonstration, where each pedestrian bounding box could have more than five potential matches. % and the matrix of matching object distances has non-sparse blocks. 
+While the object list matching in Fig.~\ref{fig:top_down_all} is straightforward, there may also be complex scenes like a dense crowd of pedestrians, where each bounding box has many potential matches. % and the matrix of matching object distances has non-sparse blocks. 
 In such cases, optimization algorithms such as the Hungarian/Munkres algorithm determine TPs by globally minimizing the overall distance between all matches.
-In summary, also the way of multi-object matching influences the resulting TPs, FPs, and FNs.
 
 %\begin{enumerate}
 %\item object distance functions in state space, including penalties and thresholds
@@ -565,11 +565,11 @@ Continuously present reference tracks from, for example, RTK-GNSS recordings, ca
 
 However, in general, reference tracks do not span continuously over the entire recording, which means that the synchronization must also deal with track beginnings and ends. % (Fig. \ref{fig:timeline}, a)).  
 If the sampling times of track $a_\text{ReS}$ (Fig. \ref{fig:timeline}) are linearly interpolated to those of $a_\text{OuT}$, all sampling times of $a_\text{OuT}$ are covered. 
-Then, however, it is up to the test oracle to decide what happens to the overhanging frames of $a_\text{ReS}$ at the beginning and at the end. 
+Then, however, it is up to the test oracle to decide what happens to the overhanging frames of $a_\text{ReS}$ at the beginning and at the end (see also Sec.~\ref{sec:temp_latency}). 
 Both could be neglected, but they could also both mark FNs. 
-Whether or not the test oracle identifies FNs there might also depend on whether the overhang falls below a temporal matching threshold given in milliseconds.
+Whether or not the test oracle identifies FNs there might also depend on whether the overhang falls below a temporal matching threshold. % given in milliseconds.
 
-For synchronous time stamps of the same frequency that only suffer from a slight offset (smaller than a temporal matching threshold), the test oracle might also synchronize by matching the temporally closest time frames with one another without interpolating any recorded data.
+% For synchronous time stamps of the same frequency that only suffer from a slight offset (smaller than a temporal matching threshold), the test oracle might also synchronize by matching the temporally closest time frames with one another without interpolating any recorded data.
 
 
 \subsubsection{Matching of objects with an extended lifetime}
@@ -605,17 +605,10 @@ However, if the sampling frequency is sufficiently high such that a single misse
 \subsubsection{Treatment of latency and delays}
 \label{sec:temp_latency}
 
-%Similar to missed frames in the middle of a reference track, 
-A test oracle should also have a policy for missed frames at the beginning and overhanging frames at the end of a ReS track. 
-In example c) (Fig.~\ref{fig:timeline}), the oracle could
-\begin{itemize}
-	\item identify a FN in the first, missing frame, and TPs otherwise, or
-	\item identify just one single TP track, but mark it as detected with an initial delay.
-\end{itemize}
+The time that the OuT takes to output a newly appeared object can be considered by the test method explicitly as a property of TPs (as in the average delay metric \cite{Mao2019delay}), but also implicitly through initial FNs (Fig.~\ref{fig:timeline}, c)).
+In the case of only implicit delays, the oracle might have to  predict objects forward in time from their outdated time stamps to the times when the OuT actually outputted them. In doing so, outdated time stamps get traded in for worsened existence and accuracy properties.
 
-Hence, the time that the OuT takes to output a newly appeared object can be considered by the test method implicitly through initial FNs, but also explicitly as a property of TPs (as in the average delay metric \cite{Mao2019delay}).
-Note that the test oracle can transform lags due to slow inference speed into functional perception failures if it predicts the objects of outdated sensor time stamps to the moment when the OuT actually outputs them. In this way, the OuT is not penalized for its inference speed, but instead for initially missed objects and for their prediction-induced reduced precision.
-
+Similarly, the oracle should have a policy for non-equal track lifetimes at the end of a ReS track. 
 %The same concept holds for FPs in case of sustained OuT tracks after the lifetime of a ReS track.
 
 
@@ -636,11 +629,9 @@ Otherwise, undesired FPs and FNs are possible in these distant regions where one
 
 \subsubsection{Probabilistic object distance functions}
 \label{sec:prob_bbox}
-OuTs often estimate error variances and covariances of the detected objects' positions, orientations, dimensions, and velocities. 
-Also the ReS objects' properties are generally uncertain unless they stem from a simulated ground truth \cite{Wang2020inferring_iros}.
-It is worth while evaluating the accuracy of these covariances due to their relevance for the downstream driving policy, which could, for example, maintain a higher safety distance to uncertainly perceived objects.
+Uncertainties in an object's state can be described by probability distributions (both for OuT and ReS objects). 
+There might be cases where a ReS object and an OuT object are deterministically too far away from each other for a match, but the overlap of their probability distributions might still lead to a reasonable match under a probabilistic distance function.
 
-Therefore, finding TP matches requires a probabilistic distance function with a suitable threshold. 
 The dissimilarity of two probability distributions for the bounding box centroids can be expressed by the Wasserstein or earth mover's distance.
 A probabilistic version of the \textit{IoU} for rotated 3D bounding boxes is the \textit{JIoU} \cite{Wang2020inferring_iros}.
 
@@ -759,7 +750,7 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 \begin{table*}[htbp]
 	\begin{threeparttable}
 	\centering
-	\caption{Different test oracles for TP, FP, FN, expressed by the checklist of this paper}
+	\caption{Checklist of this paper applied to different test oracles for TPs, FPs, FNs}
 	\label{table:case_study}
 	\begin{tabularx}{\linewidth}{
 			>{\hsize=0.02\hsize}X
@@ -892,7 +883,7 @@ Especially, choosing which objects or areas are relevant (Sec. \ref{sec:basic_ar
 Moreover, even though certain oracle-independent metrics might be task-oriented, %such as PKL 
 they might not necessarily be sufficient for safety evidences and come with additional challenges.
 
-\addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
+%\addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
 % on the last page of the document manually. It shortens the textheight of the last page by a suitable amount.
 % This command does not take effect until the next pageso it should come on the page before the last. Make sure that you do not shorten the textheight too much.
 
