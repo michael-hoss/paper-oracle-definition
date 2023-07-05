@@ -683,8 +683,9 @@ Both oracles can be characterized fairly well by the same proposed criteria desp
 
 However, even the level of detail of Table~\ref{table:case_study} is still not sufficient for a transparent oracle definition and leaves open uncertainties. %, especially in terms of ReS data processing and labeling (Sec.~\ref{sec:basic_ref_labeling}).
 % Mention that these descriptions are still super high-level, and more detail is given (and should be given) in the respective papers and documentation.
-For example, most details of ReS labeling are omitted only due to space reasons. 
-The referenced external documents that contain further such details should be regarded as a full part of the transparent definition, not as optional annexes.
+For example, most details of ReS labeling are omitted due to space reasons. 
+The referenced external documents that 
+contain such details should be regarded as a full part of the transparent definition, not as optional annexes.
 
 % \footnote{\url{https://www.nuscenes.org/tracking}}
 % \cite{Krajewski2020UsingDrones}
@@ -724,11 +725,11 @@ The FoVs overlap in the analyzed area.}
 \newcommand{\basicDroneGeometrAlign}{Polynomial transformation of 3\textsuperscript{rd} order from ReS coordinates to OuT coordinates. Polynomial is fitted through corresponding pixels in an orthophoto and a stabilized drone image. 
 Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not further calculated.}
 \newcommand{\basicDroneObjDistance}{2D center distance on the ground plane (threshold below); only car-car matching.}
-\newcommand{\basicDroneMultiObjMatching}{Entire tracks are matched (see below). \textit{Not published:} Multiple OuT tracks can be matched to one ReS track (also at the same time), but only one ReS track can be matched to an OuT track (1-to-n).}
+\newcommand{\basicDroneMultiObjMatching}{Entire tracks are matched (see below). \textit{Not published:} Multiple OuT tracks can be matched to one ReS track (also at the same time), but only one ReS track can be matched to an OuT track (1:n).}
 
 \newcommand{\tempDroneSync}{Asynchronous OuT and ReS at \SI{25}{\hertz}; synchronization in post-processing through a mutually captured visual signal; resulting accuracy loss $\approx$\,\SI{0.14}{\meter}. \textit{Not published:} Once synchronized, OuT tracks were interpolated to the matched ReS time stamps, which left overhanging ReS measurements unused.}
 \newcommand{\tempDroneMatching}{Entire tracks are matched if their mean center distance (see above) during their non-occluded lifetimes $<$\,\SI{1.5}{\meter}.}
-\newcommand{\tempDroneIncomplete}{\textit{Not published:} Two or more incomplete OuT tracks can be matched with one ReS track}
+\newcommand{\tempDroneIncomplete}{\textit{Not published:} Two or more incomplete OuT tracks can be matched with one ReS track. FNs were not explicitly computed.}
 \newcommand{\tempDroneDelays}{Temporally overhanging track parts are discarded by counting them as FNs or FPs. \textit{Not published:} The closest overhanging OuT measurement was still used for the interpolation onto the ReS time stamp.}
 
 \newcommand{\probDroneFoV}{OuT FoV is acknowledged to have a fuzzy range, but its fuzziness is not explicitly modeled.}
@@ -745,7 +746,7 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 \newcommand{\basicChallengeAreas}{No evaluation beyond class-specific maximum detection and tracking ranges (\SI{40}{\meter} to \SI{50}{\meter}); no evaluation of bikes and motorcycles inside bike racks; list of excluded object classes.}
 \newcommand{\basicChallengeGeometrAlign}{Calibration of lidar, camera, and radar w.r.t. ego coordinate system; without accuracy estimate $\rightarrow$ ReS-OuT-alignment might be non-perfect for the camera-only OuT.}
 \newcommand{\basicChallengeObjDistance}{2D center distance on the ground plane; threshold of \SI{2}{\meter}; a match requires equal object classifications.}
-\newcommand{\basicChallengeMultiObjMatching}{Metrics from \cite{Bernardin2006mot_metrics} use 1-to-1 matching and Munkres' algorithm (see \cite{bernardin2008evaluating}).}
+\newcommand{\basicChallengeMultiObjMatching}{Metrics from \cite{Bernardin2006mot_metrics} use 1:1 matching and Munkres' algorithm (see \cite{bernardin2008evaluating}).}
 
 \newcommand{\tempChallengeSync}{Online synchronization of lidar (\SI{20}{\hertz}) and camera (\SI{12}{\hertz}), but evaluation only on keyframes (\SI{2}{\hertz}) where the sensors coincide. Radar operates on \SI{13}{\hertz}\tnote{d}. ReS tracks and OuT tracks are linearly interpolated ``to avoid excessive track fragmentation from lidar/radar point filtering"\tnote{a}.}
 \newcommand{\tempChallengeMatching}{Metrics from \cite{Bernardin2006mot_metrics} keep a match over subsequent time steps for as long as it is below the threshold, even if another, new match candidate would have less cost.}
@@ -919,6 +920,7 @@ Future work can either show the checklist's completeness and adequacy, or otherw
 \section*{Acknowledgment}
 \label{sec:acknowledgment}
 
+The author would like to thank Fabian Thomsen for providing the previously unpublished implementation details of \cite{Krajewski2020UsingDrones}.
 Open Access funding enabled and organized by Projekt DEAL. % of RWTH Aachen University Library.
 Besides this, the present work was conducted independently without related \href{https://ko-fi.com/michaelhoss}{funding} or employment. 
 % The author would like to thank the social media commenters for their feedback on the given topic.
