@@ -302,7 +302,7 @@ In the present paper, \textit{(test) oracle} refers to the mechanism that identi
 \label{sec:related_work}
 
 Besides general literature on software test oracles \cite{Barr2015oracle}, we are aware of Abrecht et al. \cite{Abrecht2021testing}, who discuss test oracle generation for visual perception of ADS.
-Abrecht et al. specifically focus on functional properties of deep neural networks (DNNs), which leaves practical aspects of oracle implementation outside of their scope, even though Sec.~\ref{sec:criteria} illustrates that such practical aspects can still influence the oracle's behavior.
+Abrecht et al. specifically focus on functional properties of deep neural networks (DNNs), which leaves practical aspects of oracle implementation outside of their scope, even though Sec.~\ref{sec:criteria} of the present paper illustrates that such practical aspects can still influence the oracle's behavior.
 To the best of our knowledge, we have not yet found a comprehensive and universally applicable compilation of aspects to define an implemented test oracle.
 
 The numerous sources that focus on specific parts of the test oracle (e.g. labeling policies, safety-relevant areas, or matching criteria) are referred to in their corresponding following subsections. % corresponding subsections of the checklist (Sec.~\ref{sec:criteria}) or of the discussion (Sec.~\ref{sec:discussion}).
@@ -368,7 +368,7 @@ In doing so, we considered the following criteria: % to be met or included:
 
 
 A test oracle can be regarded from different perspectives: as part of a testing activity (Fig. \ref{fig:oracle_in_taxonomy}), in space (Fig. \ref{fig:top_down_all}), and in time (Fig. \ref{fig:timeline}).
-Each paragraph in this section represents one item on the checklist to transparently describe test oracles. 
+Each paragraph in this section represents one item of a checklist to transparently describe test oracles. 
 % This section details these and further issues in the form of a checklist. %, whose items are visually summarized later on in Table \ref{table:case_study}. 
 % We intentionally avoid a more formal, more technical, or more specific description in order to keep it generally applicable to as many test oracles as possible without prescribing an internal structure and without . 
 % DO THIS WHY NATURAL LANGUAGE HERE IN THE DISCUSSION!
@@ -439,7 +439,7 @@ Labeling policy specifications, as being used by perception challenges and for o
 These labeling policies include details such as how objects are classified, criteria for including and omitting objects, which parts of objects shall be inside or outside their bounding boxes, or how to label in case of partial or full occlusions\footnote{\url{https://github.com/waymo-research/waymo-open-dataset/blob/master/docs/labeling_specifications.md}}.
 
 Even with a thorough labeling policy, the actual labels can be uncertain \cite{wang2020inferring}, erroneous, or simply part of edge cases that the labeling policy did not consider or could not fully specify.
-To still describe the ReS labeling as transparently as possible, one could describe also the processes that implement the labeling policy.
+To still describe the ReS labeling as transparently as possible, one could additionally describe how the labeling policy is realized in practice.
 %For example, labeling can be fully automated, semi-automated, or manual, where each way impacts the labeling quality in a different way. 
 
 This can include
@@ -465,9 +465,9 @@ For example, the excluded pedestrian D in Fig.~\ref{fig:top_down_all} might stil
 \subsubsection{Coordinate transformation from ReS to OuT}
 \label{sec:basic_spatial_alignment}
 
-While certain oracle aspects such as safety-relevant evaluation areas can be seen as functional properties, the present aspect is more like a non-functional matter of implementation.
+While certain oracle aspects such as safety-relevant areas can be seen as functional properties, the present aspect is rather a non-functional matter of implementation.
 If ReS and OuT use different coordinate systems, then the ReS objects' coordinates must be transformed to the OuT's coordinate system before matching can take place.
-Since uncertainties in this transformation can ultimately affect the matching of object pairs, a transparently defined test oracle should estimate the uncertainty inherent in the geometrical alignment. 
+Since uncertainties in this transformation can ultimately affect the matching of object pairs, a transparently defined test oracle should estimate the uncertainty inherent in this geometrical alignment. 
 
 %Ideally, uncertainties inherent in this geometric alignment are negligible. 
 %However, these uncertainties can skew the reference objects' positions, which ultimately affects the resulting TPs, FPs, and FNs.  
@@ -494,7 +494,7 @@ Commonly used distance functions are the euclidean distance between bounding box
 
 While the bounding boxes of truck A (Fig.~\ref{fig:top_down_all}) should match for any reasonable choice of distance function and threshold value, the situation is less obvious for truck H.
 Since only its rear end got detected by the OuT, both the center distance and $1 - IoU$ could prevent a match under common thresholds like \SI{2}{\metre} or $0.5$, respectively. 
-Without a match, though, truck H would lead to a FP and a FN, which might be undesired given the fact that its property that is relevant to the driving task of ego vehicle, namely its rear end, got properly detected. 
+Without a match, though, truck H would lead to a FP and a FN, which might be undesired given the fact that its property that is relevant to the driving task of the ego vehicle, namely its rear end, got properly detected. 
 Still, thresholds should also not be unnecessarily loose to prevent unrelated misdetections such as G and B from merging into an undesired TP candidate.
 
 %including penalties (object classifications?) and thresholds. 
@@ -608,7 +608,10 @@ However, if the sampling frequency is sufficiently high such that a single misse
 \label{sec:temp_latency}
 
 The time that the OuT takes to output a newly appeared object can be considered by the test method explicitly as a property of TPs (as in the average delay metric \cite{Mao2019delay}), but also implicitly through initial FNs (Fig.~\ref{fig:timeline}, c)).
-In the case of only implicit delays, the oracle might have to  predict objects forward in time from their outdated time stamps to the times when the OuT actually outputted them. In doing so, outdated time stamps get traded in for worsened existence and accuracy properties.
+One might want to distinguish TPs that were correctly detected upon appearance in the scenario, but whose computation simply took too long, from actual initial misdetections.
+To assure that the test oracle only considers OuT objects that were available to the downstream driving function at a given time, the timestamps of object output should be considered rather than the timestamps of raw data acquisition.
+
+%In doing so, outdated time stamps get traded in for worsened existence and accuracy properties.
 
 Similarly, the oracle should have a policy for non-equal track lifetimes at the end of a ReS track. 
 %The same concept holds for FPs in case of sustained OuT tracks after the lifetime of a ReS track.
@@ -618,7 +621,7 @@ Similarly, the oracle should have a policy for non-equal track lifetimes at the 
 \subsection{Generalization to probabilistic object representations}
 \label{sec:oracle_probabilistic}
 
-While the previous two sections assumed deterministic object representations, the following subsections highlight the test oracle's degrees of freedom for evaluating probabilistic data.
+While the previous two sections assumed deterministic object and FoV representations, the following subsections highlight the test oracle's degrees of freedom for evaluating probabilistic data.
 
 \subsubsection{Probabilistic FoVs}
 \label{sec:prob_fov}
@@ -626,7 +629,7 @@ While the previous two sections assumed deterministic object representations, th
 The FoVs of active sensors often have no clear-cut borders, but their performance can be regarded as degrading probabilistically with increasing distance. 
 If a sensor system software does not cut off object hypotheses after a fixed distance, but instead detects objects as far as possible, then a clear distinction of intersecting and overhanging FoV areas of OuT and ReS (Sec. \ref{sec:basic_fov_ref}) is no longer possible.
 In such a case, it could be the test oracle that cuts off uncertain FoV regions to reduce the problem to the previously explained deterministic case.
-Otherwise, undesired FPs and FNs are possible in these distant regions where one system might randomly still detect an object that the other system might not detect (even though both systems might work perfectly closer to the sensor).
+Otherwise, undesired FPs and FNs are possible in these distant regions where one system might randomly still detect an object that the other system might not detect (even though both systems might work perfectly in closer proximity to the sensor).
 
 
 \subsubsection{Probabilistic object distance functions}
@@ -647,7 +650,7 @@ OuTs typically compute confidences for object existence and/or classification.
 %If the OuT does the thresholding itself and only outputs a binary existence and a unique classification, then the deterministic test oracle criteria from Sec. \ref{sec:oracle_simple} can be applied. 
 %However, if the OuT forwards these probabilities to the downstream driving policy, which could make use of them, then the test oracle should also consider them. 
 A simple test oracle can threshold the existence confidence at a fixed value and assume the class of maximum classification confidence.
-More complex oracles might also be reasonable under given circumstances, for example with thresholds depending on scenario properties or where the correct class is allowed to be only among the top $n$ OuT classifications. 
+More complex oracles might also be reasonable under given circumstances, for example with thresholds depending on scenario properties or where the correct class is allowed to be among the top $n$ OuT classifications. 
 
 Detected, but misclassified objects could either be identified as a TP with a property ``assigned wrong class", but also as a FN for the ReS class and a FP for the OuT class.
 
