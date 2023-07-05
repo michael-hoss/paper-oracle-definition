@@ -82,7 +82,9 @@
 
 % -------------------------- TITLE -------------------------------
 
-\title{Checklist to Transparently Define \\Test Oracles for Identifying TP, FP, and FN Objects \\in Automated Driving}
+\title{Checklist to Transparently Define Test Oracles for TP, FP, and FN Objects in Automated Driving}
+
+%\title{Checklist to Transparently Define \\Test Oracles for Identifying TP, FP, and FN Objects \\in Automated Driving}
 
 %\title{Definition of Test Oracles for Identifying TP, FP, and FN in Object Perception of Automated Driving}
 
@@ -723,7 +725,7 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 
 \newcommand{\tempDroneSync}{Asynchronous OuT and ReS at \SI{25}{\hertz}; synchronization in post-processing through a mutually captured visual signal; resulting accuracy loss $\approx$\,\SI{0.14}{\meter}. \textit{Not published:} Once synchronized, OuT tracks were interpolated to the matched ReS time stamps, which left overhanging ReS measurements unused.}
 \newcommand{\tempDroneMatching}{Entire tracks are matched if their mean center distance (see above) during their non-occluded lifetimes $<$\,\SI{1.5}{\meter}.}
-\newcommand{\tempDroneIncomplete}{\textit{Not published:} Two or more incomplete OuT tracks could be matched with one ReS track (see above)}
+\newcommand{\tempDroneIncomplete}{\textit{Not published:} Two or more incomplete OuT tracks can be matched with one ReS track}
 \newcommand{\tempDroneDelays}{Temporally overhanging track parts are discarded by counting them as FNs or FPs. \textit{Not published:} The closest overhanging OuT measurement was still used for the interpolation onto the ReS time stamp.}
 
 \newcommand{\probDroneFoV}{OuT FoV is acknowledged to have a fuzzy range, but its fuzziness is not explicitly modeled.}
@@ -813,20 +815,20 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 
 % TODO: maybe include what else I found out (besides the research questions)
 
-This section discusses the earlier mentioned three research questions (Sec. \ref{sec:introduction_contrib}). 
+This section discusses the earlier mentioned four research questions (Sec. \ref{sec:introduction_contrib}). 
 
 
 \subsection{RQ1: Can TPs, FPs, and FNs be objectively defined?}
 \label{sec:discussion_rq1}
 
-No. Objectively defining what TPs, FPs, and FNs are means objectively defining how the test oracle functions, which is not possible. After having put together the checklist, we find that at least ReS labeling \& data processing (Sec.~\ref{sec:basic_ref_labeling}) suffers from subjective ambiguity of either human labelers or automated labeling. 
+No. Objectively defining TPs, FPs, and FNs means objectively defining how the test oracle functions, which is not possible. After having put together the checklist, we find that at least ReS labeling \& data processing (Sec.~\ref{sec:basic_ref_labeling}) suffers from subjective ambiguity of either human labelers or automated labeling. 
 This finding is confirmed by previous considerations about the inherent oracle problem for machine learning applications \cite{Abrecht2021testing}. 
 In particular, since the symbol grounding problem prevents a full specification of road user classes in an open context \cite{Salay2019partialspecifications, Abrecht2021testing}, also the test oracle for detecting these road users cannot be fully specified.
 
 Moreover, also some implementation aspects that influence the oracle's behavior cannot be exactly defined.
 For example, the behavior of ReS hardware is partially uncertain and a millimeter-accuracy FoV description is hardly feasible.
 Nevertheless, other implementation details such as synchronization or the exact object matching method are often well definable and publishable.
-We marked those details that we did not publish in our own earlier study to highlight this issue and encourage more transparent oracles (Table~\ref{table:case_study}). 
+We marked those details that we did not publish in our own earlier study to highlight this potential for more transparent oracles (Table~\ref{table:case_study}). 
 
 
 % Things I want to cite from Abrecht2021testing:
@@ -890,7 +892,7 @@ can avoid arbitrariness in the oracle's judgment of the following checklist aspe
 \item incomplete or delayed tracks (Secs. \ref{sec:temp_incomplete}, \ref{sec:temp_latency})
 \end{itemize}
 However, they are similarly subjected to the challenges of the remaining aspects.
-Especially, choosing which objects or areas are relevant (Sec. \ref{sec:basic_areas}), as well as reliably labeling ReS data (Sec. \ref{sec:basic_ref_labeling}), seems necessary for ADS perception testing even if no explicit TPs, FPs, or FNs are computed. %seem to be universal challenges or ADS perception testing.
+Especially, choosing which objects or areas are relevant (Sec. \ref{sec:basic_areas}), as well as reliably labeling ReS data (or ReS data of ReS data; Sec. \ref{sec:basic_ref_labeling}), seems necessary for ADS perception testing even if no explicit TPs, FPs, or FNs are computed. %seem to be universal challenges or ADS perception testing.
 % (either as safety-relevant areas for TP metrics or as some behavior policy in terms of which the tested object list is compared to the ReS object list).
 Moreover, even though certain oracle-independent metrics might be task-oriented, %such as PKL 
 they might not necessarily be sufficient for safety evidences and come with additional challenges.
