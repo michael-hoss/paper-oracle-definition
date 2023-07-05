@@ -141,9 +141,9 @@ Despite being the only author, the first person plural (``we") is used to comply
 %Single paragraph up to 250 words. Mini-version of the paper that includes context, state of the art, why it is not good enough, the research question, the methods, the evaluation and conclusions.
 Popular test oracles for the perception subsystem of driving automation systems identify true-positive (TP), false-positive (FP), and false-negative (FN) objects.
 Oracle transparency is needed for comparing test results and for safety cases.
-To date, there exists a common notion of TPs, FPs, and FNs in the field, but apparently no published way to comprehensively characterize entire implemented oracles. 
+To date, there exists a common notion of TPs, FPs, and FNs in the field, but apparently no published way to comprehensively define their oracles. 
 % Despite a common understanding, the implementation of these concepts varies across testing activities.
-Therefore, this paper provides a checklist of aspects to define such test oracles.
+Therefore, this paper provides a checklist of  functional aspects and implementation details that affect the oracle behavior.
 Besides labeling policies of the test set, we cover fields of view, occlusion handling, safety-relevant areas, matching criteria, temporal and probabilistic issues, and further aspects.
 Even though our checklist %for oracle definition 
 can hardly be formalized, it can help practitioners maximize the transparency of their oracles, which, in turn, makes statements on object perception more reliable and comparable.
@@ -315,7 +315,7 @@ The numerous sources that focus on specific parts of the test oracle (e.g. label
 
 The workings of an oracle in the present context consist of obtaining a reference object list and comparing it to the OuT's object list. 
 We compiled the following checklist (Sec.~\ref{sec:criteria}) to help increase the transparency of these workings for given oracles, not to prescribe them.
-Additionally, we considered the following criteria: % to be met or included:
+In doing so, we considered the following criteria: % to be met or included:
 \begin{itemize}
 \item human comprehensibility of the checklist's aspects \newline (to keep safety argumentations understandable)
 \item versatility w.r.t. different stages of development \newline (e.g. initial developer feedback or final safety evidences)
@@ -368,13 +368,13 @@ Additionally, we considered the following criteria: % to be met or included:
 
 
 A test oracle can be regarded from different perspectives: as part of a testing activity (Fig. \ref{fig:oracle_in_taxonomy}), in space (Fig. \ref{fig:top_down_all}), and in time (Fig. \ref{fig:timeline}).
-This section's lowest-level subsections detail these and further issues in the form of a checklist, whose items are visually summarized later on in Table \ref{table:case_study}. 
+Each paragraph in this section represents one item on the checklist to transparently describe test oracles. 
+% This section details these and further issues in the form of a checklist. %, whose items are visually summarized later on in Table \ref{table:case_study}. 
 % We intentionally avoid a more formal, more technical, or more specific description in order to keep it generally applicable to as many test oracles as possible without prescribing an internal structure and without . 
 % DO THIS WHY NATURAL LANGUAGE HERE IN THE DISCUSSION!
-
 After the simple case of deterministic object representations in a single time frame (Sec. \ref{sec:oracle_simple}), temporal aspects (Sec. \ref{sec:oracle_time}) and probabilistic data representations (\ref{sec:oracle_probabilistic}) are covered.
-The following paragraphs outline how a given test oracle can be described transparently in each respective aspect.
-Subsequently, Table~\ref{table:case_study} provides concrete examples of two oracles. % , along with guidance for characterizing an oracle in terms of it. 
+% The following paragraphs outline how a given test oracle can be described transparently in each respective aspect.
+% Subsequently, Table~\ref{table:case_study} expresses two concrete examples of test oracles through the given checklist. % , along with guidance for characterizing an oracle in terms of it. 
 % The actual aspects that collectively define the workings of the test oracle are given one level of section structure deeper (e.g. Sec. \ref{sec:basic_fov_ref}, \ref{sec:basic_ref_hw}, \dots). 
 
 %In this whole section, we assume that any FP or FN is an undesired penalty to the OuT. % is is just "one system saw something that the other system did not see" or is it "" MAYBE DEAL WITH THIS TOPIC IN ANOTHER SECTION??
