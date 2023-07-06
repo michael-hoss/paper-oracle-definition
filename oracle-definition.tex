@@ -773,6 +773,7 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 	\caption{Checklist of this paper applied to different test oracles for TPs, FPs, FNs}
 	\label{table:case_study}
 
+	\newcommand{\midrulewidth}{1pt}
 	
 	\begin{tabularx}{\linewidth}{
 			>{\hsize=0.02\hsize}X % \columncolor{white} \arraybackslash
@@ -784,7 +785,7 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 		\multicolumn{2}{>{\hsize=\dimexpr0.4\hsize+0.4\tabcolsep+\arrayrulewidth\relax}X}{\textbf{Criterion of checklist}}                                         & \textbf{Evaluation of nuScenes tracking challenge\tnote{a}} & \textbf{Obtaining TPs for perception error modeling \cite{Krajewski2020UsingDrones}} \\ \midrule
  \parbox[t]{2mm}{\multirow{3}{*}[-0.4cm]{\rotatebox[origin=c]{90}{(\textit{Context})}}} & \scenariosCol                                           & \scenariosChallenge                  & \scenariosDrone                                                                 \\ \cline{2-4}
 																								&  \outCol                                                 & \outChallenge                        & \outDrone                                                                       \\ \cline{2-4}
-		                                                                                        & \furtherCol                 & \furtherChallenge                    & \furtherDrone                                                                   \\ \midrule
+		                                                                                        & \furtherCol                 & \furtherChallenge                    & \furtherDrone                                                                   \\ \midrule[\midrulewidth]
 		\parbox[t]{2mm}{\multirow{8}{*}[-2.5cm]{\rotatebox[origin=c]{90}{Basic (Sec. \ref{sec:oracle_simple})}}}               & \ref{sec:basic_fov_ref} FoVs                              & \basicChallengeFoV                   & \basicDroneFoV                                                                  \\ \cline{2-4}
 		                                                                                        & \ref{sec:basic_occlusions} Occlusion handling             & \basicChallengeOcclusion             & \basicDroneOcclusion                                                            \\ \cline{2-4}
 		                                                                                        & \ref{sec:basic_ref_hw} ReS hardware                       & \basicChallengeReSHW                 & \basicDroneReSHW                                                                \\ \cline{2-4}
@@ -792,11 +793,11 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 		                                                                                        & \ref{sec:basic_areas} Relevant areas             & \basicChallengeAreas                 & \basicDroneAreas                                                                \\ \cline{2-4}
 		                                                                                        & \ref{sec:basic_spatial_alignment} Geometr. alignment  & \basicChallengeGeometrAlign          & \basicDroneGeometrAlign                                                         \\ \cline{2-4}
 		                                                                                        & \ref{sec:basic_dist_func} Obj. distance func.     & \basicChallengeObjDistance           & \basicDroneObjDistance                                                          \\ \cline{2-4}
-		                                                                                        & \ref{sec:basic_multi_obj_matching} Multi-obj. matching & \basicChallengeMultiObjMatching      & \basicDroneMultiObjMatching                                                     \\ \midrule
+		                                                                                        & \ref{sec:basic_multi_obj_matching} Multi-obj. matching & \basicChallengeMultiObjMatching      & \basicDroneMultiObjMatching                                                     \\ \midrule[\midrulewidth]
 		\parbox[t]{2mm}{\multirow{4}{*}[-1.2cm]{\rotatebox[origin=c]{90}{Temporal (Sec. \ref{sec:oracle_time})}}}            & \ref{sec:temp_sync} Synchronization                 & \tempChallengeSync                   & \tempDroneSync                                                                  \\ \cline{2-4}
 		                                                                                        & \ref{sec:temp_matching} Matching in time                    & \tempChallengeMatching               & \tempDroneMatching                                                              \\ \cline{2-4}
 		                                                                                        & \ref{sec:temp_incomplete} Incomplete tracks         & \tempChallengeIncomplete             & \tempDroneIncomplete                                                            \\ \cline{2-4}
-		                                                                                        & \ref{sec:temp_latency} Delays \& latency            & \tempChallengeDelays                 & \tempDroneDelays                                                                \\ \midrule
+		                                                                                        & \ref{sec:temp_latency} Delays \& latency            & \tempChallengeDelays                 & \tempDroneDelays                                                                \\ \midrule[\midrulewidth]
 		\parbox[t]{2mm}{\multirow{3}{*}[-0.2cm]{\rotatebox[origin=c]{90}{Probabil. (Sec. \ref{sec:oracle_probabilistic})}}}       & \ref{sec:prob_fov} FoVs                             & \probChallengeFoV                    & \probDroneFoV                                                                   \\ \cline{2-4}
 		                                                                                        & \ref{sec:prob_bbox} Obj. distance func.             & \probChallengeObjDistance            & \probDroneObjDistance                                                           \\ \cline{2-4}
 		                                                                                        & \ref{sec:prob_thresholding} Obj. exist. \& class.   & \probChallengeExistClass             & \probDroneExistClass                                                            \\ \bottomrule
@@ -928,7 +929,7 @@ Future work can either show the checklist's completeness and adequacy, or otherw
 \section*{Acknowledgment}
 \label{sec:acknowledgment}
 
-The author would like to thank Fabian Thomsen for providing the previously unpublished implementation details of \cite{Krajewski2020UsingDrones}.
+% The author would like to thank Fabian Thomsen for providing previously unpublished implementation details of \cite{Krajewski2020UsingDrones}.
 Open Access funding enabled and organized by Projekt DEAL. % of RWTH Aachen University Library.
 Besides this, the present work was conducted independently without related \href{https://ko-fi.com/michaelhoss}{funding} or employment. 
 % The author would like to thank the social media commenters for their feedback on the given topic.
