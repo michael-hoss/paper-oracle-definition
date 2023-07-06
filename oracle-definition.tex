@@ -14,6 +14,8 @@
 \definecolor{wong-darkblue}     {HTML}{0072B2}
 \definecolor{wong-darkorange}   {HTML}{D55E00}
 \definecolor{wong-pink}         {HTML}{CC79A7}
+\definecolor{gray-table}        {HTML}{000000}  % 666666  for gray, 000000 for black
+\definecolor{gray-background}        {HTML}{EAEAEA}
 
 % -------------------------- PACKAGES -------------------------------
 
@@ -34,6 +36,8 @@
 \newcommand{\figref}[1]{Fig.~\ref{#1}}
 \newcommand{\secref}[1]{Sec.~\ref{#1}}
 
+\usepackage{array}
+\usepackage{colortbl}
 \usepackage{cite}
 \usepackage{siunitx-v2}
 \usepackage{tabularx}
@@ -703,15 +707,17 @@ contain such details should be regarded as a full part of the transparent defini
 
 
 % CONTEXT
-\newcommand{\scenariosDrone}{Ego vehicle statically observes an urban intersection from a sidewalk.}
-\newcommand{\outDrone}{Single lidar sensor with integrated object detection and tracking}
-\newcommand{\furtherDrone}{Modeling of how OuT deviates from ReS regarding TP object states}
+\newcommand{\scenariosDrone}{\textcolor{gray-table}{Ego vehicle statically observes an urban intersection from a sidewalk.}}
+\newcommand{\outDrone}{\textcolor{gray-table}{Single lidar sensor with integrated object detection and tracking}}
+\newcommand{\furtherDrone}{\textcolor{gray-table}{Modeling of how OuT deviates from ReS regarding TP object states}}
 
-\newcommand{\scenariosChallenge}{Ego vehicle dynamically participates in various urban traffic scenarios.}
-\newcommand{\furtherChallenge}{Computation of metrics such as AMOTA and AMOTP \cite{weng2019baseline} for the online leaderboard}
-\newcommand{\outChallenge}{Submitted detection and tracking algorithms that operate on either camera-only, lidar-only, or all raw sensor data}
+\newcommand{\scenariosChallenge}{\textcolor{gray-table}{Ego vehicle dynamically participates in various urban traffic scenarios.}}
+\newcommand{\furtherChallenge}{\textcolor{gray-table}{Computation of metrics such as AMOTA and AMOTP \cite{weng2019baseline} for the online leaderboard}}
+\newcommand{\outChallenge}{\textcolor{gray-table}{Submitted detection and tracking algorithms that operate on either camera-only, lidar-only, or all raw sensor data}}
 
-
+\newcommand{\scenariosCol}{\textcolor{gray-table}{Scenarios}}
+\newcommand{\outCol}{\textcolor{gray-table}{OuT}}
+\newcommand{\furtherCol}{\textcolor{gray-table}{Further evaluation after TPs, FPs, FNs}}
 
 
 % DRONE TEST ORACLE
@@ -766,17 +772,19 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 	\centering
 	\caption{Checklist of this paper applied to different test oracles for TPs, FPs, FNs}
 	\label{table:case_study}
+
+	
 	\begin{tabularx}{\linewidth}{
-			>{\hsize=0.02\hsize}X
+			>{\hsize=0.02\hsize}X % \columncolor{white} \arraybackslash
 			>{\hsize=0.38\hsize}X 
 			>{\hsize=0.8\hsize}X 
 			>{\hsize=0.8\hsize}X 
 		}
 		\toprule
 		\multicolumn{2}{>{\hsize=\dimexpr0.4\hsize+0.4\tabcolsep+\arrayrulewidth\relax}X}{\textbf{Criterion of checklist}}                                         & \textbf{Evaluation of nuScenes tracking challenge\tnote{a}} & \textbf{Obtaining TPs for perception error modeling \cite{Krajewski2020UsingDrones}} \\ \midrule
-		\parbox[t]{2mm}{\multirow{3}{*}[-0.4cm]{\rotatebox[origin=c]{90}{(\textit{Context})}}} & Scenarios                                           & \scenariosChallenge                  & \scenariosDrone                                                                 \\ \cline{2-4}
-																								& OuT                                                 & \outChallenge                        & \outDrone                                                                       \\ \cline{2-4}
-		                                                                                        & Further evaluation after TPs, FPs, FNs                 & \furtherChallenge                    & \furtherDrone                                                                   \\ \midrule
+ \parbox[t]{2mm}{\multirow{3}{*}[-0.4cm]{\rotatebox[origin=c]{90}{(\textit{Context})}}} & \scenariosCol                                           & \scenariosChallenge                  & \scenariosDrone                                                                 \\ \cline{2-4}
+																								&  \outCol                                                 & \outChallenge                        & \outDrone                                                                       \\ \cline{2-4}
+		                                                                                        & \furtherCol                 & \furtherChallenge                    & \furtherDrone                                                                   \\ \midrule
 		\parbox[t]{2mm}{\multirow{8}{*}[-2.5cm]{\rotatebox[origin=c]{90}{Basic (Sec. \ref{sec:oracle_simple})}}}               & \ref{sec:basic_fov_ref} FoVs                              & \basicChallengeFoV                   & \basicDroneFoV                                                                  \\ \cline{2-4}
 		                                                                                        & \ref{sec:basic_occlusions} Occlusion handling             & \basicChallengeOcclusion             & \basicDroneOcclusion                                                            \\ \cline{2-4}
 		                                                                                        & \ref{sec:basic_ref_hw} ReS hardware                       & \basicChallengeReSHW                 & \basicDroneReSHW                                                                \\ \cline{2-4}
