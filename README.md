@@ -1,4 +1,4 @@
-# Checklist to Define Test Oracles for Identifying TP, FP, and FN Objects in Automated Driving
+# Checklist to Transparently Define Test Oracles for TP, FP, and FN Objects in Automated Driving
 
 [![Create latex PDF release](https://github.com/michael-hoss/paper-oracle-definition/actions/workflows/create_latex_pdf_release.yml/badge.svg)](https://github.com/michael-hoss/paper-oracle-definition/actions/workflows/create_latex_pdf_release.yml)
 
