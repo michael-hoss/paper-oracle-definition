@@ -196,7 +196,7 @@ Task-oriented and safety-relevant perception metrics are therefore currently bei
 In contrast to the most popular perception leaderboard metrics, safety-relevant metrics tend to be more complex and incomprehensible due to their additional consideration of the downstream driving function and of safety in road traffic. 
 %Popularity of direct metrics that are based on TP, FP, FN still orders of magnitude higher than the popularity of task-oriented metrics. 
 
-Ideally, novel perception metrics combine all desired properties such that they are helpful to both perception developers \textit{and} verification and validation engineers. 
+Ideally, novel perception metrics combine all desired properties such that they are helpful to both perception system developers \textit{and} verification and validation engineers. 
 This requires closing the gap between straightforward safety-agnostic metrics and more complex safety-relevant metrics. 
 %comprehensible to humans, and straightforward to compute all at the same time. 
 
@@ -214,9 +214,9 @@ The present paper aims at defining TPs, FPs, and FNs clearly enough such that me
 %Specifically, we aim at defining popular aspects of direct metrics clearly enough such that they can represent meaningful evidences for safety-relevant claims.  
 Our main contributions are:
 \begin{itemize}
-\item A checklist to define how a test oracle identifies TPs, FPs, and FNs (Sec. \ref{sec:criteria}, Table \ref{table:case_study})
-% \item A description of two oracles by this checklist (Sec. \ref{sec:case_studies})
-\item A discussion of the relevance of TPs, FPs, and FNs in the safety assurance context (Sec. \ref{sec:discussion})
+	\item A checklist to define how a test oracle identifies TPs, FPs, and FNs (Sec. \ref{sec:criteria}, Table \ref{table:case_study})
+	% \item A description of two oracles by this checklist (Sec. \ref{sec:case_studies})
+	\item A discussion of the relevance of TPs, FPs, and FNs in the safety assurance context (Sec. \ref{sec:discussion})
 \end{itemize}
 
 
@@ -232,15 +232,15 @@ Our main contributions are:
 
 The discussion will treat the following research questions:
 \begin{itemize}
-
-
-\item \hyperref[sec:discussion_rq1]{RQ1}: \textit{Can TPs, FPs, and FNs be objectively defined?}
-
-\item \hyperref[sec:discussion_rq2]{RQ2}: \textit{How relevant are TPs, FPs, and FNs for task-oriented perception metrics?}
-
-\item \hyperref[sec:discussion_rq3]{RQ3}: \textit{Can statistics of TPs, FPs, and FNs contribute to a safety argumentation?}
-
-\item \hyperref[sec:discussion_rq4]{RQ4}: \textit{Do TP/FP/FN-independent perception metrics circumvent the oracle's challenges?}
+	
+	
+	\item \hyperref[sec:discussion_rq1]{RQ1}: \textit{Can TPs, FPs, and FNs be objectively defined?}
+	
+	\item \hyperref[sec:discussion_rq2]{RQ2}: \textit{How relevant are TPs, FPs, and FNs for task-oriented perception metrics?}
+	
+	\item \hyperref[sec:discussion_rq3]{RQ3}: \textit{Can statistics of TPs, FPs, and FNs contribute to a safety argumentation?}
+	
+	\item \hyperref[sec:discussion_rq4]{RQ4}: \textit{Do TP/FP/FN-independent perception metrics circumvent the oracle's challenges?}
 \end{itemize}
 
 \begin{figure*}[t]
@@ -263,7 +263,7 @@ From ISO 23150:2021 \cite{ISO_23150_2021_data_communication}:
 ``representation of a real-world entity with defined boundaries and characteristics in the vehicle coordinate system".
 This paper narrows down this definition to Layer 4 of the 6-layer-model \cite{Scholtes20216lmAccess}. An object can span over one or multiple time steps. 
 
-\subsubsection{Object under Test (OuT)} \label{def:out} Perception subsystem of a driving automation system. It comprises both hardware and software and it outputs an object list in each time step. 
+\subsubsection{Object under Test (OuT)} \label{def:out} From ISO/TR 4804:2020 \cite{ISO_TR_4804_2020}. Here: perception subsystem of a driving automation system. It comprises both hardware and software and it outputs an object list in each time step. 
 %An object (Sec. \ref{def:object}) perceived by the OuT is referred to as an OuT object.
 
 \subsubsection{Reference System (ReS)}
@@ -359,15 +359,15 @@ In doing so, we considered the following criteria: % to be met or included:
 
 
 \begin{figure*}[t]
-	\centering
-	\vspace*{2mm}
-	\includegraphics[width=\textwidth]{img/top_down_fitting_slide.pdf}
-	
-	\caption{ While objects A-C appear obvious, the desired identification of TPs, FPs, and FNs from objects D-L requires a purposefully defined test oracle. 
-		%A clear definition of the test oracle is needed to understand how it identifies TPs, FPs, and FNs from the given objects A-L. 
-		%Aspects of road traffic and geometry that the test oracle covers.
-	}
-	\label{fig:top_down_all}
+\centering
+\vspace*{2mm}
+\includegraphics[width=\textwidth]{img/top_down_fitting_slide.pdf}
+
+\caption{ While objects A-C appear obvious, the desired identification of TPs, FPs, and FNs from objects D-L requires a purposefully defined test oracle. 
+	%A clear definition of the test oracle is needed to understand how it identifies TPs, FPs, and FNs from the given objects A-L. 
+	%Aspects of road traffic and geometry that the test oracle covers.
+}
+\label{fig:top_down_all}
 \end{figure*}
 
 
@@ -440,7 +440,7 @@ The method by which an object list is extracted from the raw reference data % in
 % This method 
 can comprise programmed software, machine-learned modules, and human interaction. 
 Labeling policy specifications, as being used by perception challenges and for outsourcing labeling activities to subcontractors, describe this extraction of object lists from raw reference data. 
-These labeling policies include details such as how objects are classified, criteria for including and omitting objects, which parts of objects shall be inside or outside their bounding boxes, or how to label in case of partial or full occlusions\footnote{\url{https://github.com/waymo-research/waymo-open-dataset/blob/master/docs/labeling_specifications.md}}.
+These labeling policies include details such as how objects are classified, criteria for including and omitting objects, which parts of objects shall be inside or outside their bounding boxes, or how to label in case of partial or full occlusions. %\footnote{\url{https://github.com/waymo-research/waymo-open-dataset/blob/master/docs/labeling_specifications.md}}.
 
 Even with a thorough labeling policy, the actual labels can be uncertain \cite{wang2020inferring}, erroneous, or simply part of edge cases that the labeling policy did not consider or could not fully specify.
 To still describe the ReS labeling as transparently as possible, one could additionally describe how the labeling policy is realized in practice.
@@ -458,13 +458,14 @@ A higher-level reference system or evaluation procedure (``reference of the refe
 
 While certain areas on or next to the road surface are relevant to the traffic scenario, others might not be worth while perceiving. 
 To allocate test efforts meaningfully, one can therefore define (safety-) relevant areas and no-test-areas \cite{Philipp2022systematization, Topan2022zones, Butz2020soca, Wolf2021people, Chu2023sotif}.
+Similarly, \cite{Mori2023relevance} and \cite{Storms2023relevance} determine directly which objects are relevant for perception.
 
 The exclusion of objects from no-test areas (e.g. pedestrian D in Fig.~\ref{fig:top_down_all}) can occur in different stages of the testing activity (Fig. \ref{fig:oracle_in_taxonomy}). 
 They might already be excluded from the reference data; they might be included in the reference data, but excluded from the identification of TPs, FPs, and FNs; or, they could still be part of the TPs, FPs, and FNs, but excluded in a potential further evaluation.
 
 In any case, a clear definition of such areas is crucial for a comprehensible test oracle (e.g. farther away than \SI{20}{\meter} from any road surface; or above/below a criticality metric threshold).
 The definition of no-test areas can be delicate due to the risk of omitting objects that are in fact safety-relevant. 
-For example, the excluded pedestrian D in Fig.~\ref{fig:top_down_all} might still be running towards the intersection or be throwing items at it.
+For example, the excluded pedestrian D in Fig.~\ref{fig:top_down_all} might still be running towards the intersection and thereby influence other trajectories.
 
 \subsubsection{Coordinate transformation from ReS to OuT}
 \label{sec:basic_spatial_alignment}
@@ -476,7 +477,7 @@ Since uncertainties in this transformation can ultimately affect the matching of
 %Ideally, uncertainties inherent in this geometric alignment are negligible. 
 %However, these uncertainties can skew the reference objects' positions, which ultimately affects the resulting TPs, FPs, and FNs.  
 
- 
+
 Especially, uncertainties in the sensor orientation angles result in large cartesian offsets far away from the sensor.
 For reference sensors on the ego vehicle, such uncertainties could stem from the calibration of sensor mounting positions. 
 For external reference sensors such as moving drones or mounted infrastructure sensors, the geometrical alignment has further challenges. %there are multiple ways of ending up with a common coordinate system.  
@@ -551,12 +552,12 @@ Now, the test oracle's temporal aspects, which are explained in the following, d
 
 
 \begin{figure}[t]
-	\centering
-	\vspace*{2mm}
-	\includegraphics[width=0.49\textwidth]{img/timeline.pdf}
-	\caption{Temporal design aspects of a test oracle for TPs, FPs, and FNs.
-	}
-	\label{fig:timeline}
+\centering
+\vspace*{2mm}
+\includegraphics[width=0.49\textwidth]{img/timeline.pdf}
+\caption{Temporal design aspects of a test oracle for TPs, FPs, and FNs.
+}
+\label{fig:timeline}
 \end{figure}
 
 %\subsubsection{Temporal validity of tested objects}
@@ -717,7 +718,7 @@ contain such details should be regarded as a full part of the transparent defini
 
 \newcommand{\scenariosCol}{\textcolor{gray-table}{Scenarios}}
 \newcommand{\outCol}{\textcolor{gray-table}{OuT}}
-\newcommand{\furtherCol}{\textcolor{gray-table}{Further evaluation after TPs, FPs, FNs}}
+\newcommand{\furtherCol}{\textcolor{gray-table}{Further evaluation}}
 
 
 % DRONE TEST ORACLE
@@ -809,9 +810,9 @@ Accuracy loss in the order of magnitude of $\approx$\,\SI{0.1}{\meter} is not fu
 		\item [c] \href{https://github.com/nutonomy/nuscenes-devkit/blob/da3c9a977112fca05413dab4e944d911769385a9/docs/instructions_nuscenes.md}{https://github.com/nutonomy/nuscenes-devkit/blob/master/docs/instructions\_nuscenes.md}
 		\item [d]
 		\href{https://www.nuscenes.org/nuscenes#data-collection}{https://www.nuscenes.org/nuscenes\#data-collection}
-	%	\item [x] \href{https://github.com/nutonomy/nuscenes-devkit/issues/366}{https://github.com/nutonomy/nuscenes-devkit/issues/366}
+		%	\item [x] \href{https://github.com/nutonomy/nuscenes-devkit/issues/366}{https://github.com/nutonomy/nuscenes-devkit/issues/366}
 	\end{tablenotes}
-	\end{threeparttable}
+\end{threeparttable}
 \end{table*}
 % \multicolumn{2}{>{\hsize=0.5\hsize}X}{\textbf{Criterion}}
 % \multicolumn{2}{|>{\hsize=\dimexpr0.5\hsize+0.5\tabcolsep+\arrayrulewidth\relax}X|}{\textbf{Criterion}}
@@ -868,16 +869,16 @@ They are directly relevant for oracle-dependent metrics, but irrelevant for orac
 For oracle-dependent metrics, which are aggregates of TP, FP, and FN objects, a clearer and more transparent oracle directly results in clearer and more transparent metrics. 
 In the current literature of task-oriented perception metrics, the following metrics are oracle-dependent:
 \begin{itemize}
-	\item Volk et al. (safety score based on CLEAR and RSS) \cite{Volk2020metric}
-	\item Lyssenko et al. ($dIoU_\delta$) \cite{Lyssenko2021relevance}
-	\item Wolf et al. (weighted F1-score, precision, recall) \cite{Wolf2021people}
-	\item Bansal et al. (risk ranked recall $R^3$) \cite{Bansal2021riskrankedrecall}
-	\item Topan et al. (interaction-dynamics-aware metrics based on safety zones) \cite{Topan2022zones}
+\item Volk et al. (safety score based on CLEAR and RSS) \cite{Volk2020metric}
+\item Lyssenko et al. ($dIoU_\delta$) \cite{Lyssenko2021relevance}
+\item Wolf et al. (weighted F1-score, precision, recall) \cite{Wolf2021people}
+\item Bansal et al. (risk ranked recall $R^3$) \cite{Bansal2021riskrankedrecall}
+\item Topan et al. (interaction-dynamics-aware metrics based on safety zones) \cite{Topan2022zones}
 \end{itemize}
 Contrarily, the following metrics are oracle-independent (they don't explicitly compute TPs, FPs, and FNs): % (they typically depend on a behavior policy and a threat metric):
 \begin{itemize}
-	\item Philion et al. (PKL) \cite{Philion2020planner_centric}
-	\item Shalev-Shwartz et al. (safety-critical ghosts/misses) \cite{shalevshwartz2017formalRSS}
+\item Philion et al. (PKL) \cite{Philion2020planner_centric}
+\item Shalev-Shwartz et al. (safety-critical ghosts/misses) \cite{shalevshwartz2017formalRSS}
 \end{itemize}
 
 \subsection{RQ3: Can statistics of TPs, FPs, and FNs contribute to a safety argumentation?}
@@ -892,7 +893,7 @@ We consider the realization of a clearly-defined \textit{and} safety-sufficient 
 % Therefore, an oracle should be using an oracle that is both defined as much as feasible \textit{and} sufficiently safety-relevant is essential.
 Additionally, even the absence of FPs and FNs is not necessarily sufficient for full perception safety because a wrong estimation of TP properties could still lead to accidents under an ideal planner.
 
-\subsection{RQ4: Do TP/FP/FN-independent metrics avoid the \newline oracle's challenges?}
+\subsection{RQ4: Do TP/FP/FN-independent metrics avoid the oracle's challenges?}
 \label{sec:discussion_rq4}
 
 Oracle-independent metrics %such as PKL \cite{Philion2020planner_centric} or safety-critical ghosts/misses \cite{shalevshwartz2017formalRSS} 
@@ -901,7 +902,7 @@ can avoid arbitrariness in the oracle's judgment of the following checklist aspe
 \item manual occlusion handling (Sec. \ref{sec:basic_occlusions})
 \item object matching (Secs. \ref{sec:basic_dist_func}, \ref{sec:basic_multi_obj_matching},
 \ref{sec:temp_matching},
- \ref{sec:prob_bbox})
+\ref{sec:prob_bbox})
 \item incomplete or delayed tracks (Secs. \ref{sec:temp_incomplete}, \ref{sec:temp_latency})
 \end{itemize}
 However, they are similarly subjected to the challenges of the remaining aspects.
@@ -921,10 +922,7 @@ This paper provided a comprehensive checklist of aspects that define an implemen
 Even though uncertainty and ambiguity are inherent in some aspects, an oracle definition according to the checklist increases the transparency and comparability of TP/FP/FN-based metrics.
 Consequently, such metrics can represent more reliable evidences in safety argumentations.
 
-Future work can either show the checklist's completeness and adequacy, or otherwise suggest extensions, refinements, and new structures. 
-
-% Future work could add potentially missing aspects to the checklist and investigate the feasibility of a partially formal oracle description. % without unnecessarily prescribing internals of the oracle
-
+Future work can either show the checklist's completeness and adequacy, or otherwise suggest extensions, refinements, and new structures.
 
 \section*{Acknowledgment}
 \label{sec:acknowledgment}
